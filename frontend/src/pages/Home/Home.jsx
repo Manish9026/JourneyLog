@@ -12,6 +12,7 @@ const sliderImage = ["https://assets-in.bmscdn.com/promotions/cms/creatives/1726
 const Home = () => {
   const swiper = useSwiper();
 
+console.log(import.meta.env.VITE_SERVER_URL);
 
   return (
     <div className='w-full'>
