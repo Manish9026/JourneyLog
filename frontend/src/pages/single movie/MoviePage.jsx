@@ -22,18 +22,18 @@ if (data && Object.keys(data).length!=0 )
         <div className='w-full max-w-[1300px] h-full '>
            { loading && <Loader/>}
             {/* movi hero & card section */}
-            <span className=" flex max-h-[500px] p-10 h-full bg-cover bg-no-repeat w-full movi-card relative bg-red-400 bg-center" style={{backgroundImage:`url(${data?.primaryVideos?.edges[0]?.node?.thumbnail?.url})`}} >
+            <span className=" flex sm:max-h-[500px] p-10 h-full bg-cover bg-no-repeat w-full movi-card relative bg-red-400 bg-center" style={{backgroundImage:`url(${data?.primaryVideos?.edges[0]?.node?.thumbnail?.url})`}} >
                 {/* <img className='absolute' src={data.primaryVideos.edges[0].node.thumbnail.url} alt="" /> */}
                 {/* {
                     // data.primaryImage.url
                 } */}
-                <div className="card flex w-full z-12 items-center max-h-[200px text-white">
+                <div className="card sm:flex-row flex-col flex w-full z-12 items-center min-h-[200px] text-white">
                     <span className="img">
 
                         <img className=" max-w-[300px] h-[300px]" src={data?.primaryImage?.url} alt="" />
                     </span>
-                    <span className="conent justify-center px-4 py-2 w-full gap-2  flex flex-col h-full">
-                        <h4 className='text-4xl font-semibold'>{data?.titleText?.text}</h4>
+                    <span className="conent sm:items-start items-center justify-center px-4 py-2 w-full gap-2  flex flex-col h-full">
+                        <h4 className='text-center text-4xl font-semibold'>{data?.titleText?.text}</h4>
                         <span className='text-md flex gap-2 list-none'>
                             <li>{data?.runtime?.displayableProperty?.value?.plainText}</li>
                             <li>{data?.genres?.genres.map((genres, id) => {
@@ -43,11 +43,11 @@ if (data && Object.keys(data).length!=0 )
                                     return genres.text
                             })}</li>
                             <li></li></span>
-                        <span className=" flex gap-5 list-none bg-blue-200 max-w-[300px] rounded-md px-2 py-2"><li className='flex relative gap-2'><MdStar className='relative top-1' />{data?.ratingsSummary?.aggregateRating}/10</li>
-                            <li>{(data?.ratingsSummary?.voteCount / 1000).toFixed(1) + "K"} votes</li>
+                        <span className=" flex gap-5 list-none bg-blue-200 px-2  items-center justify-around  rounded-md px-2 sm:max-w-[300px] min-w-[300px] py-2"><li className='flex relative gap-2 '><MdStar className='relative top-1' />{data?.ratingsSummary?.aggregateRating}/10</li>
+                            <li className='flex'>{(data?.ratingsSummary?.voteCount / 1000).toFixed(1) + "K "} <p>votes</p></li>
                         </span>
 
-                        <div className="span bg-blue-500 max-w-[300px] p-2 rounded-md relative ">
+                        <div className="span flex bg-blue-500 min-w-[200px] items-center justify-center sm:justify-start p-2 rounded-md relative ">
                             <span>{data?.releaseDate.day} {monthCode.filter((value, id) => { if (id == data?.releaseDate.month) return value })} {data.releaseDate.year}</span>
 
                         </div>
@@ -56,7 +56,7 @@ if (data && Object.keys(data).length!=0 )
                         </span>
 
 
-                        <Link to={`/buyticket/${data?.movi_id}/${data.id}`} className='bg-pink-700 mt-10 rounded-md px-5 py-2 max-w-[200px]'>book now</Link>
+                        <Link to={`/buyticket/${data?.movi_id}/${data.id}`} className='flex bg-pink-700 sm:mt-10 mt-5 rounded-md px-5 py-2 w-full max-w-[200px]  justify-center '>book now</Link>
 
 
 

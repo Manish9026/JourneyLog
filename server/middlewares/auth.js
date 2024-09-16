@@ -25,7 +25,7 @@ import { userModel } from "../models/authModel.js";
         }).status(201).json({
             message:"firstly login",
             statusCode:65,
-            data:[]
+            data:null
         });
 
         }else{

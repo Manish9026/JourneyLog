@@ -10,9 +10,9 @@ const navTitle=["movies","stream","event",'plays',"sports","activities","listyou
 
 const Profile=({profile})=>{  
   return(
-    <span className="flex items-center bg-gray-400 hover:bg-slate-800 hover:text-white text-sky-900 cursor-pointer p-1 rounded-lg  gap-2 ">
+    <span className="hidden sm:flex items-center bg-gray-400 hover:bg-slate-800 hover:text-white text-sky-900 cursor-pointer p-1 rounded-lg  gap-2 ">
       <img src={profile?.profileImage} className='size-[40px] rounded-full' alt="" />
-      <p className='capitalize '>hey,{profile.userName.split(" ")[0]}</p>
+      <p className='capitalize '>hey,{profile?.userName.split(" ")[0]}</p>
       
     </span>
   )
@@ -21,12 +21,14 @@ const Navbar = () => {
 
   const {userInfo}=useSelector(state=>state.auth);
   const dispatch=useDispatch();
+  // console.log(userInfo);
+  
   return (
 
  <div className="w-full relative z-[1000]">
   <div className='w-full h-[70px] bg-gray-500 flex justify-between px-3' >
 
-<div className="items-center  h-full border-sky-500 max-w-xl flex flex-1 gap-2.5">
+<div className="items-center min-w-[250px]  h-full border-sky-500 max-w-xl flex flex-1 gap-2.5">
   <Link to={'/'} className="">
     <img src={logo} alt="" className='mix-blend-multiply max-w-[100px]' width={'100px'}/>
   </Link>
@@ -37,13 +39,13 @@ const Navbar = () => {
   </span>
 </div>
 
-<div className="h-full border-sky-500 max-w-xl flex flex-1 gap-2.5 justify-end items-center" >
+<div className="h-full border-sky-500 max-w-xl flex gap-2.5 justify-end items-center" >
 <span className="nav-titles flex items-center">
 
-<span className='flex items-center gap-1'>choose<MdLocationOn className='mt-1 text-gray-100'/></span>
+<span className='sm:flex hidden items-center gap-1'>choose<MdLocationOn className='mt-1 text-gray-100'/></span>
 
 </span>
-{Object.keys(userInfo)==0?<div onClick={()=>{dispatch(setFormStatus({login:true}))}} className="btn cursor-pointer w-20 bg-pink-500 flex justify-center items-center  rounded-[5px] text-white ">
+{userInfo && Object.keys(userInfo)==0?<div onClick={()=>{dispatch(setFormStatus({login:true}))}} className="btn cursor-pointer w-20 bg-pink-500 flex justify-center items-center  rounded-[5px] text-white ">
   sign
 </div>:<Profile profile={userInfo}/>}
 <span className="icon ">
@@ -56,7 +58,7 @@ const Navbar = () => {
 
 
 {/* sub-nav */}
-<div className=" px-4 w-full h-[30px] bg-gray-400 flex items-center justify-between gap-2">
+<div className=" sm:flex hidden   px-4 w-full h-[30px] bg-gray-400  items-center justify-between gap-2">
 <span className="title1 flex text-sm items-center gap-2 capitalize">
 {
 navTitle.map((value,id)=>{

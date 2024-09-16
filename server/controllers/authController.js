@@ -56,7 +56,7 @@ export class AuthTools {
                 const file = files.file[0];
                 //   const response=await imageUploader("C:\\Users\\manis\\AppData\\Local\\Temp\\d703c3da3ceeb867286c48d01")
 
-                console.log(file.filepath, fields);
+                // console.log(file.filepath, fields);
                 formData = {
                     filePath: file.filepath,
                     fields: fields
@@ -64,7 +64,7 @@ export class AuthTools {
 
             })
 
-            console.log(formData);
+            // console.log(formData);
             return formData;
         } catch (error) {
             console.log(error);

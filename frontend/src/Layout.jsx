@@ -4,6 +4,8 @@ import Footer from './component/Footer'
 import { Outlet } from 'react-router-dom'
 import { Login, Register } from './component/auth/Auth'
 import {useSelector,useDispatch} from 'react-redux'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export const Layout = () => {
   const {status,formStatus}=useSelector(state=>state.auth)
   const style={
@@ -12,6 +14,7 @@ export const Layout = () => {
   }
   return (
     <div className='flex flex-col items-center w-screen min-h-screen h-full '>
+      <ToastContainer/>
         <Navbar/>
         <div className="flex relative w-full h-full justify-center relative min-h-[80%] ">
           {

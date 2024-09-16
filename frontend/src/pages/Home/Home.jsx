@@ -90,7 +90,7 @@ export const  MovieContainer=({title,data})=>{
   
   return(
     <div className=" bg-gray-200 w-full flex p-3 justify-start items-center ">
-      <div className="flex flex-col gap-2 w-full px-10 sm:px-1">
+      <div className="flex flex-col gap-2 w-full sm:px-10 sm:px-1">
         {/* heading */}
         <span className="text-gray-600 capitalize px-2 text-xl">
           {title}

@@ -7,9 +7,7 @@ import { setFormStatus } from "./authSlice";
 
 export const  bookTicket=createAsyncThunk("bookTicket",async(data,{dispatch})=>{
    const response=await  axios.post("/ticket/book",data,{withCredentials:true})
-   if(response.data.statusCode==65){
-    dispatch(setFormStatus({login:true}))
-}
+   urlReloader(response.data,dispatch)
 console.log(response.data);
 
 return response.data
