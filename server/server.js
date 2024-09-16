@@ -7,7 +7,7 @@ import authRoutes from './routes/authRoutes.js';
 const app=express();
 import DB_connection from './DBconfig/DB.config.js';
 import ticketRoutes from './routes/ticketRoutes.js'
-
+const port=process.env.PORT;
 app.use(express.json()) 
 app.use(cookieParser());
 
@@ -26,7 +26,7 @@ app.get("/",(req,res)=>{
 
 
 
-app.listen(2000,()=>{
+app.listen(port,()=>{
     DB_connection()
     console.log("server runing on port 2000");
 })
