@@ -1,0 +1,410 @@
+@import '../../css-configration/classes.scss';
+@import '../../css-configration/variables.scss';
+
+.welcome-section {
+    .none{
+        display: none;
+    }
+    p {
+        padding: 0;
+        margin: 0;
+    }
+
+    @extend .center;
+    width: 100vw;
+    // padding: ;
+    min-height: 100vh;
+    background: linear-gradient(to bottom, rgb(13, 13, 60) 10%, rgb(77, 89, 119));
+
+    .w-container {
+        @extend .center;
+        flex-direction: column;
+        max-width: 400px;
+        min-height: 50px;
+        flex: 1;
+        padding: 10px;
+        // border: 1px solid white;
+        gap: 10px;
+
+        .welcome {
+            @extend .center;
+            width: 100%;
+            border-radius: 10px;
+            min-height: 50px;
+            background-color: #637285b4;
+            flex: 1
+        }
+
+        .auth {
+            @extend .center;
+            align-items: flex-start;
+            width: 100%;
+            gap: 10px;
+            // background-color: #fff;
+            flex: 1;
+            // padding: 0px 20px;
+
+            & span {
+                @extend .center;
+                border-radius: 10px;
+                background-color: #637285b4;
+                // padding: 10px;
+                // flex: 1;
+                width: 45%;
+                gap: 5px;
+                line-height: normal;
+                min-width: 100px;
+                min-height: 50px;
+                cursor: pointer;
+                transition: 1s ease;
+                :active{
+                    scale: .8;
+                }
+
+                .icon {
+                    margin-top: 2px;
+                }
+
+            }
+
+            .btn1 {
+                background-color: #42deb2;
+
+            }
+
+            .btn2 {
+                background-color: #4266de;
+
+                :first-child {
+                    background-color: transparent;
+                }
+            }
+
+            // background-color: #fff;
+        }
+    }
+}
+
+.mdIcons{
+    @extend .center;
+    position: absolute;
+    top: 10px;
+    width: 40px;
+    height: 40px;
+    left: 10px;
+    border-radius: 5px;
+    background-color: #99aed098;
+    cursor: pointer;
+}
+.sade-in{
+    transform: translatey(-1000px);
+    opacity: 0;
+
+}
+.sade-out{
+    transform: translatey(0);
+    opacity: 1;
+
+}
+.signin {
+    margin: 0px 10px;
+    position: relative;
+    flex: 1;
+    animation: 1s ease-in sade-out forwards;
+    min-width: 200px;
+    max-width: 350px;
+    background: #0c0c28;
+    // z-index: 1000;
+    overflow: hidden;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 5px 35px rgba(0, 0, 0, 9);
+    transition: 1s ease-in;
+    position: fixed;
+    top: 25%;
+    transform: translate(-50%,-50%);
+    // left: ;
+    z-index:100;
+    .content {
+        position: relative;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 40px;
+
+        h2 {
+            font-size: 2em;
+            color: rgb(34, 164, 207);
+            text-transform: uppercase;
+        }
+
+        .form {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            .links {
+                position: relative;
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                a:nth-child(2) {
+                    color: rgb(255, 166, 0);
+                    font-weight: 600;
+                }
+                
+            }
+            .inputBox {
+                position: relative;
+                width: 100%;
+
+                input {
+                    position: relative;
+                    width: 100%;
+                    background: #8da0a07f;
+                    border: none;
+                    outline: none;
+                    padding: 25px 10px 7.5px;
+                    border-radius: 4px;
+                    color: #fff;
+                    font-weight: 500;
+                    font-size: 1em;
+                }
+
+                p {
+                    position: absolute;
+                    left: 0;
+                    padding: 15px 10px;
+                    font-style: normal;
+                    color: #090320c9;
+                    transition: 0.5s;
+                    top: 0;
+                    pointer-events: none;
+                }
+
+                input:focus~p,
+                input:valid~p {
+                    transform: translateY(-7.5px);
+                    font-size: 0.8em;
+                    color: #fff;
+                }
+                input[type="submit"] {
+                    padding: 10px;
+                    background: linear-gradient(65deg,lightblue 50%,orange);
+                    color: #2f3953;
+                    font-weight: 600;
+                    font-size: 1.35em;
+                    letter-spacing: 0.05em;
+                    cursor: pointer;
+                }
+                input[type="submit"]:active {
+                    opacity: 0.6;
+                }
+            }
+        }
+    }
+}
+
+@keyframes sade-out {
+    from{
+        transform: translatey(-1000px);
+        opacity: 0;
+    }
+    to{
+        transform: translatey(0);
+        opacity: 1;
+
+
+    }
+    
+}
+
+
+
+.upload{
+    cursor: pointer;
+    position: relative;
+    width: 70px;
+    height: 70px;
+border-radius: 50%;
+padding: 5px;
+background-color: #433d3d;
+    border: 1px solid green;
+    img[src=""] {
+        display: none;
+     }
+    img{
+width: 100%;
+height: 100%;
+border-radius: 50%;
+    }
+    .uploadIcon{
+        @extend .center;
+        position: absolute;
+        background-color: #ffffffa4;
+        padding: 10px 20px;
+        font-size: 10px;
+        border-radius: 5px;
+top: 50%;
+left: 50%;
+transform: translate(-50%,-50%);
+
+    }
+    .editIcon{
+        @extend .center;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      border-radius: 50%;
+      width: 25px;
+      height: 25px;
+      background-color: #fff;
+    }
+}
+
+
+
+.sign-up{
+
+    p{
+        padding: 0;
+        margin: 0;
+    }
+    .heading{
+        font-size: 2em;
+        color: rgb(34, 164, 207);
+        text-transform: uppercase;
+    }
+    @extend .flex;
+    max-width: 200px;
+    position: fixed;
+    max-width: 400px;
+    width: 100%;
+    min-height: 400px;
+    border-radius: 15px;
+    margin: 0px 10px;
+    overflow: hidden;
+    // justify-content: ;
+    padding:  10px 20px;
+$inputBgColor:rgb(97, 150, 177);   
+    flex: 1;
+    gap: 10px;
+    flex-direction: column;
+    // background: #d4c1c17b;
+    background: #060621;
+    z-index: 100;
+    top:50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+
+    .s-body{
+    @extend .center;
+    flex: 1;
+    width: 100%;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px;
+    // background-color: #fff;
+        
+        .inputBox {
+            position: relative;
+            width: 100%;
+            // max-width: 90%;
+            display: flex;
+    
+            input {
+                position: relative;
+                width: 100%;
+                background: $inputBgColor;
+                border: none;
+                outline: none;
+                padding: 25px 10px 7.5px;
+                border-radius: 4px;
+                color: #fff;
+                font-weight: 500;
+                font-size: 1em;
+            }
+    
+            p {
+                position: absolute;
+                left: 0;
+                padding: 15px 10px;
+                font-style: normal;
+                color: #090320c9;
+                transition: 0.5s;
+                top: 0;
+                pointer-events: none;
+            }
+    
+            input:focus~p,
+            input:valid~p {
+                transform: translateY(-7.5px);
+                font-size: 0.8em;
+                color: #fff;
+            }
+            input[type="submit"] {
+                padding: 10px;
+                background: linear-gradient(65deg,lightblue 50%,orange);
+                color: #2f3953;
+                font-weight: 600;
+                font-size: 1.35em;
+                letter-spacing: 0.05em;
+                cursor: pointer;
+            }
+            input[type="submit"]:active {
+                opacity: 0.6;
+            }
+        }
+        .flex-inputBox{
+            @extend .center;
+            flex-wrap: wrap;
+            width: 100%;
+            // border: 1px solid white;
+            // flex: 1;
+            gap: 5px;
+ 
+            .inputBox{
+                // max-width: 300px;
+                flex: 1;
+                // padding: 10px;
+                width: 100%;
+                p{
+                    top: -5px;
+                }
+                height: 40px;
+
+                
+
+            }
+        }
+
+    }
+
+    .submitBtn{
+        padding: 10px;
+                    background: linear-gradient(65deg,lightblue 50%,orange);
+                    color: #2f3953;
+                    font-weight: 600;
+                    font-size: 1.35em;
+                    letter-spacing: 0.05em;
+                    cursor: pointer;
+                    flex: 1;
+                    border: none;
+                    border-radius: 10px;
+                    width: 100%;
+                    max-height:50px ;
+                    max-width: 300px;
+    }
+  
+}
+
+
+
+
+

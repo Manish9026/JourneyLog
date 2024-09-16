@@ -1,0 +1,77 @@
+
+
+
+{
+    "film": {
+        "film_id": 227902,
+        "imdb_id": 3829266,
+        "imdb_title_id": "tt3829266",
+        "film_name": "The Predator",
+        "other_titles": {
+            "EN": "The Predator"
+        },   
+        "version_type": "Standard",
+        "age_rating": [
+            {
+                "rating": "15 ",
+                "age_rating_image": "https://d2z9fe5yu2p0av.cloudfront.net/age_rating_logos/uk/15.png",
+                "age_advisory": "strong bloody violence, sex references, language"
+            }
+        ],
+        "film_image": "https://d3ltpb4h29tx4j.cloudfront.net/227902/227902h2.jpg",
+        "film_image_height": 199,
+        "film_image_width": 300
+    },
+    "cinemas": [
+        {
+            "cinema_id": 8922,
+            "cinema_name": "Vue Cinemas - Shepherds Bush",
+            "distance": 1.6461926320075,
+            "logo_url": "https://d2z9fe5yu2p0av.cloudfront.net/chainlogos/uk/UK-712-sq.jpg",
+            "showings": {
+                "Standard": {
+                    "film_id": 227902,
+                    "film_name": "The Predator",
+                    "times": [
+                        {
+                            "start_time": "15:45",
+                            "end_time": "17:51"
+                        },
+                        {
+                            "start_time": "16:55",
+                            "end_time": "19:01"
+                        },
+                        {
+                            "start_time": "18:30",
+                            "end_time": "20:36"
+                        },
+                        {
+                            "start_time": "20:00",
+                            "end_time": "22:06"
+                        },
+                        {
+                            "start_time": "22:00",
+                            "end_time": "00:06"
+                        },
+                        {
+                            "start_time": "23:35",
+                            "end_time": "01:41"
+                        }
+                    ]
+                },
+                "3D": {
+                    "film_id": 277426,
+                    "film_name": "The Predator 3D",
+                    "times": [
+                        {
+                            "start_time": "21:00",
+                            "end_time": "23:06"
+                        }
+                    ]
+                }
+            }
+        }
+    
+  ]
+}
+
