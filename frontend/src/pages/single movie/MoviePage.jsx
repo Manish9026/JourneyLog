@@ -34,7 +34,7 @@ if (data && Object.keys(data).length!=0 )
                     </span>
                     <span className="conent sm:items-start items-center justify-center px-4 py-2 w-full gap-2  flex flex-col h-full">
                         <h4 className='text-center text-4xl font-semibold'>{data?.titleText?.text}</h4>
-                        <span className='text-md flex gap-2 list-none'>
+                        <span className='flex-wrap text-md justify-center flex gap-2 list-none'>
                             <li>{data?.runtime?.displayableProperty?.value?.plainText}</li>
                             <li>{data?.genres?.genres.map((genres, id) => {
                                 if (id >= 0 && data.genres.genres.length - 1 > id)
