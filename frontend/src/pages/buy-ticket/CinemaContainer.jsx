@@ -66,6 +66,9 @@ const CinemaContainer = () => {
     const loading = false;
     const dispatch = useDispatch();
 
+    // useEffect(()=>{
+    //     window.scrollTo(0, 0)
+    // },[])
     if (data && Object.keys(data).length != 0)
         return (
 

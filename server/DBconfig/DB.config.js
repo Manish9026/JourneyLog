@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 
 const DB_connection=async()=>{
     const uri=process.env.DB_CONNECTION_STRING
@@ -13,4 +13,14 @@ const DB_connection=async()=>{
     })
 }
 
+export const selfPro_DB_conn=async()=>{
+try {    
+const conn= mongoose.createConnection(process.env.DB_CONNECTION_selfpro)
+return conn
+} catch (error) {
+    console.log(error,process.env.DB_CONNECTION_selfpro);
+    
+    return false
+}
+}
 export default DB_connection

@@ -56,7 +56,7 @@ if (data && Object.keys(data).length!=0 )
                         </span>
 
 
-                        <Link to={`/buyticket/${data?.movi_id}/${data.id}`} className='flex bg-pink-700 sm:mt-10 mt-5 rounded-md px-5 py-2 w-full max-w-[200px]  justify-center '>book now</Link>
+                        <Link   to={`/buyticket/${data?.movi_id}/${data.id}`} className='flex bg-pink-700 sm:mt-10 mt-5 rounded-md px-5 py-2 w-full max-w-[200px]  justify-center '>book now</Link>
 
 
 

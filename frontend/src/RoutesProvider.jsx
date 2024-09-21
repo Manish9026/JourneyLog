@@ -28,6 +28,8 @@ const dispatch=useDispatch();
       loader:({params})=>{
         console.log(params);
         dispatch(getMovieData({movi_id:params.moviId,IMDB_id:params.IMDB_id}))
+      window.scrollTo(0, 0)
+
         return 0
         
       }
@@ -37,8 +39,9 @@ const dispatch=useDispatch();
       loader:({params})=>{
         const {IMDB_id,movi_id}=params;
         console.log(IMDB_id,movi_id);
-
         dispatch(getMoviDetailsAndCinema({IMDB_id,movi_id}))
+      window.scrollTo(0, 0)
+
         return 0
         
 
