@@ -5,7 +5,7 @@ import { urlReloader } from '../utils/urlReloder'
 axios.defaults.baseURL = url
 export const login = createAsyncThunk("login", async (formdata) => {
     return await axios.post("/user/login", formdata, { withCredentials: true }).then(res => {
-        urlReloader(res.data)
+        urlReloader({response:res.data,});
     //    console.log( res.data)
         return res.data
     }).catch((error)=>{
@@ -24,7 +24,7 @@ export const register = createAsyncThunk("register", async (formdata) => {
 
     return await axios.post("/user/register", data).then(res => {
 
-        urlReloader(res.data);
+        urlReloader({response:res.data,});
 // console.log(res.data);
 
         return res.data
@@ -43,8 +43,9 @@ export const isVerified=createAsyncThunk("isVerified",async(_,{dispatch})=>
     
     const response= await axios.get('/user/verify',{withCredentials:true});
 
-    // console.log(response.data);
-    urlReloader(response.data,dispatch)
+    console.log(response.data);
+    
+    urlReloader({response:response.data,dispatch,})
     // if(response.data.statusCode==65){
     //     dispatch(setFormStatus({login:true}))
     // }
@@ -56,7 +57,7 @@ export const isVerified=createAsyncThunk("isVerified",async(_,{dispatch})=>
 export const logout=createAsyncThunk("logout",async()=>{
     return await axios.get('/user/logout',{withCredentials:true}).then(res=>{
 
-        urlReloader(res.data)
+        urlReloader({response:res.data,});
         return res.data
     }).catch(err=>{
         alert(err)

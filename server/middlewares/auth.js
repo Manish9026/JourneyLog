@@ -5,7 +5,7 @@ import { userModel } from "../models/authModel.js";
     
     try {
         const {uid}=req.cookies;
-        console.log("hello",uid);
+        // console.log("hello",uid,req);
         
         if(uid){
           const {userId} =await AuthTools.tokenVerifier(uid)
@@ -19,14 +19,14 @@ import { userModel } from "../models/authModel.js";
    
            return
           }
-          res.clearCookie('uid', {
-            sameSite: 'None',
-            secure: true
-        }).status(201).json({
-            message:"firstly login",
-            statusCode:65,
-            data:null
-        });
+        //   res.clearCookie('uid', {
+        //     sameSite: 'None',
+        //     secure: true
+        // }).status(201).json({
+        //     message:"firstly login",
+        //     statusCode:65,
+        //     data:null
+        // });
 
         }else{
             res.status(201).json({

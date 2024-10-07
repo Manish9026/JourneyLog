@@ -1,13 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
-import singleMoviPageSlice from "./slices/singleMoviPageSlice";
-import buyticketSlice from "./slices/buyticketSlice";
-import authSlice from "./slices/authSlice";
+import authSlice from "./slices/authSlice";travelRouteSlice
+import travelRouteSlice from "./slices/travelRouteSlice";
+
 
 export const store=configureStore({
     reducer:{
-       singleMoviPage:singleMoviPageSlice,
-       buyTicket:buyticketSlice,
-       auth:authSlice
+        
+       auth:authSlice,
+       travelRoute:travelRouteSlice
     }
 
 })

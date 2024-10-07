@@ -1,0 +1,48 @@
+.inputField{
+    // background-color: red;
+ 
+    @apply bg-red-100 light-bg rounded-md  px-3 py-2 w-full  ;
+    background-color:transparent;
+    box-shadow: inset 1px 1px 5px 0px rgb(139, 136, 136), inset -1px -1px 5px 0px rgb(136, 139, 139);
+    color: rgb(118, 237, 248);
+
+    
+
+}
+.btn{
+    &:active{
+        scale: .5;
+        transition: 1s ease-in;
+    }
+    @apply center  min-w-[100px] p-2 max-w-[200px]  rounded-md;
+    
+}
+
+.t-container{
+    .t-body{
+@apply w-full min-h-[50px] p-2 rounded-md ;
+box-shadow: 0px 1px 3px 1px rgb(72, 73, 78);
+    }
+    &>:nth-child(even){
+  background: #78dce9;
+    }
+    &>:nth-child(odd){
+        background: #b1c0df;
+
+    }
+}
+
+// home
+
+.home{
+    .box-1{
+        // background: #5776d4;
+        padding: 5px 5px;
+        box-shadow: inset 1px 1px 5px rgb(179, 171, 245) , inset  -1px -1px 5px rgb(181, 174, 242);
+        color: #78dce9;
+        &>:nth-child(2){
+            @apply px-2 rounded-sm ;
+         box-shadow: inset 1px 1px 0px rgb(179, 171, 245) , inset  -1px -1px 0px rgb(181, 174, 242);
+        }
+    }
+}

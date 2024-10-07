@@ -1,15 +1,18 @@
 import { toast } from "react-toastify";
 import { setFormStatus } from "../slices/authSlice";
- export const urlReloader=(res,dispatch)=>{
+ export const urlReloader=({response,dispatch,messageAllow=true}={})=>{
 
-    if(res.statusCode==65){
-        dispatch(setFormStatus({login:true}))
+    if(response?.statusCode==65){
+       return  dispatch(setFormStatus({login:true}))
     }
-    if(res?.status){
-        toast.success(res?.message)
+    if(messageAllow){
+        if(response?.status){
+            return  toast.success(response?.message)
+         }
+         else{
+           return  toast.error(response?.message)
+         }
     }
-    else{
-        toast.error(res?.message)
-    }
+    
    
 }
