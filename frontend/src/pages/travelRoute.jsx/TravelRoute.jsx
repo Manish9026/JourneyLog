@@ -17,7 +17,7 @@ import { getFormatedDate } from '../../utils/timeFormat';
 import { Tuple } from '@reduxjs/toolkit';
 // import { log } from 'console';
 
-const travler = [["rapido", <RiEBikeLine />], ["metro", <FaTrain />], ["auto", <MdDirectionsCarFilled />], ["other", <FaRoute />]]
+export const travler = [["rapido", <RiEBikeLine />], ["metro", <FaTrain />], ["auto", <MdDirectionsCarFilled />], ["other", <FaRoute />]]
 const TravelRoute = () => {
 
   const { recentRoutes, loading } = useSelector(state => state.travelRoute.addRoute)

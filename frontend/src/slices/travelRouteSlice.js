@@ -17,8 +17,8 @@ export const addRoute=createAsyncThunk("addRoute",async(formData,{dispatch})=>{
         alert(err)
     })
 })
-export const  recentRoutes=createAsyncThunk("recentRoutes",async(_,{dispatch})=>{
-    return await axios.get("/travel/getRecentRoutes",{withCredentials:true}).then((res)=>{
+export const  recentRoutes=createAsyncThunk("recentRoutes",async(navigate,{dispatch})=>{
+    return await axios.get(`/travel/getRecentRoutes?skip=${navigate?.skip || 0}&next=${navigate?.next || 5}`,{withCredentials:true}).then((res)=>{
         urlReloader({response:res.data,dispatch,messageAllow:false});
         console.log(res.data);       
         return res.data

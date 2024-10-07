@@ -24,8 +24,10 @@ app.use("/travel",travelRoutes)
 app.get("/",(req,res)=>{
     res.json({
         message:"this is server page"
-    })
+    }) 
 })
+
+
 
 
 
