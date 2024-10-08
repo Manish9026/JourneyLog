@@ -9,6 +9,7 @@ import { MdPostAdd } from "react-icons/md";
 import { IoMdLogOut } from "react-icons/io";
 import { useSelector } from 'react-redux';
 import { logout, setFormStatus } from '../slices/authSlice';
+import logo from '../../public/logo.png'
 import useReactHooks from '../custom-hooks/useReactHooks';
 
 
@@ -30,7 +31,8 @@ const Header = () => {
       <h6 className='text-xl'>Welcome back!</h6>
     </span>: 
     <div className='uppercase flex items-center '>
-      journeyLog <PiHandWavingFill className='ml-2 text-yellow-400' /> 
+        <span className='flex gap-2 items-center'><img src={logo} className='size-[40px]' alt="" />journeyLog</span>
+       <PiHandWavingFill className='ml-2 text-yellow-400' /> 
         </div>}
 
 <span className='flex items-center gap-2'>
