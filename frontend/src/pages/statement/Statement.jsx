@@ -16,7 +16,7 @@ const Statement = () => {
     <div className='flex flex-col w-full primary-p'>
 
 <span className='flex search w-full flex-col gap-1'>
-   <span className='flex w-full gap-1'>
+   <span className='flex w-full gap-1 relative overflow-hidden'>
    <label htmlFor='search' className='flex items-center  p-1 light-bg w-full min-h-[40px] overflow-hidden rounded-[5px]'>
         <input type='text' id='search' className=" flex min-w-[100px] bg-transparent px-2 h-full  flex-1 w-full"/>
         <span className='text-[15px] min-w-[40px] text-sky-400 center  h-full'>

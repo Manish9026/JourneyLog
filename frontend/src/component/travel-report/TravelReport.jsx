@@ -8,6 +8,7 @@ import { travler } from '../../pages/travelRoute.jsx/TravelRoute';
 import { getFormatedDate } from '../../utils/timeFormat';
 import { MdPrint } from "react-icons/md";
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 
 export const TravelReport = ({className}) => {
@@ -90,8 +91,9 @@ const PdfReport =forwardRef( (props,ref) => {
 	  () => ({
 		async handleDownloadPdf(){
             // setpageCount(1)
+            
 			const element = componentRef.current;
-	
+	if(!element) return toast("no records")
 			const canvas = await html2canvas(element, {
 				scale: 2,
 				useCORS: true,
@@ -122,9 +124,10 @@ const PdfReport =forwardRef( (props,ref) => {
 		}
 	  })
 	)
+    if(Array.isArray(recentRoutes) && recentRoutes?.length!=0)
 	return (
 
-        Array.isArray(recentRoutes) && recentRoutes?.length!=0 &&
+        
 		<div className="w-full p-1 flex-col" ref={componentRef} style={{ width: '600px', height: "auto", border: "1px solid white", display: "flex", position:"absolute",top:"-1000000px",fontFamily: 'Arial, sans-serif',  
 			boxSizing: 'border-box' }}>
 
@@ -198,4 +201,5 @@ const PdfReport =forwardRef( (props,ref) => {
 
 		</div>
 	)
+
 })
