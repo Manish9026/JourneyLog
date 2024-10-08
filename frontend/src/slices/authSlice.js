@@ -3,10 +3,13 @@ import axios from 'axios'
 import { url } from '../utils/url'
 import { urlReloader } from '../utils/urlReloder'
 axios.defaults.baseURL = url
-export const login = createAsyncThunk("login", async (formdata) => {
+export const login = createAsyncThunk("login", async (formdata,{dispatch}) => {
     return await axios.post("/user/login", formdata, { withCredentials: true }).then(res => {
         urlReloader({response:res.data,});
-    //    console.log( res.data)
+    //    console.log( res.data,"login")
+       if(res.data.status){
+        dispatch(isVerified())
+       }
         return res.data
     }).catch((error)=>{
         return error
@@ -97,8 +100,8 @@ const authSlice = createSlice({
         })
         builder.addCase(login.fulfilled,(state,{payload})=>{
             state.loading=false;
-            state.userInfo=payload?.data;
             state.status=payload?.status
+            state.userInfo=payload?.data || [];
         })
 
         builder.addCase(isVerified.fulfilled,(state,{payload})=>{
@@ -108,7 +111,8 @@ const authSlice = createSlice({
         })
       
         builder.addCase(logout.fulfilled,(state,{payload})=>{
-            state.status=false
+            state.status=false,
+            state.userInfo=[]
         })
 
 

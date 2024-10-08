@@ -9,6 +9,7 @@ import { isVerified } from './slices/authSlice.js'
 import TravelRoute from './pages/travelRoute.jsx/TravelRoute.jsx'
 import { recentRoutes } from './slices/travelRouteSlice.js'
 import Statement from './pages/statement/Statement.jsx'
+import { TravelReport } from './component/travel-report/TravelReport.jsx'
 function RoutesProvider() {
 
 const dispatch=useDispatch();
@@ -37,6 +38,9 @@ const dispatch=useDispatch();
         dispatch(recentRoutes({skip:0,next:20}))
         return 0
       }
+    },{
+      path:"/pdf",
+      element:<TravelReport/>
     }]
   
   }])

@@ -81,26 +81,28 @@ export class Auth extends AuthTools{
             userEmail=userEmail.toLowerCase();
             console.log(userEmail);
             if (userEmail && password ) {
-                const match = await userModel.findOne({ userEmail })
+                let match = await userModel.findOne({ userEmail })
                 console.log(match);
                 if (match) {
                     if (await this.bycriptPass(password, match.password)) {
 
                         const loginToken = await this.genJWT_Token(match.userEmail, match._id)
                         console.log(loginToken);
-
+                        //  delete match['password']
                         res.cookie("uid", loginToken, {
                             sameSite: 'None',
                             secure: true,
                             expires: new Date(Date.now() + 3600000)
                         }).json({
                             message: "successfully login",
-                            status: true
+                            status: true,
+                            data:[]
                         })
                     } else {
                         res.json({
                             message: "password not matched",
-                            status: 0
+                            status: 0,
+                            data:[]
                         })
                     }
                 }

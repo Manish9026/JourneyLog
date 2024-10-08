@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import Title from '../../component/Title';
 import { travler } from '../travelRoute.jsx/TravelRoute';
 import { getFormatedDate } from '../../utils/timeFormat';
+import { TravelReport } from '../../component/travel-report/TravelReport';
 
 const Statement = () => {
   const { recentRoutes, loading } = useSelector(state => state.travelRoute.addRoute)
@@ -22,10 +23,12 @@ const Statement = () => {
         <FaSearch className='  '/>
         </span>
     </label>
-    <span className='min-w-[40px] center tertiary rounded-[5px] primary-font cursor-pointer'>
+    {/* <span className='min-w-[40px] center tertiary rounded-[5px] primary-font cursor-pointer'>
 
 <TiPrinter />
-    </span>
+    </span> */}
+    <TravelReport className="min-w-[40px] center tertiary rounded-[5px] primary-font cursor-pointer"/>
+
    </span>
    <span className='flex justify-end w-full gap-1'>
 
