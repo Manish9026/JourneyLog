@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaArrowRight, FaSearch } from 'react-icons/fa'
 import { FaFilter, FaIndianRupeeSign } from 'react-icons/fa6';
 import { TiPrinter } from "react-icons/ti";
@@ -8,13 +8,21 @@ import Title from '../../component/Title';
 import { travler } from '../travelRoute.jsx/TravelRoute';
 import { getFormatedDate } from '../../utils/timeFormat';
 import { TravelReport } from '../../component/travel-report/TravelReport';
+import useReactHooks from '../../custom-hooks/useReactHooks';
+import { sort } from '../../slices/statementSlice';
 
 const Statement = () => {
-  const { recentRoutes, loading } = useSelector(state => state.travelRoute.addRoute)
+    const [isSort,setIsSort]=useState(1);
+  const { statement, loading,printLoading } = useSelector(state => state.statement)
+  const {dispatch}=useReactHooks();
 
+  useEffect(()=>{
+dispatch(sort(isSort))
+  },[isSort])
   return (
     <div className='flex flex-col w-full primary-p'>
 
+{printLoading && <span className='absolute z-10 w-full flex-col capitalize primary-font center h-full light-dark top-0 left-0'><div class="loader rounded-[5px]"></div> printing...</span>}
 <span className='flex search w-full flex-col gap-1'>
    <span className='flex w-full gap-1 relative overflow-hidden'>
    <label htmlFor='search' className='flex items-center  p-1 light-bg w-full min-h-[40px] overflow-hidden rounded-[5px]'>
@@ -32,14 +40,14 @@ const Statement = () => {
    </span>
    <span className='flex justify-end w-full gap-1'>
 
-    <span className="size-[35px] center tertiary rounded-[5px] primary-font cursor-pointer"><BiSortAlt2 /></span>
+    <span className="size-[35px] center tertiary rounded-[5px] primary-font cursor-pointer" onClick={()=>setIsSort(prev=>prev==1?-1:1)}><BiSortAlt2 /></span>
     <span className="w-[40px] center tertiary rounded-[5px] primary-font cursor-pointer"><FaFilter/></span>
    </span>
 </span>
 
 <span className=' flex flex-col gap-2 py-2 w-full'>
-{recentRoutes.length != 0 ?
-            recentRoutes.map((routes, id) => {
+{statement.length != 0 ?
+            statement.map((routes, id) => {
 
               return (
                 <div className="" key={routes._id}>

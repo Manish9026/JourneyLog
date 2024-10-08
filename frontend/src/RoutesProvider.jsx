@@ -10,6 +10,7 @@ import TravelRoute from './pages/travelRoute.jsx/TravelRoute.jsx'
 import { recentRoutes } from './slices/travelRouteSlice.js'
 import Statement from './pages/statement/Statement.jsx'
 import { TravelReport } from './component/travel-report/TravelReport.jsx'
+import { getStatements } from './slices/statementSlice.js'
 function RoutesProvider() {
 
 const dispatch=useDispatch();
@@ -35,7 +36,7 @@ const dispatch=useDispatch();
       path:"statement",
       element:<Statement/>,
       loader:()=>{
-        dispatch(recentRoutes({skip:0,next:20}))
+        dispatch(getStatements({skip:0,next:5}))
         return 0
       }
     },{

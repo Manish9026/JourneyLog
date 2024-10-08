@@ -9,6 +9,8 @@ import { getFormatedDate } from '../../utils/timeFormat';
 import { MdPrint } from "react-icons/md";
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import useReactHooks from '../../custom-hooks/useReactHooks';
+import { setPrintLoading } from '../../slices/statementSlice';
 
 
 export const TravelReport = ({className}) => {
@@ -84,13 +86,14 @@ const triggerPdfDownload = () => {
 // ]
 const PdfReport =forwardRef( (props,ref) => {
 	const componentRef = useRef();
-
-    const { recentRoutes, loading } = useSelector(state => state.travelRoute.addRoute)
+const {dispatch}=useReactHooks()
+    const { statement, loading } = useSelector(state => state.statement)
 	useImperativeHandle(
 	  ref,
 	  () => ({
 		async handleDownloadPdf(){
             // setpageCount(1)
+dispatch(setPrintLoading(true))
             
 			const element = componentRef.current;
 	if(!element) return toast("no records")
@@ -121,10 +124,12 @@ const PdfReport =forwardRef( (props,ref) => {
 			}
 	
 			pdf.save('travelReport.pdf');
+dispatch(setPrintLoading(false))
+
 		}
 	  })
 	)
-    if(Array.isArray(recentRoutes) && recentRoutes?.length!=0)
+    if(Array.isArray(statement) && statement?.length!=0)
 	return (
 
         
@@ -133,7 +138,7 @@ const PdfReport =forwardRef( (props,ref) => {
 
 			<header className='primary-p flex w-full list-none border-b border-red-400 flex-col capitalize'>
 				<span className='center flex-col'><h4>travel report </h4>
-                <p className='center'>{new Date(recentRoutes[0].createdAt).toLocaleDateString('en') }-{new Date(recentRoutes[recentRoutes.length-1].createdAt).toLocaleDateString()}</p></span>
+                <p className='center'>{new Date(statement[0].createdAt).toLocaleDateString('en') }-{new Date(statement[statement.length-1].createdAt).toLocaleDateString()}</p></span>
 				<span className="flex justify-between">
 					<ul>
 						<li>company name:</li>
@@ -141,7 +146,7 @@ const PdfReport =forwardRef( (props,ref) => {
 					</ul>
 					<ul>
 						<li>date:{new Date().toLocaleDateString()}</li>
-						<li>pages:{0}</li>
+						<li>total amount:{Array.isArray(statement) && statement.reduce((sum,item)=>sum + item.travel.reduce((sum,data)=>sum + data.amount,0),0)}</li>
 					</ul>
 				</span>
 			</header>
@@ -149,8 +154,8 @@ const PdfReport =forwardRef( (props,ref) => {
 			<div className="body capitalize w-full">
 
 			{
-                Array.isArray(recentRoutes) && recentRoutes.length!=0 &&
-				recentRoutes.map((routes,id)=>{
+                Array.isArray(statement) && statement.length!=0 &&
+				statement.map((routes,id)=>{
 					return(
 						
 				<div key={routes?._id} className="box w-full border flex flex-col primary-px">
