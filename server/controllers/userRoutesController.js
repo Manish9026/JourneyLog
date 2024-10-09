@@ -109,27 +109,98 @@ try {
     }
 
     static getAllRoutes = async (req, res) => {
-        const userId = req?.user?._id || null
+
         try {
-            if (!userId) return badRes({ res, message: "user not authenticated" })
-            const allRoutes = await userRouteModel.find({ userId });
-
-            if (allRoutes.length != 0) {
-                goodRes({ res, data: allRoutes })
-            } else
-                return badRes({ res, data: [], message: "result not found" })
-
+            
+            const userId = req?.user?._id || null
+            const company=req?.user?.company?.map((item)=>{
+                return item.cmpName
+              })
+    
+              if(userId && company.length!=0){
+            await userRouteModel.aggregate([
+              {
+                $match: { userId }  // Match by userId
+              },
+              {
+                $unwind: "$travel"  // Unwind the travel array so each travel log can be processed individually
+              },
+              {
+                $addFields: {
+                  travelDate: {
+                    $dateToString: { format: "%Y-%m-%d", date: "$travel.date" }  // Extract the date (YYYY-MM-DD)
+                  }
+                }
+              },
+              {
+                $match: { "company.cmpName": { $in: company } }  // Filter based on the company names
+              },
+              {
+                $group: {
+                  _id: { travelDate: "$travelDate", company: "$company.cmpName" },  // Group by date and company name
+                  travelDetails: {
+                    $push: {
+                      whereTo: "$travel.whereTo",
+                      whereFrom: "$travel.whereFrom",
+                      travelBy: "$travel.travelBy",
+                      amount: "$travel.amount",
+                      date:"$travel.date",
+                      _id:"$travel._id"
+                    }
+                  }
+                }
+              },
+              {
+                $group: {
+                  _id: "$_id.travelDate",  // Group by travel date
+                  companies: {
+                    $push: {
+                      company: "$_id.company",
+                      travelDetails: "$travelDetails"
+                    }
+                  }
+                }
+              },
+              {
+                $project: {
+                  _id: 0,  // Exclude the default _id field
+                  date: "$_id",  // Rename the _id field to "date"
+                  companies: 1  // Include the companies array
+                }
+              }
+            ])
+            .then(result => {
+            //   console.log(result);
+            //   res.send(result) 
+              goodRes({res,data:result}) // Output the result object
+            })
+            .catch(err => {
+                badRes({res,})
+              console.error(err);
+            });}
+            else{
+                badRes({res,message:"internal error"})
+            }
         } catch (error) {
-            badRes({ res, message: "internal error" })
+           
+                badRes({res,message:"internal error"})
+            
         }
+       
+        
+        
+  
     }
+
 
     static getRecentRoutes =async(req,res)=>{
         const {limit,skip}=req.query;
         const userId=req?.user?._id
         const {recentCompany}=req.user;
+        console.log(recentCompany,userId);
+        
         try {
-            const recentRoutes=await userRouteModel.find({userId,"company.cmpName":recentCompany}).sort({updatedAt:-1}).limit(limit);
+            const recentRoutes=await userRouteModel.find({userId}).sort({updatedAt:-1}).limit(limit);
             if(recentRoutes.length!=0){
                 goodRes({res,data:recentRoutes})
             }else badRes({res,})

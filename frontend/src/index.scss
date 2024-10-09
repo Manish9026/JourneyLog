@@ -61,6 +61,16 @@ body{
       font-size: 1.5rem;
       color: #333;
     }
+
+// scrollbar -style
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+   /* Hide scrollbar for IE, Edge and Firefox */
+    .no-scrollbar {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+  }
   }
 .navBtn{
     left: 0;
