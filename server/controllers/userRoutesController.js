@@ -108,7 +108,7 @@ try {
 }
     }
 
-    static getAllRoutes = async (req, res) => {
+    static getRecentRoutes = async (req, res) => {
 
         try {
             
@@ -193,20 +193,30 @@ try {
     }
 
 
-    static getRecentRoutes =async(req,res)=>{
-        const {limit,skip}=req.query;
+    static getRandomRoutes =async(req,res)=>{
+        const {limit,skip,company}=req.query;
         const userId=req?.user?._id
         const {recentCompany}=req.user;
-        console.log(recentCompany,userId);
+        console.log(recentCompany,userId,company);
+        let cmpName;
+        if(company){
+            cmpName=company
+        }
+        cmpName=recentCompany
+        console.log(cmpName);
         
         try {
-            const recentRoutes=await userRouteModel.find({userId}).sort({updatedAt:-1}).limit(limit);
+            const recentRoutes=await userRouteModel.find({userId,"company.cmpName":cmpName}).sort({updatedAt:-1}).limit(limit).skip(skip || 0);
+            console.log(recentRoutes);
+            
             if(recentRoutes.length!=0){
                 goodRes({res,data:recentRoutes})
             }else badRes({res,})
             
         } catch (error) {
             badRes({res,})
+            console.log(error);
+            
             
         }
 

@@ -39,7 +39,7 @@ const dispatch=useDispatch();
       path:"statement",
       element:<Statement/>,
       loader:()=>{
-        dispatch(getStatements({skip:0,next:5}))
+        dispatch(getStatements({skip:0,next:5,company:null}))
         return 0
       }
     },{

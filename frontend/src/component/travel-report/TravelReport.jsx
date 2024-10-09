@@ -13,7 +13,7 @@ import useReactHooks from '../../custom-hooks/useReactHooks';
 import { setPrintLoading } from '../../slices/statementSlice';
 
 
-export const TravelReport = ({className}) => {
+export const TravelReport = ({className,travlerName,companyName}) => {
 const pdfRef=useRef()
 const triggerPdfDownload = () => {
     if (pdfRef.current) {
@@ -22,7 +22,7 @@ const triggerPdfDownload = () => {
   };
 	return(<>
 	
-	<PdfReport ref={pdfRef}/>
+	<PdfReport ref={pdfRef} travlerName={travlerName} companyName={companyName}/>
 		<span className={className} onClick={()=>triggerPdfDownload()}> <MdPrint/></span>
 	</>
 	)
@@ -84,7 +84,7 @@ const triggerPdfDownload = () => {
 // 		"__v": 0
 // 	}
 // ]
-const PdfReport =forwardRef( (props,ref) => {
+const PdfReport =forwardRef( ({travlerName,companyName},ref) => {
 	const componentRef = useRef();
 const {dispatch}=useReactHooks()
     const { statement, loading } = useSelector(state => state.statement)
@@ -141,8 +141,8 @@ dispatch(setPrintLoading(false))
                 <p className='center'>{new Date(statement[0].createdAt).toLocaleDateString('en') }-{new Date(statement[statement.length-1].createdAt).toLocaleDateString()}</p></span>
 				<span className="flex justify-between">
 					<ul>
-						<li>company name:</li>
-						<li>traveler Name:</li>
+						<li className='flex items-center '>company name:<p className='text-sm mt-1'>{companyName}</p></li>
+						<li className='flex items-center'>traveler Name: <p className='text-sm mt-1'>{travlerName}</p></li>
 					</ul>
 					<ul>
 						<li>date:{new Date().toLocaleDateString()}</li>
