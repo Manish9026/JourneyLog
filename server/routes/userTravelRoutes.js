@@ -9,3 +9,6 @@ travelRoutes.get("/all-routes",authMiddleWare,UserRoutes.getAllRoutes)
 travelRoutes.get("/getRecentRoutes",authMiddleWare,UserRoutes.getRecentRoutes)
 travelRoutes.get("/places",UserRoutes.searchPlace)
 
+// detail page routes
+travelRoutes.post("/add-company",authMiddleWare,UserRoutes.addCompany)
+travelRoutes.get("/all-details",authMiddleWare,UserRoutes.getDetails)

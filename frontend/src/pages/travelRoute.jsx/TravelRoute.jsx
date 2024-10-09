@@ -5,7 +5,7 @@ import { FaArrowRight, FaCross, FaTrain } from "react-icons/fa";
 import { RiEBikeLine } from "react-icons/ri";
 import { MdDirectionsCarFilled } from "react-icons/md";
 import { FaRoute } from "react-icons/fa";
-import { FaIndianRupeeSign, FaXmark } from "react-icons/fa6";
+import { FaIndianRupeeSign, FaPlus, FaXmark } from "react-icons/fa6";
 import { LuArrowDownUp } from "react-icons/lu";
 // import { Button } from '../Home/Home';
 import useReactHooks from '../../custom-hooks/useReactHooks';
@@ -21,18 +21,24 @@ export const travler = [["rapido", <RiEBikeLine />], ["metro", <FaTrain />], ["a
 const TravelRoute = () => {
 
   const { recentRoutes, loading } = useSelector(state => state.travelRoute.addRoute)
+  const {userInfo}=useSelector(state=>state.auth)
   const [srhBox,setSrhBox]=useState({
     one:false,
     two:false
   })
-  const { dispatch } = useReactHooks();
+  const { dispatch,navigate } = useReactHooks();
   const [formData, setFormData] = useState({
     whereFrom: "",
     whereTo: "",
     amount: '',
     travelBy: "metro",
-    date: Date.now
+    date: Date.now,
+    company:{
+      cmpName:"",
+      cmpId:""
+    }  
   })
+  const [isActive,setIsActive]=useState(0)
 
 
   const onChangeHandler = (ele) => {
@@ -48,15 +54,8 @@ const TravelRoute = () => {
   }
 
   const isValidate = () => {
-    if (!formData.amount) {
-      toast.error("please enter amount")
-      return false
-    }
-    else if (!formData.travelBy) {
-      toast.error("please choose option from travelBY")
-      return false
-    }
-    else if (!formData.whereFrom) {
+
+    if (!formData.whereFrom) {
       toast.error("please enter location")
       return false
     }
@@ -64,6 +63,20 @@ const TravelRoute = () => {
       toast.error("please enter destination location")
       return false
     }
+    else if(!formData.company.cmpName){
+      toast.error("please choose company name")
+      return false
+    }
+    else if (!formData.travelBy) {
+      toast.error("please choose option from travelBY")
+      return false
+    }
+    else if (!formData.amount) {
+      toast.error("please enter amount")
+      return false
+    }
+    
+   
     else {
       return true
     }
@@ -82,6 +95,16 @@ const TravelRoute = () => {
     })
   }
 
+  const recentCmp=()=>{
+   if( userInfo?.company){
+   const result= userInfo?.company.find((ele)=>{return userInfo?.recentCompany==ele.cmpName })
+   console.log(result);
+
+   setFormData(prev=>({...prev,company:{cmpId:result?._id,cmpName:result?.cmpName}}))
+   
+   } 
+  }
+
   const interchangeHandler = () => {
     // if(formData.whereFrom)
     setFormData(prev => ({ ...prev, whereFrom: prev.whereTo, whereTo: prev.whereFrom }))
@@ -91,7 +114,7 @@ const TravelRoute = () => {
   return (
     <div className='flex flex-col w-full h-full'>
 
-      <div className="primary-p">
+      <div className="primary-p " >
         <Title title={"Pick location"} />
         <span className='flex flex-col items-center gap-1 max-w-[400px]'>
           <span className='w-full relative '>
@@ -111,6 +134,24 @@ const TravelRoute = () => {
           }/>}
             </span>
 
+            <span onFocus={()=>{setIsActive(1);recentCmp()}} className="flex   flex-col w-full placeholder:capitalize">
+              <input type="text" value={formData?.company?.cmpName}  className="inputField"placeholder='choose company' />
+              <span className={`w-full secondary-bg  relative z-[1]  ${isActive? "max-h-[150px] opacity-100  px-2 py-1  "  : "p-[0] max-h-[0px]  opacity-0 hidden "} transition-height duration-500 overflow-auto  flex flex-col gap-1   list-none`}>
+                {
+
+                  userInfo && Array.isArray( userInfo?.company) && userInfo?.company.length!=0 ?
+                  userInfo?.company.map((data,id)=>{
+                  return (
+                    <li key={data?._id} className='border px-1 rounded-md center capitalize secondary-font cursor-pointer' onClick={()=>{setFormData(prev=>({...prev,company:{cmpName:data?.cmpName,cmpId:data?._id}}));setIsActive(0)}}>{data?.cmpName}</li>
+                  )
+                }):
+                <span className="capitalize w-full min-h-[100px] center flex-col">
+                  <p className='tertiary-font center'> company dosen't exist in own record</p>
+                 <p className='center secondary-font'> please add company details after that fill entry</p>
+                 <button onClick={()=>navigate("/detail")} className='flex w-full gap-2 capitalize  cursor-pointer center max-w-[150px] mt-2 primary-font bg-sky-400 flex-1 max-h-[40px] rounded-md'><FaPlus/> <p>add</p></button>
+                </span>
+}</span>
+            </span>
           <div className="sub flex w-full flex-wrap gap-1 ">
 
             {/* <input type="text" /> */}

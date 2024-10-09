@@ -1,79 +1,103 @@
-.inputField{
-    // background-color: red;
- 
-    @apply bg-red-100 light-bg rounded-md  px-3 py-2 w-full  ;
-    background-color:transparent;
-    box-shadow: inset 1px 1px 5px 0px rgb(139, 136, 136), inset -1px -1px 5px 0px rgb(136, 139, 139);
-    color: rgb(118, 237, 248);
+// .light-bg{
+//   background: #eceff4f9;
+//   color: #393E46;
 
-    
+// }
+//tailwind
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+.inputField {
+
+  @apply bg-red-100 rounded-md px-3 py-2 w-full;
+  background-color: red;
+  background-color: transparent;
+  box-shadow: inset 1px 1px 5px 0px rgb(139, 136, 136), inset -1px -1px 5px 0px rgb(136, 139, 139);
+  color: rgb(118, 237, 248);
+}
+
+.btn {
+  &:active {
+    scale: .5;
+    transition: 1s ease-in;
+  }
+  @apply  min-w-[100px] p-2 max-w-[200px] rounded-md;
 
 }
-.btn{
-    &:active{
-        scale: .5;
-        transition: 1s ease-in;
-    }
-    @apply center  min-w-[100px] p-2 max-w-[200px]  rounded-md;
-    
-}
 
-.t-container{
-    .t-body{
-@apply w-full min-h-[50px] p-2 rounded-md ;
-box-shadow: 0px 1px 3px 1px rgb(72, 73, 78);
-    }
-    &>:nth-child(even){
-  background: #78dce9;
-    }
-    &>:nth-child(odd){
-        background: #b1c0df;
+.t-container {
+  .t-body {
+    @apply w-full min-h-[50px] p-2 rounded-md;
+    box-shadow: 0px 1px 3px 1px rgb(72, 73, 78);
+  }
 
-    }
+  &>:nth-child(even) {
+    background: #78dce9;
+  }
+
+  &>:nth-child(odd) {
+    background: #b1c0df;
+
+  }
 }
 
 // home
 
-.home{
-    .box-1{
-        // background: #5776d4;
-        padding: 5px 5px;
-        box-shadow: inset 1px 1px 5px rgb(179, 171, 245) , inset  -1px -1px 5px rgb(181, 174, 242);
-        color: #78dce9;
-        &>:nth-child(2){
-            @apply px-2 rounded-sm ;
-         box-shadow: inset 1px 1px 0px rgb(179, 171, 245) , inset  -1px -1px 0px rgb(181, 174, 242);
-        }
+.home {
+  .box-1 {
+    // background: #5776d4;
+    padding: 5px 5px;
+    box-shadow: inset 1px 1px 5px rgb(179, 171, 245), inset -1px -1px 5px rgb(181, 174, 242);
+    color: #78dce9;
+
+    &>:nth-child(2) {
+      @apply px-2 rounded-sm;
+      box-shadow: inset 1px 1px 0px rgb(179, 171, 245), inset -1px -1px 0px rgb(181, 174, 242);
     }
+  }
 }
 
 /* HTML: <div class="loader"></div> */
 .loader {
-    width: 70px;
-    height: 50px;
-    box-sizing: border-box;
-    background:
-      conic-gradient(from 135deg at top,#0000, #fff 1deg 90deg,#0000 91deg) right -20px bottom 8px/18px 9px,
-      linear-gradient(#fff 0 0) bottom/100% 8px,
-      #000;
-    background-repeat: no-repeat;
-    border-bottom: 8px solid #000;
-    position: relative;
-    animation: l7-0 2s infinite linear;
+  width: 70px;
+  height: 50px;
+  box-sizing: border-box;
+  background:
+    conic-gradient(from 135deg at top, #0000, #fff 1deg 90deg, #0000 91deg) right -20px bottom 8px/18px 9px,
+    linear-gradient(#fff 0 0) bottom/100% 8px,
+    #000;
+  background-repeat: no-repeat;
+  border-bottom: 8px solid #000;
+  position: relative;
+  animation: l7-0 2s infinite linear;
+}
+
+.loader::before {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 14px;
+  background: lightblue;
+  left: 10px;
+  animation: l7-1 2s infinite cubic-bezier(0, 200, 1, 200);
+}
+
+@keyframes l7-0 {
+  100% {
+    background-position: left -20px bottom 8px, bottom
   }
-  .loader::before {
-    content: "";
-    position: absolute;
-    width: 10px;
-    height: 14px;
-    background: lightblue;
-    left: 10px;
-    animation: l7-1 2s infinite cubic-bezier(0,200,1,200);
+}
+
+@keyframes l7-1 {
+
+  0%,
+  50% {
+    bottom: 8px
   }
-  @keyframes l7-0{
-    100% { background-position: left -20px bottom 8px,bottom}
+
+  90%,
+  100% {
+    bottom: 8.1px
   }
-  @keyframes l7-1{
-    0%,50%   {bottom: 8px}
-    90%,100% {bottom: 8.1px}
-  }
+}

@@ -7,11 +7,19 @@ const routesSlice=mongoose.Schema({
         required: true,
         ref: "user"
     },
+    company:{
+        type:{
+            cmpName:String,
+            cmpId:String
+        }
+
+    },
     travel:{
         type:[{
             whereTo:{
                 type:String
             },
+            company:String,
             whereFrom:{
                 type:String
             },

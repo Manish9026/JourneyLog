@@ -20,6 +20,21 @@ const authSchema=mongoose.Schema({
     profileImage:{
         type:String,
     },
+    company:{
+        type:[{
+            cmpName:String,
+            createdAt:{
+                type:Date,
+                default:Date.now
+            },
+            recentPayment:Date
+        }]
+    },
+    recentCompany:{
+       type:String 
+    },
+
+
     userToken:String
 })
 

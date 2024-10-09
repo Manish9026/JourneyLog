@@ -12,6 +12,8 @@ import { logout, setFormStatus } from '../slices/authSlice';
 import logo from '../../public/logo.png'
 import useReactHooks from '../custom-hooks/useReactHooks';
 
+import { BiSolidUserDetail } from "react-icons/bi";
+import { MdPayments } from "react-icons/md";
 
 
 
@@ -45,7 +47,7 @@ const Header = () => {
    </div>
    <div className={`${isNavActive? "max-h-40 opacity-100" : "max-h-0 opacity-0"} transition-all duration-500 overflow-hidden flex flex-col list-none secondary-font capitalize`}>
    {
-    [["home","/",<AiFillHome />],["add","/add-routes",<MdPostAdd />],["statements","/statement",<HiDocumentMagnifyingGlass />]].map((title,id)=>{
+    [["home","/",<AiFillHome />],["add","/add-routes",<MdPostAdd />],["statements","/statement",<HiDocumentMagnifyingGlass />],["detail","/detail",<BiSolidUserDetail />],["payment",'/payment',<MdPayments />]].map((title,id)=>{
         return (
             <Link to={title[1]} key={id}>
             <li className='flex items-center gap-2 '>{title[2]}{title[0]}</li>
