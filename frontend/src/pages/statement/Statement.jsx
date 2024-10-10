@@ -22,10 +22,16 @@ const Statement = () => {
   const [searchValue,setSearchValue]=useState("")
 
   useEffect(()=>{
-// console.log();
-setSearchValue(userInfo?.recentCompany || "" )
+console.log("hdhfd");
+if(!searchValue){
+  let timeout=setTimeout(() => {
+    setSearchValue(userInfo?.recentCompany || "" )
+    dispatch(getStatements({skip:0,next:5,company:searchValue}))
+  }, 1000);
 
-  },[userInfo?.recentCompany])
+return ()=>clearTimeout(timeout)}
+
+  },[userInfo?.recentCompany,searchValue])
   useEffect(()=>{
 dispatch(sort(isSort))
   },[isSort])

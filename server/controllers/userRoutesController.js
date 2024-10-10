@@ -198,17 +198,11 @@ try {
         const userId=req?.user?._id
         const {recentCompany}=req.user;
         console.log(recentCompany,userId,company);
-        let cmpName;
-        if(company){
-            cmpName=company
-        }
-        cmpName=recentCompany
-        console.log(cmpName);
-        
+        let cmpName=company && company!=null?company:recentCompany;
+console.log(cmpName);
+
         try {
             const recentRoutes=await userRouteModel.find({userId,"company.cmpName":cmpName}).sort({updatedAt:-1}).limit(limit).skip(skip || 0);
-            console.log(recentRoutes);
-            
             if(recentRoutes.length!=0){
                 goodRes({res,data:recentRoutes})
             }else badRes({res,})
