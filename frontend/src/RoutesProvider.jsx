@@ -14,6 +14,8 @@ import { TravelReport } from './component/travel-report/TravelReport.jsx'
 import { getStatements } from './slices/statementSlice.js'
 import Detail from './pages/Detail/Detail.jsx'
 import { getDetails } from './slices/detailSlice.js'
+import Payment from './pages/Payment/Payment.jsx'
+import { recentPayment } from './slices/paymentSlice.js'
 function RoutesProvider() {
 
 const dispatch=useDispatch();
@@ -54,7 +56,11 @@ const dispatch=useDispatch();
       }
     },{
       path:"/payment",
-      element:<div>payment</div>
+      element:<Payment/>,
+      loader:()=>{
+        dispatch(recentPayment())
+        return null
+      }
     }]
   
   }])

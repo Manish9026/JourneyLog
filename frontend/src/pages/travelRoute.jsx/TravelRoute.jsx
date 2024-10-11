@@ -269,7 +269,7 @@ const SrhContainer = memo(({ srhParam, setValue, close }) => {
 const DropDownContainer = memo(({ travelDetails, company = "company name" }) => {
   const [isActive, setIsActive] = useState(false)
   return (
-    <span className=" flex no-scrollbar   flex-col w-full gap-2  max-h-[500px] overflow-auto">
+    <span className=" flex no-scrollbar flex-col w-full gap-2  max-h-[500px] overflow-auto">
       {/* show */}
       <span onClick={() => setIsActive(prev => !prev)} className="flex cursor-pointer relative text-slate-800  items-center sticky top-0 z-[2] gap-2 capitalize rounded-md p-2 bg-sky-200 w-full">
 
@@ -279,7 +279,7 @@ const DropDownContainer = memo(({ travelDetails, company = "company name" }) => 
       </span>
       {/*hide*/}
 
-      <span className={`${isActive ? "max-h-[400px] opacity-100" : "max-h-0 opacity-0"} transition-all duration-700 t-container  flex px-2 gap-2 flex-col`}>
+      <span className={`${isActive ? "max-h-[400px] pb-2 opacity-100 " : "max-h-0 opacity-0  pb-0"} transition-all duration-700 t-container flex  px-2 gap-2 flex-col `}>
         {
           travelDetails.map((data, id) => {
             return (

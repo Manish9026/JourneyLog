@@ -7,6 +7,7 @@ import authRoutes from './routes/authRoutes.js';
 const app=express();
 import DB_connection from './DBconfig/DB.config.js';
 import { travelRoutes } from './routes/userTravelRoutes.js'
+import { paymentRoute } from './routes/paymentRoutes.js'
 
 const port=process.env.PORT;
 app.use(express.json()) 
@@ -20,6 +21,7 @@ app.use(cors({
 
 app.use("/user",authRoutes);
 app.use("/travel",travelRoutes)
+app.use("/payment",paymentRoute)
 
 app.get("/",(req,res)=>{
     res.json({

@@ -1,0 +1,47 @@
+.inputBox {
+    position: relative;
+    width: 100%;
+
+    input {
+        position: relative;
+        width: 100%;
+        background: #8da0a07f;
+        border: none;
+        outline: none;
+        padding: 25px 10px 7.5px;
+        border-radius: 4px;
+        color: #fff;
+        font-weight: 500;
+        font-size: 1em;
+    }
+
+    p {
+        position: absolute;
+        left: 0;
+        padding: 15px 10px;
+        font-style: normal;
+        color: #090320c9;
+        transition: 0.5s;
+        top: 0;
+        pointer-events: none;
+    }
+
+    input:focus~p,
+    input:valid~p {
+        transform: translateY(-7.5px);
+        font-size: 0.8em;
+        color: #fff;
+    }
+    input[type="submit"] {
+        padding: 10px;
+        background: linear-gradient(65deg,lightblue 50%,orange);
+        color: #2f3953;
+        font-weight: 600;
+        font-size: 1.35em;
+        letter-spacing: 0.05em;
+        cursor: pointer;
+    }
+    input[type="submit"]:active {
+        opacity: 0.6;
+    }
+}

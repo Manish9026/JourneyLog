@@ -29,7 +29,7 @@ const routesSlice=mongoose.Schema({
             amount:Number,
             date:{
                 type:Date,
-                default:Date.now
+                default:new Date().toISOString()
             }
         }]
 

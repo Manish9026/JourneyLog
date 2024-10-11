@@ -22,7 +22,6 @@ const Statement = () => {
   const [searchValue,setSearchValue]=useState("")
 
   useEffect(()=>{
-console.log("hdhfd");
 if(!searchValue){
   let timeout=setTimeout(() => {
     setSearchValue(userInfo?.recentCompany || "" )
@@ -67,7 +66,7 @@ dispatch(sort(isSort))
 </span>
 
 <span className=' flex flex-col gap-2 py-2 w-full'>
-{statement.length != 0 ?
+{loading?<CardSkelton/>: statement.length != 0 ?
             statement.map((routes, id) => {
 
               return (
@@ -126,6 +125,36 @@ dispatch(sort(isSort))
 </span>
 
     </div>
+  )
+}
+
+const CardSkelton=()=>{
+  return(
+    <div className="flex flex-col gap-2 ">
+      <span className='capitalize secondary-font'>fetching details...</span>
+      <span className='flex flex-col gap-1'>
+        {
+            Array(5).fill(0).map((_,id)=>{
+              return(
+                <span key={id} className=' relative flex flex-col cursor-pointer rounded-md p-2 light-dark gap-1' >
+                    <span className='flex items-center  gap-2'>
+                      <span className='size-[20px] inner-shade p-1 rounded-full'></span>
+                      <span className='flex gap-2 items-center capitalize flex-wrap'>
+                        <p className='min-w-[100px] inner-shade p-1 rounded-md'></p><FaArrowRight className='text-xs font-normal text-white mt-0' /> <p className='min-w-[100px] inner-shade p-1 rounded-md'></p>
+                      </span>
+        
+                    </span>
+                    <span className='flex items-center text-sm gap-2'>
+                      <span className='size-[20px] inner-shade p-1 rounded-full'></span><p className='min-w-[50px] inner-shade py-[5px] rounded-[2px]'></p></span>
+        
+                    <p className='absolute top-1 right-[20px] text-slate-900 text-[10px]'></p>
+                  </span>
+              )
+            })
+        }
+      </span>
+    </div>
+  
   )
 }
 

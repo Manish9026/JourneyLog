@@ -1,96 +1,21 @@
-.loader-c{
-    width: 100%;
-    /* height: calc(100vh - 60px); */
-    display: flex;
-    background-color: hsla(0, 6%, 32%, 0.232);
-position: absolute;
-min-height: 80vh;
-height: 100%;
-    justify-content: center;
-    align-items: center;
-    z-index: 100;
-  
 
-    .ring-container{
-        position: sticky;
-        display: flex;
-        top: 50%;
-        transform: translatey(-50%);
-    /* background-color: #dedbdb46; */
+@keyframes l2{ 
+    100%{transform: rotate(1turn)}
+  }
+  /* HTML: <div class="loader"></div> */
 
-    justify-content: center;
-    align-items: center;
-min-width: 100px;
-max-width: 300px;
-/* width: 100%; */
-height: 400px;
-.ring{
-    /* background-color: #fff; */
-    position: absolute;
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    /* border: 1px solid; */
+  .loader-container{
+    background-color: rgba(107, 114, 134, 0.408);
 
-}
-        :nth-child(1){
-            border-bottom:5px solid rgb(243, 53, 246);
-            /* transition: 1 linear; */
-            animation:rotate1 2s linear infinite ;
-            /* transform: rotate(35deg) rotate(-80deg) rotate(0deg); */
-
-        }
-        :nth-child(2){
-            border-right:5px solid rgba(43, 126, 241, 0.87);
-            /* transition: 1 linear; */
-            animation:rotate2 2s linear infinite ;
-            /* transform: rotate(35deg) rotate(-80deg) rotate(0deg); */
-
-        }
-        :nth-child(3){
-            border-top:5px solid rgba(125, 223, 4, 0.938);
-            /* transition: 1 linear; */
-            animation:rotate3 2s linear infinite ;
-            /* transform:rotate3d( 20deg,50deg,100deg); */
-
-        }
-        p{
-            /* width: 20px; */
-            font-size: 12px;
-            color: #1570c1;
-      font-weight: 700;
-        }
-    }
-}
-@keyframes rotate1 {
-    0%{
-        transform: rotateX(35deg) rotateY(-45deg) rotateZ(0deg);
-    }
-    100%{
-        transform: rotateX(35deg) rotateY(-45deg) rotateZ(360deg);
-
-    }
-    
-}
-@keyframes rotate2{
-    0%{
-        transform: rotateX(50deg) rotateY(-10deg) rotateZ(0deg);
-    }
-    100%{
-        transform: rotateX(50deg) rotateY(-10deg) rotateZ(360deg);
-    }
-    
-}
-@keyframes rotate3 {
-    0%{
-        transform: rotateX(35deg) rotateY(55deg) rotateZ(0deg);
-
-    }
-    100%{
-        transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);
-
-
-
-    }
-    
-}
+    .loader-2 {
+        width: 70px;
+        aspect-ratio: 1;
+        /* border-radius: 50%; */
+        /* background: transparent; */
+        animation: l13 1s infinite linear;
+      }
+      
+  }
+  @keyframes l13{ 
+    100%{transform: rotate(1turn)}
+  }

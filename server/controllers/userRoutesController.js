@@ -127,13 +127,15 @@ try {
               },
               {
                 $addFields: {
-                  travelDate: {
-                    $dateToString: { format: "%Y-%m-%d", date: "$travel.date" }  // Extract the date (YYYY-MM-DD)
-                  }
+                    travelDate: {
+                    $dateToString: { format: "%Y-%m-%d", date: '$travel.date'  }  // Extract the date (YYYY-MM-DD)
+                  },
+                //   travelDate:'$travel.date'
                 }
               },
               {
-                $match: { "company.cmpName": { $in: company } }  // Filter based on the company names
+                $match: { "company.cmpName": { $in: company },  } // Filter based on the company names
+            
               },
               {
                 $group: {
@@ -167,8 +169,13 @@ try {
                   date: "$_id",  // Rename the _id field to "date"
                   companies: 1  // Include the companies array
                 }
+              },
+              {
+                $sort:{"date":-1}
+              },{
+                $limit:3
               }
-            ])
+            ])                         
             .then(result => {
             //   console.log(result);
             //   res.send(result) 
@@ -284,3 +291,56 @@ console.log(cmpName);
         }
     }
 }
+
+
+[{
+    "companies": [
+        {
+            "company": "manish",
+            "travelDetails": [
+                {
+                    "whereTo": "meerut ",
+                    "whereFrom": "lucknow",
+                    "travelBy": "metro",
+                    "amount": 30,
+                    "date": "2024-10-10T18:36:06.679Z",
+                    "_id": "67081e96f8a3cf5d7639b22b"
+                },
+                {
+                    "whereTo": "mayur vihar",
+                    "whereFrom": "asharm",
+                    "travelBy": "metro",
+                    "amount": 25,
+                    "date": "2024-10-10T18:46:05.769Z",
+                    "_id": "670820ed75d9dd12bb429930"
+                },
+                {
+                    "whereTo": "mumbai",
+                    "whereFrom": "kanpur",
+                    "travelBy": "metro",
+                    "amount": 200,
+                    "date": "2024-10-10T19:41:41.774Z",
+                    "_id": "67082df53be42cc8f38268f1"
+                }
+            ]
+        }
+    ],
+    "date": "2024-10-10T18:36:06.683Z"
+}, {
+    "companies": [
+        {
+            "company": "krisna oversiease",
+            "travelDetails": [
+                {
+                    "whereTo": "agra",
+                    "whereFrom": "asharm",
+                    "travelBy": "rapido",
+                    "amount": 56,
+                    "date": "2024-10-10T19:51:01.260Z",
+                    "_id": "67083025726e33449cbd6c46"
+                }
+            ]
+        }
+    ],
+    "date": "2024-10-10T19:51:01.261Z"
+},]

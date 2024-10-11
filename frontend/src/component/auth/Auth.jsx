@@ -35,7 +35,7 @@ export const Register = () => {
     
         }
         return (
-            <div className="sign-up">
+            <div className="sign-up relative">
                {loading? <Loader/>:""}
                 <span className="mdIcons" onClick={() => {dispatch(setFormStatus({register:false}))}}>
                     <FaArrowLeft />
