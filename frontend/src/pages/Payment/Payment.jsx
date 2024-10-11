@@ -5,7 +5,6 @@ import InputField from '../../component/UI component/InputField'
 import Datepicker from "react-tailwindcss-datepicker";
 import useReactHooks from '../../custom-hooks/useReactHooks'
 import { payment } from '../../slices/paymentSlice';
-import OutsideClickHandler from '../../custom-hooks/outSideClickHandler';
 import { useSelector } from 'react-redux';
 import { PiBuildingOfficeBold } from 'react-icons/pi';
 import { IoIosArrowUp } from 'react-icons/io';
