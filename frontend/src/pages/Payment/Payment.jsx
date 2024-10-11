@@ -29,6 +29,12 @@ const Payment = () => {
     const submitHandler = (e) => {
         e.preventDefault();
         dispatch(payment(formData))
+        setFormData({
+            company: { cmpName: "", cmpId: "" },
+            startFrom: "",
+            startTo: "",
+            amount: ""
+        })
     }
 
     return (

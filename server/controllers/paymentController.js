@@ -11,10 +11,13 @@ export class payment{
 
             console.log(req.body);
             const userId=req?.user?._id;
+            const companies=req.user?.company;
             const {company,startFrom,startTo,amount}=req.body;  
             
+            
+            
             if(company && startFrom?.startDate && startTo?.startDate && amount ){
-    
+                if(!companies.find((a)=>a.cmpName==company.cmpName)) return badRes({res,message:"company is not valid"})
                 const newPayment=await paymentModel.create({
                     company,startFrom:startFrom.startDate,startTo:startTo.startDate,
                     amount,userId
@@ -44,7 +47,7 @@ export class payment{
             const userId=req?.user?._id;
             if(!userId) badRes({res,"message":"unauthorised"})
 
-            const matchPayment=await paymentModel.find({userId});
+            const matchPayment=await paymentModel.find({userId}).sort({createdAt:-1});
 
             if(matchPayment)
                 goodRes({res,data:matchPayment});
