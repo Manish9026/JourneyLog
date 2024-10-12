@@ -9,7 +9,8 @@ const authSchema=mongoose.Schema({
     },
     userEmail:{
         type:String,
-        required:true
+        required:true,
+        index: true ,
     },
     password:{
         type:String

@@ -1,7 +1,7 @@
 function checkDateStatus(dateString) {
     const days=["sunday","monday","tuesday","wednesday","thursday","friday","saturday"]
         // date declaration
-        const [givenDate,today,checkIfDate,yesterday]=[new Date(new Date(dateString).toLocaleDateString()),new Date(),new Date(),new Date(),new Date()]
+        const [givenDate,today,checkIfDate,yesterday]=[new Date(new Date(dateString).toLocaleDateString('en-US', { timeZone: 'UTC' })),new Date(),new Date(),new Date(),new Date()]
         // logic of yesterday date
         yesterday.setDate(today.getDate() - 1);
       //  convert date to local string "DD/MM/YYYY" format

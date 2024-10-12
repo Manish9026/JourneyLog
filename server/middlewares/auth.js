@@ -20,9 +20,10 @@ import { userModel } from "../models/authModel.js";
            return
           }
         //   res.clearCookie('uid', {
-        //     sameSite: 'None',
-        //     secure: true
-        // }).status(201).json({
+//                 sameSite: process.env.DEPLOYMENT_TYPE=="local"?'Strict':"None",
+//                 secure: process.env.DEPLOYMENT_TYPE=="local"?false:true,
+//                 httpOnly:process.env.DEPLOYMENT_TYPE=="local"?false:true,
+// }).status(201).json({
         //     message:"firstly login",
         //     statusCode:65,
         //     data:null

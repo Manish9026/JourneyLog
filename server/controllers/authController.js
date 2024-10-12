@@ -81,7 +81,7 @@ export class Auth extends AuthTools{
             userEmail=userEmail.toLowerCase();
             console.log(userEmail);
             if (userEmail && password ) {
-                let match = await userModel.findOne({ userEmail })
+                let match = await userModel.findOne({userEmail})
                 console.log(match);
                 if (match) {
                     if (await this.bycriptPass(password, match.password)) {
@@ -90,9 +90,9 @@ export class Auth extends AuthTools{
                         console.log(loginToken);
                         //  delete match['password']
                         res.cookie("uid", loginToken, {
-                            sameSite: 'None',
-                            secure: true,
-                            expires: new Date(Date.now() + 3600000)
+                            sameSite: process.env.DEPLOYMENT_TYPE=="local"?'Strict':"None",
+                                        secure: process.env.DEPLOYMENT_TYPE=="local"?false:true,
+                                        httpOnly:process.env.DEPLOYMENT_TYPE=="local"?false:true,
                         }).json({
                             message: "successfully login",
                             status: true,
@@ -272,8 +272,9 @@ export class Auth extends AuthTools{
         try {
            
             res.clearCookie('uid', {
-                sameSite: 'None',
-                secure: true
+                sameSite: process.env.DEPLOYMENT_TYPE=="local"?'Strict':"None",
+                            secure: process.env.DEPLOYMENT_TYPE=="local"?false:true,
+                            httpOnly:process.env.DEPLOYMENT_TYPE=="local"?false:true,
             });
 
             res.send({
