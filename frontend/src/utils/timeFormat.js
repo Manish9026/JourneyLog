@@ -1,19 +1,19 @@
 function checkDateStatus(dateString) {
     const days=["sunday","monday","tuesday","wednesday","thursday","friday","saturday"]
         // date declaration
-        const [givenDate,today,checkIfDate,yesterday]=[new Date(new Date(dateString).toLocaleDateString('en-US', { timeZone: 'UTC' })),new Date(),new Date(),new Date(),new Date()]
+        const [givenDate,today,checkIfDate]=[new Date(new Date(dateString).toLocaleDateString('en-US', { timeZone: 'UTC' })),new Date(),new Date(),new Date()]
         // logic of yesterday date
-        yesterday.setDate(today.getDate() - 1);
       //  convert date to local string "DD/MM/YYYY" format
-        checkIfDate.setDate(today.getDate()-(  today.getDay()));
-        const [givenDateStr,todayStr,yesterdayStr]=[givenDate.toLocaleDateString(),today.toLocaleDateString(),yesterday.toLocaleDateString()];
-        // logic of date chickig
+        checkIfDate.setDate(today.getDate() - 4);
 
-        if(checkIfDate<=givenDate){
-            if(givenDateStr==todayStr){
+        // logic of date chickig
+        if(givenDate.getDate()>=checkIfDate.getDate()){
+            console.log("sfjh");
+            
+            if(givenDate.getDate()==today.getDate()){
                 return "today";
             }
-            else if(givenDateStr==yesterdayStr){
+            else if(givenDate.getDate()==today.getDate() - 1){
                 return "yesterday"
             }
             else{
@@ -24,6 +24,8 @@ function checkDateStatus(dateString) {
     
         }
         else{
+            console.log("local");
+            
             return givenDate.toLocaleDateString();
         }
     
@@ -63,3 +65,5 @@ export const getFormatedDate=({type,date}={})=>{
 
 }
 
+
+console.log(checkDateStatus("2024-10-11T14:01:23.943+00:00"));
