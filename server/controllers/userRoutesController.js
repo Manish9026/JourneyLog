@@ -63,7 +63,10 @@ export class UserRoutes {
                         travel: [{
                             whereTo, whereFrom, amount, travelBy,date:chooseDate
                         }],
-                        company
+                        company:{
+                            cmpName:company.cmpName.trim(),
+                            cmpId:company.cmpId.trim()
+                        }
 
                     }).then((result) => {
                         result.save()
@@ -211,9 +214,7 @@ try {
         const userId=req?.user?._id
         const {recentCompany}=req.user;
         console.log(recentCompany,userId,company);
-        let cmpName=company && company!=null?company:recentCompany;
-console.log(cmpName);
-
+        let cmpName= company && !company==null?company:recentCompany;
         try {
             const recentRoutes=await userRouteModel.find({userId,"company.cmpName":cmpName}).sort({updatedAt:-1}).limit(limit).skip(skip || 0);
             if(recentRoutes.length!=0){
