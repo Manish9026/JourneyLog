@@ -21,12 +21,12 @@ const Statement = () => {
   const { statement, loading,printLoading } = useSelector(state => state.statement)
   const {dispatch}=useReactHooks();
 
-  const [searchValue,setSearchValue]=useState(" ")
+  const [searchValue,setSearchValue]=useState("")
 
   useEffect(()=>{
 if(!searchValue){
   let timeout=setTimeout(() => {
-    setSearchValue(userInfo?.recentCompany || " " )
+    setSearchValue(userInfo?.recentCompany || "" )
     dispatch(getStatements({skip:0,next:5,company:searchValue}))
   }, 1000);
 
