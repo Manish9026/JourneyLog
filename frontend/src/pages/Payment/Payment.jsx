@@ -17,8 +17,8 @@ const Payment = () => {
 
     const [formData, setFormData] = useState({
         company: { cmpName: "", cmpId: "" },
-        startFrom: "",
-        startTo: "",
+        startFrom:{startDate:null,endDate:null},
+        startTo:{startDate:null,endDate:null},
         amount: ""
     })
     const {recentPayment}=useSelector(state=>state.payment)
@@ -29,11 +29,11 @@ const Payment = () => {
         e.preventDefault();
         dispatch(payment(formData))
         setFormData({
-            company: { cmpName: "", cmpId: "" },
-            startFrom: "",
-            startTo: "",
-            amount: ""
-        })
+        company: { cmpName: "", cmpId: "" },
+        startFrom:{startDate:null,endDate:null},
+        startTo:{startDate:null,endDate:null},
+        amount: ""
+    })
     }
 
     return (
@@ -45,7 +45,7 @@ const Payment = () => {
 
                     <span className='flex flex-col' onClick={()=>setIsSelected(prev=>!prev)}>
                         <label htmlFor='search' className='flex items-center  p-1 bg-sky-200/80 w-full min-h-[40px] overflow-hidden rounded-[5px]'>
-                            <input type='text' id='search' value={formData?.company?.cmpName} onChange={(e) => ""} className=" flex outline-none min-w-[100px] bg-transparent px-2 h-full  flex-1 w-full" />
+                            <input type='text' placeholder='Pick Company' id='search' value={formData?.company?.cmpName} onChange={(e) => ""} className=" placeholder:text-blue-900 flex outline-none min-w-[100px] bg-transparent px-2 h-full  flex-1 w-full" />
                             <span onClick={""} className='text-[15px] min-w-[40px] text-sky-400 center  h-full'>
                                 <FaChevronDown className={` ${isSelected?"rotate-180":"rotate-0"} transition-all duration-700 text-blue-950 `} />
                             </span>
@@ -137,6 +137,7 @@ export const DateField = memo(({ title, className, value, onChange }) => {
                 asSingle={true}
                 onChange={onChange}
                value={value}
+               inputClassName={"w-full px-4 py-2 border border-gray-300 bg-[#1e293b] rounded-md"}
 
             />
         </span>

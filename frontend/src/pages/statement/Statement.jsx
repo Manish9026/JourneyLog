@@ -10,6 +10,8 @@ import { getFormatedDate } from '../../utils/timeFormat';
 import { TravelReport } from '../../component/travel-report/TravelReport';
 import useReactHooks from '../../custom-hooks/useReactHooks';
 import { getStatements, sort } from '../../slices/statementSlice';
+import { BsDash } from 'react-icons/bs';
+import { deleteRoute } from '../../slices/travelRouteSlice';
 // import { userInfo } from 'os';
 
 const Statement = () => {
@@ -19,12 +21,12 @@ const Statement = () => {
   const { statement, loading,printLoading } = useSelector(state => state.statement)
   const {dispatch}=useReactHooks();
 
-  const [searchValue,setSearchValue]=useState("")
+  const [searchValue,setSearchValue]=useState(" ")
 
   useEffect(()=>{
 if(!searchValue){
   let timeout=setTimeout(() => {
-    setSearchValue(userInfo?.recentCompany || "" )
+    setSearchValue(userInfo?.recentCompany || " " )
     dispatch(getStatements({skip:0,next:5,company:searchValue}))
   }, 1000);
 
@@ -46,11 +48,26 @@ dispatch(sort(isSort))
 <span className='flex search w-full flex-col gap-1'>
    <span className='flex w-full gap-1 relative overflow-hidden'>
    <label htmlFor='search' className='flex items-center  p-1 light-bg w-full min-h-[40px] overflow-hidden rounded-[5px]'>
-        <input type='text' id='search' value={searchValue} onChange={(e)=>setSearchValue(e.target.value)} className=" flex min-w-[100px] bg-transparent px-2 h-full  flex-1 w-full" />
+
+          
+       
+        <input list="company" id='search' value={searchValue} onChange={(e)=>setSearchValue(e.target.value)} className=" flex min-w-[100px] bg-transparent px-2 h-full  flex-1 w-full" />
+        <datalist id="company">
+   { userInfo && userInfo?.company?.map((value,id)=>{
+    return (
+      <option value={value.cmpName} key={id}/>
+    )
+   })}
+   
+  </datalist>
+        
         <span onClick={()=>isSearched()} className='text-[15px] min-w-[40px] text-sky-400 center  h-full'>
         <FaSearch className='  '/>
         </span>
     </label>
+   
+
+
     {/* <span className='min-w-[40px] center tertiary rounded-[5px] primary-font cursor-pointer'>
 
 <TiPrinter />
@@ -87,6 +104,7 @@ dispatch(sort(isSort))
                               <span className='flex gap-2 items-center capitalize flex-wrap'>
                                 <p>{data?.whereFrom}</p><FaArrowRight className='text-xs font-normal mt-1' /> <p>{data?.whereTo}</p>
                               </span>
+                              <span onClick={()=>dispatch(deleteRoute({cmpId:routes.company.cmpId,routeId:data?._id,date:routes?.createdAt,deleteFrom:"statement"}))} className=' tertiary size-[25px] absolute right-[-8px] cursor-pointer secondary-font top-[50%] translate-y-[-50%] center rounded-full transition-all duration-700 active:scale-75'><BsDash/></span>
 
                             </span>
                             <span className='flex items-center text-sm'>

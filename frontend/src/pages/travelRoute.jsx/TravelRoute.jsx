@@ -9,13 +9,15 @@ import { FaGroupArrowsRotate, FaIndianRupeeSign, FaPlus, FaXmark } from "react-i
 import { LuArrowDownUp } from "react-icons/lu";
 // import { Button } from '../Home/Home';
 import useReactHooks from '../../custom-hooks/useReactHooks';
-import { addRoute, searchPlace } from '../../slices/travelRouteSlice';
+import { addRoute, deleteRoute, searchPlace } from '../../slices/travelRouteSlice';
 import { toast } from 'react-toastify';
 import { Button } from '../../component/UI component/Button';
 import { useSelector } from 'react-redux';
 import { getFormatedDate } from '../../utils/timeFormat';
 import { Tuple } from '@reduxjs/toolkit';
 // import { log } from 'console';
+import { MdDelete } from "react-icons/md";
+
 
 export const travler = [["rapido", <RiEBikeLine />], ["metro", <FaTrain />], ["auto", <MdDirectionsCarFilled />], ["other", <FaRoute />]]
 const TravelRoute = () => {
@@ -34,7 +36,7 @@ const TravelRoute = () => {
     travelBy: "metro",
     date: {
       type:"",
-      dateValue:""
+      dateValue:{startDate:null,endDate:null}
     },
     company: {
       cmpName: "",
@@ -92,23 +94,24 @@ const TravelRoute = () => {
   }
   const reset = () => {
     setFormData({
-      whereFrom: "",
-      whereTo: "",
-      amount: '',
-      travelBy: "metro",
-      company:{
-        cmpName:"",
-        cmpId:""
-      },
-      date: Date.now
+       whereFrom: "",
+    whereTo: "",
+    amount: '',
+    travelBy: "metro",
+    date: {
+      type:"",
+      dateValue:{startDate:null,endDate:null}
+    },
+    company: {
+      cmpName: "",
+      cmpId: ""
+    }
     })
   }
 
   const recentCmp = () => {
     if (userInfo?.company) {
       const result = userInfo?.company.find((ele) => { return userInfo?.recentCompany == ele.cmpName })
-      console.log(result);
-
       setFormData(prev => ({ ...prev, company: { cmpId: result?._id, cmpName: result?.cmpName } }))
 
     }
@@ -227,7 +230,7 @@ const TravelRoute = () => {
 
                         return (
                           <div className="" key={id}>
-                            <DropDownContainer company={data.company} travelDetails={data.travelDetails} />
+                            <DropDownContainer company={data.company} travelDetails={data.travelDetails} cmpId={data.cmpId}  date={travelRoutes?.date} />
                           </div>
                         )
                       })
@@ -255,7 +258,7 @@ import { PiBuildingOfficeBold } from "react-icons/pi";
 import { IoIosArrowUp } from "react-icons/io";
 import Switch from '../../component/UI component/Switch';
 import { DateField } from '../Payment/Payment';
-
+import { BsDash } from "react-icons/bs";
 const SrhContainer = memo(({ srhParam, setValue, close }) => {
   const { dispatch } = useReactHooks();
   const { loading, data } = useSelector(state => state.travelRoute.addRoute.srhResult);
@@ -273,7 +276,7 @@ const SrhContainer = memo(({ srhParam, setValue, close }) => {
     <div className="flex z-10 transition-all duration-500 flex-wrap p-2 gap-2 list-none secondary-bg min-h-[200px] pt-[30px] absolute w-full ">
 
       <span onClick={() => close()} className='absolute top-[5px] cursor-pointer right-[10px] size-[20px] light-bg center rounded-full '><FaXmark /></span>
-      {Array.isArray(data) && data.length != 0 ? data.map((place, id) => {
+      {loading?<span className='center w-full secondary-font'>Loading...</span>:Array.isArray(data) && data.length != 0 ? data.map((place, id) => {
         return (
           <li onClick={() => setValue(place?.name)} className=' flex bg-sky-200 min-w-[100px] opacity-80 cursor-pointer p-2 flex-1 rounded-md capitalize center max-h-[40px]'>{place.name}</li>
         )
@@ -284,8 +287,9 @@ const SrhContainer = memo(({ srhParam, setValue, close }) => {
 })
 
 
-const DropDownContainer = memo(({ travelDetails, company = "company name" }) => {
+ const DropDownContainer = memo(({ travelDetails, company = "company name",cmpId ,date}) => {
   const [isActive, setIsActive] = useState(false)
+  const {dispatch}=useReactHooks();
   return (
     <span className=" flex no-scrollbar flex-col w-full gap-2  max-h-[500px] overflow-auto">
       {/* show */}
@@ -301,19 +305,20 @@ const DropDownContainer = memo(({ travelDetails, company = "company name" }) => 
         {
           travelDetails.map((data, id) => {
             return (
-              <span className='t-body relative ' key={data?._id}>
-                <span className='flex items-center  gap-2'>
+              <span className='t-body flex items-center flex-wrap relative ' key={data?._id}>
+                <span className='flex items-center flex-wrap flex-1  gap-2 min-w-[250px]'>
                   {travler.map((items, indx) => {
                     if (items[0] == data.travelBy)
                       return (<span key={indx} className='text-yellow-900'>{items[1]}</span>)
                   })}
-                  <span className='flex gap-2 items-center capitalize flex-wrap'>
+                  <span className='flex gap-2 flex-1 items-center capitalize flex-wrap'>
                     <p>{data?.whereFrom}</p><FaArrowRight className='text-xs font-normal mt-1' /> <p>{data?.whereTo}</p>
                   </span>
 
                 </span>
-                <span className='flex items-center text-sm'>
+                <span className='flex items-center text-sm flex-1 min-w-[100px] gap-1'>
                   <FaIndianRupeeSign className='text-sm mt-1' />{data?.amount}</span>
+                  <span onClick={()=>dispatch(deleteRoute({cmpId,routeId:data?._id,date}))} className=' tertiary size-[25px] absolute right-[-8px] cursor-pointer secondary-font top-[50%] translate-y-[-50%] center rounded-full transition-all duration-700 active:scale-75'><BsDash /></span>
 
                 <p className='absolute top-1 right-[20px] text-slate-900 text-[10px]'>{getFormatedDate({ date: data?.date, type: "time" })}</p>
               </span>

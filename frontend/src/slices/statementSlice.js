@@ -32,10 +32,8 @@ const statementSlice=createSlice({
             }
 
         },
-        setPrintLoading({printLoading},{payload}){
-            console.log(payload);
-            
-            printLoading=payload
+        setPrintLoading(state,{payload}){            
+           state.printLoading=payload
         }
     },
 

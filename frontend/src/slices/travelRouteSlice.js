@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { urlReloader } from "../utils/urlReloder";
 import { url } from "../utils/url";
+import { getStatements } from "./statementSlice";
 axios.defaults.baseURL=url
 export const addRoute=createAsyncThunk("addRoute",async(formData,{dispatch})=>{
 
@@ -11,6 +12,24 @@ export const addRoute=createAsyncThunk("addRoute",async(formData,{dispatch})=>{
 
     if(res.data.status){
         dispatch(recentRoutes())
+    }
+    return res.data
+    }).catch((err)=>{
+        alert(err)
+    })
+})
+export const deleteRoute=createAsyncThunk("deleteRoute",async(data,{dispatch})=>{
+console.log(data,"data");
+
+    return await axios.delete("/travel/delete",{withCredentials:true,data}).then((res)=>{
+    
+    urlReloader({response:res.data,dispatch});
+
+    if(res.data.status){
+        if(res.data.data.deleteFrom=="statement")
+            dispatch(getStatements())
+        else
+            dispatch(recentRoutes())
     }
     return res.data
     }).catch((err)=>{
@@ -39,11 +58,7 @@ export const  recentRoutes=createAsyncThunk("recentRoutes",async(navigate,{dispa
 
 
 export const searchPlace=createAsyncThunk("searchPlace",async(srhParam)=>{
-    console.log(srhParam)
     return await axios.get("/travel/places",{params:{srhParam},withCredentials:true}).then((res)=>{
-
-        console.log(res.data);
-        
       return  res.data}
     ).catch((err)=>{
         alert(err)

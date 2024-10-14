@@ -1,4 +1,4 @@
-import { badRes, goodRes } from "./index.js";
+import { badRes, goodRes, isNotEmpty } from "./index.js";
 import { userRouteModel } from "../models/userRoutesModel.js"
 import { placeModel } from "../models/placesModel.js";
 import { userModel } from "../models/authModel.js";
@@ -31,6 +31,8 @@ export class UserRoutes {
             console.log(startDate,type);
             
             let chooseDate=startDate!=null && startDate ?startDate:new Date();
+            console.log(chooseDate);
+            
             
             if (whereTo && whereFrom && amount && travelBy && userId || type=="new") {
                 let todayDate = new Date(chooseDate);
@@ -39,6 +41,8 @@ export class UserRoutes {
                 this.setRecentCmp(userId,company?.cmpName)
 
                 // transform time of choosed date 
+                console.log(todayDate.toLocaleDateString());
+                
                 startDate.setHours(0, 0, 0, 0);
                 todayDate.setHours(23, 59, 59, 999);
                 
@@ -66,7 +70,7 @@ export class UserRoutes {
                         company:{
                             cmpName:company.cmpName.trim(),
                             cmpId:company.cmpId.trim()
-                        }
+                        },createdAt:chooseDate
 
                     }).then((result) => {
                         result.save()
@@ -88,6 +92,40 @@ export class UserRoutes {
             return badRes({ res, message: "internal error" })
 
 
+        }
+    }
+
+    static deleteRoute=async(req,res)=>{
+        try {
+            const {cmpId,routeId,date,deleteFrom}=req.body;
+            const userId=req.user._id;
+
+
+            if(isNotEmpty(cmpId) && isNotEmpty(routeId) && isNotEmpty(date) && isNotEmpty(userId)){
+                const startDate=new Date(date);
+                const endDate=new Date(date);
+                startDate.setHours(0,0,0,0)
+                endDate.setHours(23, 59, 59, 999);
+    
+    
+                const existTravelRoute = await userRouteModel.findOneAndUpdate(
+                    { $and: [{ createdAt: { $lte: endDate } }, { createdAt: { $gte: startDate } }, { userId },{"company.cmpId":cmpId}] },
+                    { $pull: { travel: { _id: routeId } } },
+                    { new: true } // To return the updated document
+                  );
+                  if(existTravelRoute){
+                    return goodRes({ res, data: {existTravelRoute,deleteFrom}, message: "removed" ,})
+                  }else{
+                    return badRes({ res, data: [], message: "already removed" })
+                  }
+            }
+
+
+
+
+            
+        } catch (error) {
+            return badRes({ res, data: [], message: "internal  error" })
         }
     }
 
@@ -148,7 +186,7 @@ try {
               },
               {
                 $group: {
-                  _id: { travelDate: "$travelDate", company: "$company.cmpName" },  // Group by date and company name
+                  _id: { travelDate: "$travelDate", company: "$company.cmpName" ,cmpId:"$company.cmpId"},  // Group by date and company name
                   travelDetails: {
                     $push: {
                       whereTo: "$travel.whereTo",
@@ -167,6 +205,7 @@ try {
                   companies: {
                     $push: {
                       company: "$_id.company",
+                      cmpId:"$_id.cmpId",
                       travelDetails: "$travelDetails"
                     }
                   }
@@ -208,17 +247,19 @@ try {
   
     }
 
-
     static getRandomRoutes =async(req,res)=>{
         const {limit,skip,company}=req.query;
         const userId=req?.user?._id
         const {recentCompany}=req.user;
         console.log(recentCompany,userId,company);
-        let cmpName= company && !company==null?company:recentCompany;
+        let cmpName=isNotEmpty(company)?company:recentCompany;
+        
         try {
-            const recentRoutes=await userRouteModel.find({userId,"company.cmpName":cmpName}).sort({updatedAt:-1}).limit(limit).skip(skip || 0);
-            if(recentRoutes.length!=0){
-                goodRes({res,data:recentRoutes})
+            const travelRoute=await userRouteModel.find({userId,"company.cmpName":cmpName}).sort({updatedAt:-1}).limit(limit).skip(skip || 0);
+            console.log(travelRoute);
+            
+            if(travelRoute.length!=0){
+                goodRes({res,data:travelRoute})
             }else badRes({res,})
             
         } catch (error) {

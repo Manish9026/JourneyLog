@@ -14,4 +14,27 @@ const goodRes=({message,statusCode,data,status,res}={})=>{
     })
 }
 
- export {badRes,goodRes}
+const  isNotEmpty=(value)=> {
+    if (value == 'null' || value == 'undefined') {
+      return false;
+    }
+    if (value === null || value == undefined) {
+        return false;
+      }
+  
+    if (typeof value === 'string') {
+      return value.trim() !== '';
+    }
+  
+    if (Array.isArray(value)) {
+      return value.length > 0;
+    }
+  
+    if (typeof value === 'object') {
+      return Object.keys(value).length > 0;
+    }
+  
+    return true; // For other data types, assume non-empty if not null/undefined
+  }
+
+ export {badRes,goodRes,isNotEmpty}
