@@ -32,13 +32,18 @@ const TravelRoute = () => {
     whereTo: "",
     amount: '',
     travelBy: "metro",
-    date: Date.now,
+    date: {
+      type:"",
+      dateValue:""
+    },
     company: {
       cmpName: "",
       cmpId: ""
     }
   })
   const [isActive, setIsActive] = useState(0)
+
+  const [isToggle,setIsToggle]=useState({first:0,second:0});
 
 
   const onChangeHandler = (ele) => {
@@ -169,6 +174,17 @@ const TravelRoute = () => {
 
           </div>
 
+              <span className='flex w-full items-center gap-2 px-2 py-1 flex-wrap'>
+                <Switch checked={isToggle.first} onclick={()=>setIsToggle(prev=>({...isToggle,first:!prev.first,second:0}))}/> 
+                <p className='secondary-font capitalize'>update privious record</p>
+                <span className={`${isToggle.first?"max-h-[100px] opacity-100":"max-h-0 opacity-0  invisible"} transition-all duration-700 w-full `}><DateField onChange={(value)=>{setFormData(prev=>({...prev,date:{dateValue:value,type:"update"}}));}}  value={formData?.date?.dateValue} /></span>
+              </span>
+              {/* add new previous record */}
+              <span className='flex w-full items-center gap-2 px-2  flex-wrap'>
+                <Switch checked={isToggle.second} onclick={()=>setIsToggle(prev=>({...isToggle,first:0,second:!prev.second}))}/> 
+                <p className='secondary-font capitalize'>add new privious record</p>
+                <span className={`${isToggle.second?"max-h-[100px] opacity-100":"max-h-0 opacity-0 invisible"} transition-all duration-700 w-full `}><DateField onChange={(value)=>{setFormData(prev=>({...prev,date:{dateValue:value,type:"new"}}))}}  value={formData?.date?.dateValue} /></span>
+              </span>
           <div className="flex gap-2  center w-full">
 
             <Button className={"btn bg-sky-200 flex-1"} btnName={"reset"} onClick={() => reset()} />
@@ -237,6 +253,8 @@ const TravelRoute = () => {
 }
 import { PiBuildingOfficeBold } from "react-icons/pi";
 import { IoIosArrowUp } from "react-icons/io";
+import Switch from '../../component/UI component/Switch';
+import { DateField } from '../Payment/Payment';
 
 const SrhContainer = memo(({ srhParam, setValue, close }) => {
   const { dispatch } = useReactHooks();

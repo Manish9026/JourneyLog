@@ -6,14 +6,14 @@ import { userModel } from "../models/authModel.js";
 export class UserRoutes {
 
     static setRecentCmp=async(userId,cmpName)=>{
-        console.log(userId,cmpName);
+        // console.log(userId,cmpName);
         
         try {
             const exist=await userModel.findOne({_id:userId})
-            console.log(exist);
+            // console.log(exist);
             
             if(exist){
-                exist.recentCompany=cmpName;
+                exist.recentCompany=cmpName.trim();
                await  exist.save()
             }
         } catch (error) {
@@ -27,35 +27,41 @@ export class UserRoutes {
 
         try {
 
-            const { whereTo, whereFrom, amount, travelBy,company} = req.body;
-
-            // console.log(company);
+            const { whereTo, whereFrom, amount, travelBy,company,date:{dateValue:{startDate},type}} = req.body;
+            console.log(startDate,type);
             
-            if (whereTo && whereFrom && amount && travelBy && userId) {
-                let todayDate = new Date;
-                let startDate = new Date;
+            let chooseDate=startDate!=null && startDate ?startDate:new Date();
+            
+            if (whereTo && whereFrom && amount && travelBy && userId || type=="new") {
+                let todayDate = new Date(chooseDate);
+                let startDate = new Date(chooseDate);
                 await this.addPlace(whereFrom,whereTo);
                 this.setRecentCmp(userId,company?.cmpName)
 
+                // transform time of choosed date 
                 startDate.setHours(0, 0, 0, 0);
                 todayDate.setHours(23, 59, 59, 999);
+                
                 const existTravelRoute = await userRouteModel.findOne({ $and: [{ createdAt: { $lte: todayDate } }, { createdAt: { $gte: startDate } }, { userId },{"company.cmpId":company?.cmpId}] })
-                // console.log(existTravelRoute);
+                console.log(existTravelRoute);
                 
                 if (existTravelRoute) {
-                    //  existTravelRoute.company=company;
-                     existTravelRoute?.travel?.push({ whereTo, whereFrom, amount, travelBy })
+                     existTravelRoute?.travel?.push({ whereTo, whereFrom, amount, travelBy,date:chooseDate })
                     if (existTravelRoute.save()) {
                         return goodRes({ res, data: existTravelRoute, message: "booked" })
                     }
                     else return badRes({ res, error })
 
 
+                } else if(!existTravelRoute && type=="update"){
+
+                    return badRes({res,message:"no previous records",data:[]});
+
                 } else {
                     return await userRouteModel.create({
                         userId,
                         travel: [{
-                            whereTo, whereFrom, amount, travelBy
+                            whereTo, whereFrom, amount, travelBy,date:chooseDate
                         }],
                         company
 
@@ -83,8 +89,8 @@ export class UserRoutes {
     }
 
     static addPlace=async(whereFrom,whereTo)=>{
-        whereFrom=whereFrom.toLowerCase()
-        whereTo=whereTo.toLowerCase()
+        whereFrom=whereFrom.toLowerCase().trim()
+        whereTo=whereTo.toLowerCase().trim()
 
         
 try {
@@ -128,7 +134,7 @@ try {
               {
                 $addFields: {
                     travelDate: {
-                    $dateToString: { format: "%Y-%m-%d", date: '$travel.date'  }  // Extract the date (YYYY-MM-DD)
+                    $dateToString: { format: "%Y-%m-%d", date: '$travel.date' ,"timezone": "+05:00" }  // Extract the date (YYYY-MM-DD)
                   },
                 //   travelDate:'$travel.date'
                 }
@@ -258,10 +264,10 @@ console.log(cmpName);
                         { _id },// The filter for the document you want to update
                         {
                             $addToSet: {
-                                company: { cmpName, recentPayment: new Date() } // Add new company if it doesn't exist
+                                company: { cmpName:cmpName.trim(), recentPayment: new Date() } // Add new company if it doesn't exist
                             },
                             $set: {
-                                recentCompany: cmpName// Set the most recent company
+                                recentCompany: cmpName.trim()// Set the most recent company
                             }
                         },{
                             projection: { userName: 0, userEmail: 0 ,profileImage:0,password:0,userToken:0},

@@ -1,7 +1,7 @@
 function checkDateStatus(dateString) {
     const days=["sunday","monday","tuesday","wednesday","thursday","friday","saturday"]
         // date declaration
-        const [givenDate,today,checkIfDate]=[new Date(new Date(dateString).toLocaleDateString('en-US', { timeZone: 'UTC' })),new Date(),new Date(),new Date()]
+        const [givenDate,today,checkIfDate]=[new Date(dateString),new Date(),new Date(),new Date()]
         // logic of yesterday date
       //  convert date to local string "DD/MM/YYYY" format
         checkIfDate.setDate(today.getDate() - 4);
@@ -66,4 +66,11 @@ export const getFormatedDate=({type,date}={})=>{
 }
 
 
-console.log(checkDateStatus("2024-10-11T14:01:23.943+00:00"));
+console.log(checkDateStatus("2024-10-13T19:24:07.531+00:00"));
+console.log((new Date("2024-10-13T18:33:07.022+00:00").toLocaleTimeString()));
+
+// const now = new Date(); // Get current date
+// const utcMidnight = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds()));
+// console.log( new Date().toISOString(),utcMidnight.toLocaleString());
+// const now = new Date();
+console.log("  AGHHkdd asjdh  ".toLowerCase().trim());

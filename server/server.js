@@ -19,6 +19,7 @@ app.use(cors({
     methods:["POST","GET","DELETE","PATCH"]
 }))
 
+
 app.use("/user",authRoutes);
 app.use("/travel",travelRoutes)
 app.use("/payment",paymentRoute)

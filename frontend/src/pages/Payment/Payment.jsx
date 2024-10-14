@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { memo, useState } from 'react'
 import { FaSearch, FaPlus, FaArrowDown, FaChevronDown } from 'react-icons/fa'
 import Title from '../../component/Title'
 import InputField from '../../component/UI component/InputField'
@@ -125,20 +125,23 @@ const Payment = () => {
     )
 }
 
-const DateField = ({ title, className, value, onChange }) => {
+export const DateField = memo(({ title, className, value, onChange }) => {
+    
     return (
         <span className={`min-w-[200px] max-w-[300px] flex-1  ${className}`}>
             <Title title={title} className={"px-2"} />
             <Datepicker
+             
+                selected={value}
                 useRange={false}
                 asSingle={true}
-                value={value}
                 onChange={onChange}
+               value={value}
 
             />
         </span>
     )
-}
+})
 
 const paymentSkelton=()=>{
     return(
