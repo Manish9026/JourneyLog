@@ -180,9 +180,11 @@ width: 100%;
 .p-box {
     >:first-child
     {
-        @apply size-[15px]
+        @apply size-[15px] tertiary-font relative top-[2px];
+
     }
-    @apply flex cursor-pointer relative text-slate-800  items-center  gap-2 capitalize rounded-md flex-1 min-w-[200px]   w-full;
+    @apply flex cursor-pointer relative text-slate-800 text-sm  items-center  gap-2 capitalize rounded-md flex-1 min-w-[200px]   w-full;
+    color: #131441;
 } 
 
 input::-webkit-outer-spin-button,
