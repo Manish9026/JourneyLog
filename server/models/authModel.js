@@ -28,6 +28,7 @@ const authSchema=mongoose.Schema({
                 type:Date,
                 default:Date.now
             },
+            remainingAmount:{type:Number,default:0},
             recentPayment:Date
         }]
     },

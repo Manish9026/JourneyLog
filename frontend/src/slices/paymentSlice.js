@@ -3,16 +3,24 @@ import axios from "axios";
 import { url } from "../utils/url";
 import { urlReloader } from "../utils/urlReloder";
 axios.defaults.baseURL=url;
-export const payment=createAsyncThunk("payment",async(formData,{dispatch})=>{
+export const payment=createAsyncThunk("payment",async({company,startFrom,startTo,amount},{dispatch})=>{
 
-    return await axios.post("/payment/add",formData,{withCredentials:true}).then(res=>{
-        urlReloader({response:res.data,dispatch})
-        if(res.data.status){
-            dispatch(recentPayment())
-        }
+    try {
+
+        return await axios.post("/payment/add",{startDate:startFrom.startDate,endDate:startTo?.startDate,amount,company},{withCredentials:true}).then(res=>{
+            urlReloader({response:res.data,dispatch})
+            if(res.data.status){
+                dispatch(recentPayment())
+            }
+            
+            return res.data
+        })
+    } catch (error) {
+        console.log(error);
         
-        return res.data
-    })
+    }
+
+   
 })
 export const recentPayment=createAsyncThunk("recentPayment",async(_,{dispatch})=>{
     return axios.get("/payment/recent",{withCredentials:true}).then(res=>{

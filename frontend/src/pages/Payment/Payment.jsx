@@ -11,6 +11,7 @@ import { IoIosArrowUp } from 'react-icons/io';
 import { MdOutlineDateRange } from "react-icons/md";
 import { MdOutlineUpdate } from "react-icons/md";
 import { FaIndianRupeeSign, FaRupeeSign } from 'react-icons/fa6';
+import { rupee } from '../../assets/icons';
 
 
 const Payment = () => {
@@ -94,25 +95,27 @@ const Payment = () => {
                   {
                     Array.isArray(recentPayment.data) && recentPayment.data.length!=0 ?recentPayment.loading?<paymentSkelton/>: recentPayment.data.map((pay,id)=>{
                         return(
-                            <ul key={pay?._id} className=' flex flex-wrap bg-sky-200 px-2 py-1 w-full rounded-md'>
-                            <li className="p-box">
+                            <DropDownContainer startDate paymentDetails={pay.amount} company={pay.company}/>
+                        //     <ul key={pay?._id} className=' flex flex-wrap bg-sky-200 px-2 py-1 w-full rounded-md'>
+                        //     <li className="p-box">
         
-                                <PiBuildingOfficeBold /> {pay?.company?.cmpName}
+                        //         <PiBuildingOfficeBold /> {pay?.company?.cmpName}
         
         
-                            </li>
-                            <li className='p-box'><MdOutlineUpdate />{ new Date(pay?.createdAt).toDateString()}</li>
+                        //     </li>
+                        //     <li className='p-box'><MdOutlineUpdate />{ new Date(pay?.createdAt).toDateString()}</li>
         
-                            <li className="p-box">
+                        //     <li className="p-box">
         
-                                <MdOutlineDateRange />
-                                <p>{new Date(pay?.startFrom).toLocaleDateString()}</p>
-                                <p>{new Date(pay?.startTo).toLocaleDateString()}</p>
+                        //         <MdOutlineDateRange />
+                        //         <p>{new Date(pay?.startFrom).toLocaleDateString()}</p>
+                        //         <p>{new Date(pay?.startTo).toLocaleDateString()}</p>
         
-                            </li>
-                            <li className="p-box"><FaIndianRupeeSign />{pay?.amount}</li>
+                        //     </li>
+                        //     <li className="p-box"><FaIndianRupeeSign />{pay?.amount.payAmount}</li>
+                        //     <li className="p-box">remaining<FaIndianRupeeSign /> {pay?.amount.NewRemainingAmount}</li>
         
-                        </ul>
+                        // </ul>
                         )
                     })
                      :""
@@ -138,12 +141,45 @@ export const DateField = memo(({ title, className, value, onChange }) => {
                 onChange={onChange}
                value={value}
                inputClassName={"w-full px-4 py-2 border border-gray-300 bg-[#1e293b] rounded-md"}
-
             />
         </span>
     )
 })
 
+const DropDownContainer = memo(({ paymentDetails, company}) => {
+    const [isActive, setIsActive] = useState(false)
+    const {dispatch}=useReactHooks();
+    return (
+      <span key={company._id} className=" flex no-scrollbar flex-col w-full gap-2  max-h-[500px] overflow-auto">
+        {/* show */}
+        <span onClick={() => setIsActive(prev => !prev)} className="list-none flex cursor-pointer relative text-slate-800 justify-between  items-center sticky top-0 z-[2] gap-2 capitalize rounded-md p-2 bg-sky-200 w-full">
+  
+  <li className='flex items-center gap-1'><PiBuildingOfficeBold /> {company.cmpName}</li>
+          
+          <li className='flex gap-1 min-w-[100px]'><img src={rupee} alt="" /> {paymentDetails?.payAmount}</li>
+          <span className={`absolute right-[20px] top-[50%] translate-y-[-50%] ${isActive ? "rotate-180" : "rotate-0"} transition-all duration-700`} ><IoIosArrowUp /></span>
+        </span>
+        {/*hide*/}
+  
+        <span className={`${isActive ? "max-h-[400px] pb-2 opacity-100 " : "max-h-0 opacity-0  pb-0"} transition-all duration-700 t-container flex  px-2 gap-2 flex-col `}>
+        
+        <span className='t-body flex items-center list-none flex-wrap relative ' >
+             
+             <li></li>
+             <li></li>
+             <li></li>
+             <li></li>
+
+
+                </span>
+  
+  
+        </span>
+  
+  
+      </span>
+    )
+  })
 const paymentSkelton=()=>{
     return(
         Array(2).fill(2).map((_,indx)=>{

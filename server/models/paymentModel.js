@@ -13,7 +13,14 @@ const paymentSchema=mongoose.Schema(
             type:Date
         },
         amount:{
-            type:Number
+            
+            type:{
+                travelAmount:Number,
+                payAmount:Number,
+                prevRemainingAmount:Number,
+                NewRemainingAmount:Number,
+
+            }
         },
         company:{
             type:{

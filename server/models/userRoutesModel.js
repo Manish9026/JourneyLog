@@ -30,6 +30,10 @@ const routesSlice=mongoose.Schema({
             date:{
                 type:Date,
                 default:new Date().toISOString()
+            },
+            payStatus:{
+                type:Boolean,
+                default:false
             }
         }]
 
