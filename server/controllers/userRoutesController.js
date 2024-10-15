@@ -30,7 +30,7 @@ export class UserRoutes {
             const { whereTo, whereFrom, amount, travelBy,company,date:{dateValue:{startDate},type}} = req.body;
             console.log(startDate,type);
             
-            let chooseDate=startDate!=null && startDate ?startDate:new Date();
+            let chooseDate=!startDate==null && startDate ?startDate:new Date();
             console.log(chooseDate);
             
             
@@ -41,10 +41,10 @@ export class UserRoutes {
                 this.setRecentCmp(userId,company?.cmpName)
 
                 // transform time of choosed date 
-                console.log(todayDate.toLocaleDateString());
-                
                 startDate.setHours(0, 0, 0, 0);
                 todayDate.setHours(23, 59, 59, 999);
+                // console.log(startDate,todayDate);
+                
                 
                 const existTravelRoute = await userRouteModel.findOne({ $and: [{ createdAt: { $lte: todayDate } }, { createdAt: { $gte: startDate } }, { userId },{"company.cmpId":company?.cmpId}] })
                 console.log(existTravelRoute);
@@ -175,7 +175,7 @@ try {
               {
                 $addFields: {
                     travelDate: {
-                    $dateToString: { format: "%Y-%m-%d", date: '$travel.date' ,"timezone": "+05:00" }  // Extract the date (YYYY-MM-DD)
+                    $dateToString: { format: "%Y-%m-%d", date: '$travel.date' ,"timezone": "+05:30" }  // Extract the date (YYYY-MM-DD)
                   },
                 //   travelDate:'$travel.date'
                 }

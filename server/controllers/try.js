@@ -1,54 +1,13 @@
-const data=[
-    {
-      "cmpName": "manish",
-      "recentPayment": {
-        "$date": "2024-10-09T08:29:27.555Z"
-      },
-      "_id": {
-        "$oid": "67063ee7f423a223a09a116d"
-      },
-      "createdAt": {
-        "$date": "2024-10-09T08:29:27.559Z"
-      }
-    },
-    {
-      "cmpName": "krisna oversiease",
-      "recentPayment": {
-        "$date": "2024-10-09T09:00:02.913Z"
-      },
-      "_id": {
-        "$oid": "6706461257c266357d3c71cd"
-      },
-      "createdAt": {
-        "$date": "2024-10-09T09:00:02.915Z"
-      }
-    },
-    {
-      "cmpName": "ANQ private limited",
-      "recentPayment": {
-        "$date": "2024-10-09T10:34:00.441Z"
-      },
-      "_id": {
-        "$oid": "67065c180bc56e36d4de21bf"
-      },
-      "createdAt": {
-        "$date": "2024-10-09T10:34:00.444Z"
-      }
-    },
-    {
-      "cmpName": "shatya interprices company",
-      "recentPayment": {
-        "$date": "2024-10-09T10:34:28.166Z"
-      },
-      "_id": {
-        "$oid": "67065c340bc56e36d4de21cc"
-      },
-      "createdAt": {
-        "$date": "2024-10-09T10:34:28.166Z"
-      }
-    }
-  ]
-const res=data.find((a)=>a.cmpName=="manih"
-)
-// if({})
-console.log({name:"ds"});
+const isoDate = new Date(); // Example ISO date (UTC)
+const date = new Date(isoDate);
+
+// Convert to Indian Standard Time (IST) by manually adjusting offset
+const istOffset = 5.5 * 60; // IST is UTC+5:30
+const istTime = new Date(date.getTime() + istOffset * 60 * 1000);
+
+// Format back to ISO string in the desired format (without the time zone suffix 'Z')
+// const isoIST = istTime.toISOString().replace('Z', '');
+
+// Output the formatted IST time in ISO format
+console.log( new Date(istTime));
+// console.log(new Date().getTimezoneOffset());
