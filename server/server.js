@@ -31,10 +31,6 @@ app.get("/",(req,res)=>{
 })
 
 
-
-
-
-
 app.listen(port,()=>{
     DB_connection()
     console.log("server runing on port 2000");

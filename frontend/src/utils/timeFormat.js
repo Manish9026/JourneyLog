@@ -7,9 +7,7 @@ function checkDateStatus(dateString) {
         checkIfDate.setDate(today.getDate() - 4);
 
         // logic of date chickig
-        if(givenDate.getDate()>=checkIfDate.getDate()){
-            console.log("sfjh");
-            
+        if(givenDate.getDate()>=checkIfDate.getDate()){           
             if(givenDate.getDate()==today.getDate()){
                 return "today";
             }
@@ -66,11 +64,3 @@ export const getFormatedDate=({type,date}={})=>{
 }
 
 
-console.log(checkDateStatus("2024-10-13T19:24:07.531+00:00"));
-console.log((new Date("2024-10-13T18:33:07.022+00:00").toLocaleTimeString()));
-
-// const now = new Date(); // Get current date
-// const utcMidnight = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds()));
-// console.log( new Date().toISOString(),utcMidnight.toLocaleString());
-// const now = new Date();
-console.log("  AGHHkdd asjdh  ".toLowerCase().trim());

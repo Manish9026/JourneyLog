@@ -1,0 +1,132 @@
+
+// .box{
+//     position: absolute;
+//     top: 50%;
+//     left: 50%;
+//     transition: all ease-in 1s;
+// }
+// .popup-in{
+//     // display: none;
+// //     animation: popup-in ease 1s forwards;
+// // background: #000;
+
+// webkit-transform:translate(-50%, -50%) scale(1);
+// 	transform:translate(-50%, -50%) scale(1);
+// }
+// .popup-out{
+// // animation: popup-out ease 1s forwards;
+// position: absolute;
+// top: 50%;
+// left: 50%;
+// transition: all ease-in .5s;
+// webkit-transform:translate(-50%, -50%) scale(.5);
+// 	transform:translate(-50%, -50%) scale(.5);
+//     opacity: 0.2;
+//     visibility: hidden;
+
+// }
+@keyframes popup-in {
+    from{
+        scale: 1;
+        opacity: 1;
+    }
+    to{
+        scale: 0;
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    // 100%{
+    //     scale: .2;
+    //     opacity: .2;
+    //     visibility: hidden;
+    // }
+//    to{
+//     scale: 1;
+//     opacity: 1;
+
+//    }
+//    from{
+// scale: .2;
+// opacity: 0;
+// display: none;
+
+//    } 
+//    100%{
+//     display: none;
+//    }
+}
+@keyframes popup-out {
+    from{
+        scale: 0;
+        opacity: 0;
+    }
+    to{
+        scale: 1;
+        opacity: 1;
+        // display: flex;
+        visibility: visible;
+    }
+
+ }
+
+
+
+// mobile popup
+.m-sade-in{
+    transition: all ease .9s;
+    // top: 100%;
+    // tra
+    // background-color: ;
+    animation:  ease m-sade-in .9s forwards;
+}
+.m-sade-out{
+    position: absolute;
+    transition: all ease .9s;
+    // tra
+    // bottom: 0;
+    animation:  ease m-sade-out .9s forwards;
+}
+@keyframes m-sade-in {
+    to{
+        bottom: 0;
+        opacity: 1;
+    }
+    from{
+        bottom: -100%;
+        opacity: 0;
+        display: none;
+    }
+//     0%{
+//         bottom: 0;
+//         opacity: 1;
+//     }
+//     100%{
+// bottom: -100%;
+// opacity: 0;
+// display: none;
+
+//     }
+    
+}
+@keyframes m-sade-out {
+    to{
+        bottom: -100%;
+        opacity: 0;
+    }
+    from{
+        bottom: 0;
+        opacity: 1;
+        display: flex;
+    }
+//     0%{
+//         bottom: 100%;
+//         opacity: 0;
+//     }
+//     100%{
+// bottom: 0;
+// opacity: 1;
+
+//     }
+    
+}

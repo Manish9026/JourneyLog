@@ -6,6 +6,7 @@ import {useSelector,useDispatch} from 'react-redux'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Header from './component/Header';
+import Popup from './component/popup/Popup';
 export const Layout = () => {
   const {status,formStatus}=useSelector(state=>state.auth)
 
@@ -37,7 +38,10 @@ pauseOnHover
 
       <Header/>
 
+<div className="relative w-full h-full">
+{/* <Popup/> */}
         <Outlet/>
+</div>
    
     </div>
   )

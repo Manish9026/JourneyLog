@@ -51,5 +51,12 @@ const recentRoutes = [
 	}
 ]
 
-const result=recentRoutes.reduce((sum,item)=>sum + item.travel.reduce((sum,data)=>sum + data.amount,0),0)
-console.log(result);
+
+
+
+const obj={
+	name:"fhs",
+	php:"",
+}
+
+console.log(Object.keys(obj).includes("name"));

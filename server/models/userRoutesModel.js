@@ -5,6 +5,7 @@ const routesSlice=mongoose.Schema({
     userId:{
         type:mongoose.Schema.ObjectId,
         required: true,
+        index:true,
         ref: "user"
     },
     company:{

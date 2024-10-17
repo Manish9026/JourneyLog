@@ -4,8 +4,8 @@ import { url } from "../utils/url";
 import { urlReloader } from "../utils/urlReloder";
 
 axios.defaults.baseURL=url
-export const  getStatements=createAsyncThunk("getStatements",async(navigate,{dispatch})=>{
-    return await axios.get(`/travel/all-routes?skip=${navigate?.skip || 0}&next=${navigate?.next || 5} &company=${navigate?.company}`,{withCredentials:true}).then((res)=>{
+export const  getStatements=createAsyncThunk("getStatements",async(statementData,{dispatch})=>{
+    return await axios.post(`/travel/all-routes?skip=${statementData?.skip || 0}&next=${statementData?.next || 5} &company=${statementData?.company}`,{filter:statementData?.filterData},{withCredentials:true,}).then((res)=>{
         urlReloader({response:res.data,dispatch,messageAllow:false});
         console.log(res.data);       
         return res.data
