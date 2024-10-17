@@ -18,6 +18,8 @@ import DatePicker2 from "react-datepicker";
 import useFlexibleEle from '../../custom-hooks/useFlexibleEle';
 // import { userInfo } from 'os';
 import "react-datepicker/dist/react-datepicker.css";
+import { FcPaid } from "react-icons/fc";
+import { CiNoWaitingSign } from "react-icons/ci";
 
 const Statement = () => {
 
@@ -100,8 +102,8 @@ dispatch(sort(isSort))
                       Array.isArray(routes?.travel) && routes?.travel.length != 0 &&
                       [...routes.travel].sort((a, b) => new Date(b.date) - new Date(a.date)).map((data, id) => {
                         return (
-                          <span className='t-body relative cursor-pointer' key={data._id}>
-                            <span className='flex items-center  gap-2'>
+                          <span className='t-body flex flex-col relative cursor-pointer' key={data._id}>
+                            <span className='flex items-center flex-1  gap-2'>
                               {travler.map((items, indx) => {
                                 if (items[0] == data.travelBy)
                                   return (<span key={indx} className='text-yellow-900'>{items[1]}</span>)
@@ -112,8 +114,17 @@ dispatch(sort(isSort))
                               <span onClick={()=>dispatch(deleteRoute({cmpId:routes.company.cmpId,routeId:data?._id,date:routes?.createdAt,deleteFrom:"statement"}))} className=' tertiary size-[25px] absolute right-[-8px] cursor-pointer secondary-font top-[50%] translate-y-[-50%] center rounded-full transition-all duration-700 active:scale-75'><BsDash/></span>
 
                             </span>
-                            <span className='flex items-center text-sm'>
+                            <span className='flex items-center '>
+                            <span className='flex items-center min-w-[100px] text-sm'>
                               <FaIndianRupeeSign className='text-sm mt-1' />{data?.amount}</span>
+                              <span className='flex text-slate-900'>
+                                {
+                                  data?.payStatus?<p className='flex items-center gap-2'><FcPaid className='mt-[6px] text-lg'/> paid</p>:<p className='flex items-center gap-2'><CiNoWaitingSign className='text-red-900 mt-[1px]' /> unpaid
+                              </p>
+                                }
+                                 </span>
+                            </span>
+                            
 
                             <p className='absolute top-1 right-[20px] text-slate-900 text-[10px]'>{getFormatedDate({ date: data?.date, type: "time" })}</p>
                           </span>
