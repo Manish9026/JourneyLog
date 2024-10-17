@@ -230,7 +230,7 @@ const TravelRoute = () => {
 
                         return (
                           <div className="" key={id}>
-                            <DropDownContainer company={data.company} travelDetails={data.travelDetails} cmpId={data.cmpId}  date={travelRoutes?.date} />
+                            <DropDownContainer company={data.company} travelDetails={data.travelDetails} cmpId={data.cmpId}  date={travelRoutes?.date} parentId={travelRoutes?.routeId} />
                           </div>
                         )
                       })
@@ -287,7 +287,7 @@ const SrhContainer = memo(({ srhParam, setValue, close }) => {
 })
 
 
- const DropDownContainer = memo(({ travelDetails, company = "company name",cmpId ,date}) => {
+ const DropDownContainer = memo(({ travelDetails,parentId, company = "company name",cmpId ,date}) => {
   const [isActive, setIsActive] = useState(false)
   const {dispatch}=useReactHooks();
   return (
@@ -318,7 +318,7 @@ const SrhContainer = memo(({ srhParam, setValue, close }) => {
                 </span>
                 <span className='flex items-center text-sm flex-1 min-w-[100px] gap-1'>
                   <FaIndianRupeeSign className='text-sm mt-1' />{data?.amount}</span>
-                  <span onClick={()=>dispatch(deleteRoute({cmpId,routeId:data?._id,date}))} className=' tertiary size-[25px] absolute right-[-8px] cursor-pointer secondary-font top-[50%] translate-y-[-50%] center rounded-full transition-all duration-700 active:scale-75'><BsDash /></span>
+                  <span onClick={()=>dispatch(deleteRoute({cmpId,routeId:data?._id,date,parentId}))} className=' tertiary size-[25px] absolute right-[-8px] cursor-pointer secondary-font top-[50%] translate-y-[-50%] center rounded-full transition-all duration-700 active:scale-75'><BsDash /></span>
 
                 <p className='absolute top-1 right-[20px] text-slate-900 text-[10px]'>{getFormatedDate({ date: data?.date, type: "time" })}</p>
               </span>

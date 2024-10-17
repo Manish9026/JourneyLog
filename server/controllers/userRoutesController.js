@@ -30,23 +30,22 @@ export class UserRoutes {
             const { whereTo, whereFrom, amount, travelBy, company, date: { dateValue: { startDate }, type } } = req.body;
             console.log(startDate, type);
 
-            let chooseDate = !startDate == null && startDate ? startDate : new Date();
-            console.log(chooseDate);
+            let chooseDate = startDate!== null && startDate ? new Date(startDate) : new Date();
 
 
             if (whereTo && whereFrom && amount && travelBy && userId || type == "new") {
-                let todayDate = new Date(chooseDate);
-                let startDate = new Date(chooseDate);
-                await this.addPlace(whereFrom, whereTo);
-                this.setRecentCmp(userId, company?.cmpName)
+                // let todayDate = new Date(chooseDate);
+                // let startDate = new Date(chooseDate);
+                // await this.addPlace(whereFrom, whereTo);
+                // this.setRecentCmp(userId, company?.cmpName)
 
-                // transform time of choosed date 
-                startDate.setHours(0, 0, 0, 0);
-                todayDate.setHours(23, 59, 59, 999);
-                // console.log(startDate,todayDate);
+                // // transform time of choosed date 
+                // startDate.setHours(0, 0, 0, 0);
+                // todayDate.setHours(23, 59, 59, 999);
+                // // console.log(startDate,todayDate);
 
 
-                const existTravelRoute = await userRouteModel.findOne({ $and: [{ createdAt: { $lte: todayDate } }, { createdAt: { $gte: startDate } }, { userId }, { "company.cmpId": company?.cmpId }] })
+                const existTravelRoute = await userRouteModel.findOne({ $and: [{ createdAt: { $lte: endingDate(chooseDate) } }, { createdAt: { $gte: startingDate(chooseDate) } }, { userId }, { "company.cmpId": company?.cmpId }] })
                 console.log(existTravelRoute);
 
                 if (existTravelRoute) {
@@ -97,22 +96,19 @@ export class UserRoutes {
 
     static deleteRoute = async (req, res) => {
         try {
-            const { cmpId, routeId, date, deleteFrom } = req.body;
+            const { cmpId, routeId, date, deleteFrom ,parentId} = req.body;
             const userId = req.user._id;
 
 
-            if (isNotEmpty(cmpId) && isNotEmpty(routeId) && isNotEmpty(date) && isNotEmpty(userId)) {
-                const startDate = new Date(date);
-                const endDate = new Date(date);
-                startDate.setHours(0, 0, 0, 0)
-                endDate.setHours(23, 59, 59, 999);
-
-
+console.log(startingDate(date),endingDate(date),new Date(date).toISOString());
+ console.log(parentId);
+ 
+            if (isNotEmpty(cmpId) && isNotEmpty(routeId) && isNotEmpty(date) && isNotEmpty(userId) && isNotEmpty(parentId)) {              
                 const existTravelRoute = await userRouteModel.findOneAndUpdate(
-                    { $and: [{ createdAt: { $lte: endDate } }, { createdAt: { $gte: startDate } }, { userId }, { "company.cmpId": cmpId }] },
+                    { $and: [{_id:parentId}, { userId }, { "company.cmpId": cmpId }] },
                     { $pull: { travel: { _id: routeId } } },
                     { new: true } // To return the updated document
-                );
+                )
                 if (existTravelRoute) {
                     return goodRes({ res, data: { existTravelRoute, deleteFrom }, message: "removed", })
                 } else {
@@ -167,63 +163,72 @@ export class UserRoutes {
             if (userId && company.length != 0) {
                 await userRouteModel.aggregate([
                     {
-                        $match: { userId }  // Match by userId
+                      $match: { userId } // Match by userId
                     },
                     {
-                        $unwind: "$travel"  // Unwind the travel array so each travel log can be processed individually
+                      $unwind: "$travel" // Unwind the travel array
                     },
                     {
-                        $addFields: {
-                            travelDate: {
-                                $dateToString: { format: "%Y-%m-%d", date: '$travel.date', "timezone": "+05:30" }  // Extract the date (YYYY-MM-DD)
-                            },
-                            //   travelDate:'$travel.date'
+                      $addFields: {
+                        travelDate: {
+                          $dateToString: { format: "%Y-%m-%d", date: "$travel.date" ,"timezone": "+05:30"} // Format the date
                         }
+                      }
                     },
                     {
-                        $match: { "company.cmpName": { $in: company }, } // Filter based on the company names
-
+                      $match: { "company.cmpName": { $in: company } } // Match documents by company names
                     },
                     {
-                        $group: {
-                            _id: { travelDate: "$travelDate", company: "$company.cmpName", cmpId: "$company.cmpId" },  // Group by date and company name
-                            travelDetails: {
-                                $push: {
-                                    whereTo: "$travel.whereTo",
-                                    whereFrom: "$travel.whereFrom",
-                                    travelBy: "$travel.travelBy",
-                                    amount: "$travel.amount",
-                                    date: "$travel.date",
-                                    _id: "$travel._id"
-                                }
-                            }
+                      $group: {
+                        _id: {
+                          travelDate: "$travelDate",
+                          company: "$company.cmpName",
+                          cmpId: "$company.cmpId"
+                        },
+                        travelDetails: {
+                          $push: {
+                            whereTo: "$travel.whereTo",
+                            whereFrom: "$travel.whereFrom",
+                            travelBy: "$travel.travelBy",
+                            amount: "$travel.amount",
+                            date: "$travel.date",
+                            _id: "$travel._id"
+                          }
+                        },
+                        // Store the original document's _id for later use
+                        routeId: { $first: "$_id" } // Use $first to get the _id from the first document in the group
+                      }
+                    },
+                    {
+                      $group: {
+                        _id: "$_id.travelDate", // Group by travel date
+                        routeId: { $first: "$routeId" }, // Retain the routeId
+                        companies: {
+                          $push: {
+                            company: "$_id.company",
+                            cmpId: "$_id.cmpId",
+                            travelDetails: "$travelDetails"
+                          }
                         }
+                      }
                     },
                     {
-                        $group: {
-                            _id: "$_id.travelDate",  // Group by travel date
-                            companies: {
-                                $push: {
-                                    company: "$_id.company",
-                                    cmpId: "$_id.cmpId",
-                                    travelDetails: "$travelDetails"
-                                }
-                            }
-                        }
+                      $project: {
+                        _id: 0, // Exclude default _id
+                        date: "$_id", // Rename the grouped _id to "date"
+                        companies: 1,
+                        routeId: 1 // Include the routeId
+                      }
                     },
                     {
-                        $project: {
-                            _id: 0,  // Exclude the default _id field
-                            date: "$_id",  // Rename the _id field to "date"
-                            companies: 1  // Include the companies array
-                        }
+                      $sort: { date: -1 } // Sort by date descending
                     },
                     {
-                        $sort: { "date": -1 }
-                    }, {
-                        $limit: 3
+                      $limit: 3 // Limit the output to 3 documents
                     }
-                ])
+                  ])
+                  
+                  
                     .then(result => {
                         //   console.log(result);
                         //   res.send(result) 

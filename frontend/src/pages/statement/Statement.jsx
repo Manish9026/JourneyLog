@@ -111,7 +111,7 @@ dispatch(sort(isSort))
                               <span className='flex gap-2 items-center capitalize flex-wrap'>
                                 <p>{data?.whereFrom}</p><FaArrowRight className='text-xs font-normal mt-1' /> <p>{data?.whereTo}</p>
                               </span>
-                              <span onClick={()=>dispatch(deleteRoute({cmpId:routes.company.cmpId,routeId:data?._id,date:routes?.createdAt,deleteFrom:"statement"}))} className=' tertiary size-[25px] absolute right-[-8px] cursor-pointer secondary-font top-[50%] translate-y-[-50%] center rounded-full transition-all duration-700 active:scale-75'><BsDash/></span>
+                              <span onClick={()=>dispatch(deleteRoute({cmpId:routes.company.cmpId,routeId:data?._id,date:routes?.createdAt,deleteFrom:"statement",parentId:routes._id}))} className=' tertiary size-[25px] absolute right-[-8px] cursor-pointer secondary-font top-[50%] translate-y-[-50%] center rounded-full transition-all duration-700 active:scale-75'><BsDash/></span>
 
                             </span>
                             <span className='flex items-center '>
@@ -229,7 +229,7 @@ const reset=()=>{
 {
   [["today","today"],["yesterday","yesterday"],["last week","last_week"],["range","range"]].map((item,id)=>{
     return(
-  <label htmlFor={item[1]} className='w-full cursor-pointer flex items-center gap-2 capitalize'><input type="radio"  name="date" checked={typeof filterData?.date == "object" && Object.keys(filterData.date).includes(item[1])} value={item[1]} id={item[1]} role={item}  onChange={(e)=>setFilterData(prev=>({...prev,date:{[e.target.value]:""}}))}/>{item[0]}</label>
+  <label htmlFor={item[1]} key={id} className='w-full cursor-pointer flex items-center gap-2 capitalize'><input type="radio"  name="date" checked={typeof filterData?.date == "object" && Object.keys(filterData.date).includes(item[1])} value={item[1]} id={item[1]} role={item}  onChange={(e)=>setFilterData(prev=>({...prev,date:{[e.target.value]:""}}))}/>{item[0]}</label>
     )
   })
 }

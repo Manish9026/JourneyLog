@@ -160,7 +160,7 @@ dispatch(setPrintLoading(false))
 						
 				<div key={routes?._id} className="box w-full border flex flex-col primary-px">
 				<span className="box-head center relative top-[-8px] ">
-{getFormatedDate({date:routes?.createdAt,type:"date"})}
+{new Date(routes?.createdAt).toLocaleDateString()}
 				</span>
 				 <div className="  flex-wrap gap-1 pb-2 flex w-full">
 				{
