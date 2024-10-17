@@ -327,6 +327,8 @@ export class UserRoutes {
         let cmpName = isNotEmpty(company) ? company : recentCompany;
         const filterOption=await this.getFilterOption(req.body.filter)
         console.log(filterOption);
+        console.log(new Date());
+        
         
         try {
           const travelRoute= await userRouteModel.aggregate([
