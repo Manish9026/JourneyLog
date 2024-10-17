@@ -1,4 +1,4 @@
-import { badRes, goodRes, isNotEmpty } from "./index.js";
+import { badRes, convertToTimeZone, endingDate, goodRes, isNotEmpty, startingDate } from "./index.js";
 import { userRouteModel } from "../models/userRoutesModel.js"
 import { placeModel } from "../models/placesModel.js";
 import { userModel } from "../models/authModel.js";
@@ -271,23 +271,22 @@ export class UserRoutes {
                     let { startDate, endDate } = date.range;
                     if (startDate && endDate)
                         filterOption.createdAt = {
-                            $gte: new Date(new Date(startDate).setHours(0, 0, 0, 0)),
-                            $lte:new Date( new Date(endDate).setHours(23, 59, 59, 999))
+                            $gte:startingDate(startDate),
+                            $lte:endingDate(endDate)
                         }
 
                 }
                 else if (Object.keys(date).includes("today")) {
                     filterOption.createdAt = {
-                        $gte: new Date(new Date().setHours(0, 0, 0, 0)),
-                        $lte: new Date(new Date().setHours(23, 59, 59, 999))
+                        $gte:startingDate(new Date()),
+                        $lte:endingDate(new Date())
                     }
                 } else if (Object.keys(date).includes("yesterday")) {
-                    let y = new Date(new Date().setDate(new Date().getDate() - 1));
-                    console.log(y);
-
+                    let y = new Date();
+                    y.setUTCDate(new Date().getUTCDate() - 1)
                     filterOption.createdAt = {
-                        $gte: new Date(y.setHours(0, 0, 0, 0)),
-                        $lte: new Date(y.setHours(23, 59, 59, 999))
+                        $gte:startingDate(y),
+                        $lte:endingDate(y)
                     }
                 }
                 // console.log(date,);       
@@ -327,7 +326,7 @@ export class UserRoutes {
         let cmpName = isNotEmpty(company) ? company : recentCompany;
         const filterOption=await this.getFilterOption(req.body.filter)
         console.log(filterOption);
-        console.log(new Date());
+        console.log(new Date(new Date().setHours(0, 0, 0, 0)));
         
         
         try {
