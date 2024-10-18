@@ -276,9 +276,9 @@ const SrhContainer = memo(({ srhParam, setValue, close }) => {
     <div className="flex z-10 transition-all duration-500 flex-wrap p-2 gap-2 list-none secondary-bg min-h-[200px] pt-[30px] absolute w-full ">
 
       <span onClick={() => close()} className='absolute top-[5px] cursor-pointer right-[10px] size-[20px] light-bg center rounded-full '><FaXmark /></span>
-      {loading?<span className='center w-full secondary-font'>Loading...</span>:Array.isArray(data) && data.length != 0 ? data.map((place, id) => {
+      {loading?<span className='  center w-full secondary-font '>Loading...</span>:Array.isArray(data) && data.length != 0 ? data.map((place, id) => {
         return (
-          <li onClick={() => setValue(place?.name)} className=' flex bg-sky-200 min-w-[100px] opacity-80 cursor-pointer p-2 flex-1 rounded-md capitalize center max-h-[40px]'>{place.name}</li>
+          <li onClick={() => setValue(place?.name)} className='center bg-sky-200 min-w-[100px] opacity-80 cursor-pointer p-2 rounded-md capitalize  max-h-[50px] '>{place.name}</li>
         )
       }) : <div className='flex flex-col w-full gap-2 capitalize primary-font center'><p>place not exist in own record</p> <p className='tertiary-font'>please try manual</p>
       </div>}
@@ -306,12 +306,12 @@ const SrhContainer = memo(({ srhParam, setValue, close }) => {
           travelDetails.map((data, id) => {
             return (
               <span className='t-body flex items-center flex-wrap relative ' key={data?._id}>
-                <span className='flex items-center flex-wrap flex-1  gap-2 min-w-[250px]'>
+                <span className='flex items-center flex-wrap flex-1  gap-x-2 gap-y-1  min-w-[250px]'>
                   {travler.map((items, indx) => {
                     if (items[0] == data.travelBy)
                       return (<span key={indx} className='text-yellow-900'>{items[1]}</span>)
                   })}
-                  <span className='flex gap-2 flex-1 items-center capitalize flex-wrap'>
+                  <span className='flex gap-x-2 flex-1 items-center capitalize flex-wrap'>
                     <p>{data?.whereFrom}</p><FaArrowRight className='text-xs font-normal mt-1' /> <p>{data?.whereTo}</p>
                   </span>
 

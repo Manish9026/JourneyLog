@@ -1,4 +1,6 @@
 function checkDateStatus(dateString) {
+
+    // return new Date(dateString).toDateString()
     const days=["sunday","monday","tuesday","wednesday","thursday","friday","saturday"]
         // date declaration
         const [givenDate,today,checkIfDate]=[new Date(dateString),new Date(),new Date(),new Date()]

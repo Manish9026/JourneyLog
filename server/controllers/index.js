@@ -1,65 +1,89 @@
-import {DateTime} from 'luxon'
+import { DateTime } from 'luxon'
 
-const badRes=({message,statusCode,data,error,status,res}={})=>{
-    return res.status(statusCode || 201).json({
-        message:message || "try after some time",
-        data:data || null,
-        error:error || null,
-        status:false,     
-    })
+const badRes = ({ message, statusCode, data, error, status, res } = {}) => {
+  return res.status(statusCode || 201).json({
+    message: message || "try after some time",
+    data: data || null,
+    error: error || null,
+    status: false,
+  })
 }
-const goodRes=({message,statusCode,data,status,res}={})=>{
-    return res.status(statusCode || 201).json({
-        message:message || "success",
-        data:data || null,
-        status:true,     
-    })
+const goodRes = ({ message, statusCode, data, status, res } = {}) => {
+  return res.status(statusCode || 201).json({
+    message: message || "success",
+    data: data || null,
+    status: true,
+  })
 }
 function convertToTimeZone(dateString) {
   // Parse the date in UTC
-  
- 
+
+
   const date = DateTime.fromISO(new Date(dateString).toISOString(), { zone: 'UTC' }).setZone((Intl.DateTimeFormat().resolvedOptions().timeZone))
   console.log(date);
-  
+
   // Convert to the desired time zone
   return date.toISO();
 }
-const startingDate=(date)=>{
-  const d=new Date(date);
-  d.setUTCDate(d.getUTCDate() - 1);
-  d.setUTCHours(18,30,0,0)
+const startingDate = (date) => {
+  const d = new Date(date);
+  console.log(d, "start", d.getUTCHours());
 
-  return d
- }
- const endingDate=(date)=>{
-  const d=new Date(date);
-d.setUTCHours(18, 29, 59, 999); 
-  return d
- }
-const  isNotEmpty=(value)=> {
-    if (value == 'null' || value == 'undefined') {
-      return false;
-    }
-    if (value === null || value == undefined) {
-        return false;
-      }
-  
-    if (typeof value === 'string') {
-      return value.trim() !== '';
-    }
-  
-    if (Array.isArray(value)) {
-      return value.length > 0;
-    }
-  
-    if (typeof value === 'object') {
-      return Object.keys(value).length > 0;
-    }
-  
-    return true; // For other data types, assume non-empty if not null/undefined
+  // console.log(Math.round(Math.abs(d.getTimezoneOffset())/60),d.getTime());
+  const timeZone = Math.abs(d.getTimezoneOffset()) * 60 * 1000
+
+  if (d.getTime() > d.getTime() + timeZone) {
+    console.log(d.getHours());
+
+    d.setUTCDate(d.getUTCDate() - 1);
+    d.setUTCHours(18, 30, 0, 0)
+
+    return d
+  } else {
+    d.setUTCHours(18, 30, 0, 0)
+    return d
+  }
+}
+const endingDate = (date) => {
+  const d = new Date(date);
+  const timeZone = Math.abs(d.getTimezoneOffset()) * 60 * 1000
+  if (d.getTime() > d.getTime() + timeZone) {
+    d.setUTCHours(18, 29, 59, 999);
+    return d
+  }
+  else {
+
+    let end = new Date(d);
+    end.setUTCDate(d.getUTCDate() + 1);
+    end.setUTCHours(18, 29, 59, 999);
+
+
+    return end
+
+  }
+}
+const isNotEmpty = (value) => {
+  if (value == 'null' || value == 'undefined') {
+    return false;
+  }
+  if (value === null || value == undefined) {
+    return false;
   }
 
- export {badRes,goodRes,isNotEmpty,startingDate,endingDate,convertToTimeZone}
+  if (typeof value === 'string') {
+    return value.trim() !== '';
+  }
+
+  if (Array.isArray(value)) {
+    return value.length > 0;
+  }
+
+  if (typeof value === 'object') {
+    return Object.keys(value).length > 0;
+  }
+
+  return true; // For other data types, assume non-empty if not null/undefined
+}
+
+export { badRes, goodRes, isNotEmpty, startingDate, endingDate, convertToTimeZone }
 // console.log(convertToTimeZone("2024-10-18T00:00:00.000Z"))
- 

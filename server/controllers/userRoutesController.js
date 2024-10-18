@@ -145,7 +145,7 @@ export class UserRoutes {
 
         }
     }
-
+ 
     static getRecentRoutes = async (req, res) => {
 
         try {
