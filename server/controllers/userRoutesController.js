@@ -94,9 +94,6 @@ export class UserRoutes {
             const { cmpId, routeId, date, deleteFrom ,parentId} = req.body;
             const userId = req.user._id;
 
-console.log(startingDate(date),endingDate(date),new Date(date).toISOString());
- console.log(parentId);
- 
             if (isNotEmpty(cmpId) && isNotEmpty(routeId) && isNotEmpty(date) && isNotEmpty(userId) && isNotEmpty(parentId)) {              
                 const existTravelRoute = await userRouteModel.findOneAndUpdate(
                     { $and: [{_id:parentId}, { userId }, { "company.cmpId": cmpId }] },
@@ -104,6 +101,10 @@ console.log(startingDate(date),endingDate(date),new Date(date).toISOString());
                     { new: true } // To return the updated document
                 )
                 if (existTravelRoute) {
+                    if(existTravelRoute && existTravelRoute?.travel?.length==0){
+                      await  userRouteModel.deleteOne({ _id: parentId })
+                    }
+                   
                     return goodRes({ res, data: { existTravelRoute, deleteFrom }, message: "removed", })
                 } else {
                     return badRes({ res, data: [], message: "already removed" })
