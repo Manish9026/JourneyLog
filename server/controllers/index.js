@@ -27,16 +27,15 @@ function convertToTimeZone(dateString) {
 }
 const startingDate=(date)=>{
   const d=new Date(date);
+  d.setUTCDate(d.getUTCDate() - 1);
+  d.setUTCHours(18,30,0,0)
 
-d.setUTCHours(18, 30, 0, 0); 
   return d
  }
  const endingDate=(date)=>{
   const d=new Date(date);
-  const yesterday = new Date(d);
-yesterday.setUTCDate(d.getUTCDate() + 1);
-yesterday.setUTCHours(18, 29, 59, 999); 
-  return yesterday
+d.setUTCHours(18, 29, 59, 999); 
+  return d
  }
 const  isNotEmpty=(value)=> {
     if (value == 'null' || value == 'undefined') {

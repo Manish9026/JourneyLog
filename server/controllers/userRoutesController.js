@@ -32,20 +32,15 @@ export class UserRoutes {
 
             let chooseDate = startDate!== null && startDate ? new Date(startDate) : new Date();
 
+            // console.log(chooseDate,startingDate(chooseDate), endingDate(chooseDate));
+            
 
             if (whereTo && whereFrom && amount && travelBy && userId || type == "new") {
-                // let todayDate = new Date(chooseDate);
-                // let startDate = new Date(chooseDate);
-                // await this.addPlace(whereFrom, whereTo);
-                // this.setRecentCmp(userId, company?.cmpName)
+                await this.addPlace(whereFrom, whereTo);
+                this.setRecentCmp(userId, company?.cmpName)
 
-                // // transform time of choosed date 
-                // startDate.setHours(0, 0, 0, 0);
-                // todayDate.setHours(23, 59, 59, 999);
-                // // console.log(startDate,todayDate);
-
-
-                const existTravelRoute = await userRouteModel.findOne({ $and: [{ createdAt: { $lte: endingDate(chooseDate) } }, { createdAt: { $gte: startingDate(chooseDate) } }, { userId }, { "company.cmpId": company?.cmpId }] })
+                // validate existing routes is available or not 
+                const existTravelRoute = await userRouteModel.findOne({ $and: [{ createdAt: { $lte: endingDate(chooseDate) } }, { createdAt: { $gte: startingDate(chooseDate)} }, { userId }, { "company.cmpId": company?.cmpId }] })
                 console.log(existTravelRoute);
 
                 if (existTravelRoute) {
@@ -98,7 +93,6 @@ export class UserRoutes {
         try {
             const { cmpId, routeId, date, deleteFrom ,parentId} = req.body;
             const userId = req.user._id;
-
 
 console.log(startingDate(date),endingDate(date),new Date(date).toISOString());
  console.log(parentId);
@@ -358,7 +352,7 @@ console.log(startingDate(date),endingDate(date),new Date(date).toISOString());
                    {
                        $match: {
                            "travel.0": { $exists: true } // Ensure only documents with matching travel records are returned
-                       }
+                       } 
                    },
                ])
                if(travelRoute.length!=0){
@@ -370,6 +364,7 @@ console.log(startingDate(date),endingDate(date),new Date(date).toISOString());
             badRes({res,})
                 console.log(error);
         }
+
 
 
     }
