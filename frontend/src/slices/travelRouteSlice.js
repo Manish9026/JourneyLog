@@ -73,8 +73,30 @@ const travelRouteSlice=createSlice({
             srhResult:{
                 loading:false,
                 data:[]
-            }
+            },
+           
+        },
+        deleteState:{
+            alert:false,
+            loading:false,
+            data:[],
         }
+    },
+    reducers:{
+        setDelStateData:({deleteState},{payload})=>{
+            if(payload?.detail && payload?.type=="add"){
+            deleteState.data.push(payload.detail)
+            // deleteState.alert=true;
+        }
+        if(payload?.type=="delete"){
+            deleteState.data=[]
+        }
+        
+        },
+        setAlert:({deleteState})=>{
+            deleteState.alert=!deleteState.alert
+        }
+
     },
     extraReducers:(builder)=>{
         builder.addCase(addRoute.pending,({addRoute})=>{
@@ -101,5 +123,5 @@ const travelRouteSlice=createSlice({
         })
     }
 })
-
+export const {setDelStateData,setAlert}=travelRouteSlice.actions;
 export default travelRouteSlice.reducer;

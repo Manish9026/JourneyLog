@@ -9,7 +9,7 @@ import { FaGroupArrowsRotate, FaIndianRupeeSign, FaPlus, FaXmark } from "react-i
 import { LuArrowDownUp } from "react-icons/lu";
 // import { Button } from '../Home/Home';
 import useReactHooks from '../../custom-hooks/useReactHooks';
-import { addRoute, deleteRoute, searchPlace } from '../../slices/travelRouteSlice';
+import { addRoute, deleteRoute, searchPlace, setAlert, setDelStateData } from '../../slices/travelRouteSlice';
 import { toast } from 'react-toastify';
 import { Button } from '../../component/UI component/Button';
 import { useSelector } from 'react-redux';
@@ -318,7 +318,8 @@ const SrhContainer = memo(({ srhParam, setValue, close }) => {
                 </span>
                 <span className='flex items-center text-sm flex-1 min-w-[100px] gap-1'>
                   <FaIndianRupeeSign className='text-sm mt-1' />{data?.amount}</span>
-                  <span onClick={()=>dispatch(deleteRoute({cmpId,routeId:data?._id,date,parentId}))} className=' tertiary size-[25px] absolute right-[-8px] cursor-pointer secondary-font top-[50%] translate-y-[-50%] center rounded-full transition-all duration-700 active:scale-75'><BsDash /></span>
+                  {/* deleteRoute({cmpId,routeId:data?._id,date,parentId}) */}
+                  <span onClick={()=>{dispatch(setDelStateData({detail:{parentId,cmpId,travelDetails:data},type:"add"}));dispatch(setAlert())}} className=' tertiary size-[25px] absolute right-[-8px] cursor-pointer secondary-font top-[50%] translate-y-[-50%] center rounded-full transition-all duration-700 active:scale-75'><BsDash /></span>
 
                 <p className='absolute top-1 right-[20px] text-slate-900 text-[10px]'>{getFormatedDate({ date: data?.date, type: "time" })}</p>
               </span>

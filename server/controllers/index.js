@@ -30,9 +30,11 @@ const startingDate = (date) => {
   console.log(d, "start", d.getUTCHours());
 
   // console.log(Math.round(Math.abs(d.getTimezoneOffset())/60),d.getTime());
-  const timeZone = Math.abs(d.getTimezoneOffset()) * 60 * 1000
+  
 
-  if (d.getTime() > d.getTime() + timeZone) {
+
+
+  if (d.getHours()*60+d.getMinutes() > Math.abs(d.getTimezoneOffset()) ) {
     console.log(d.getHours());
 
     d.setUTCDate(d.getUTCDate() - 1);
@@ -46,8 +48,8 @@ const startingDate = (date) => {
 }
 const endingDate = (date) => {
   const d = new Date(date);
-  const timeZone = Math.abs(d.getTimezoneOffset()) * 60 * 1000
-  if (d.getTime() > d.getTime() + timeZone) {
+ 
+  if (d.getHours()*60+d.getMinutes() >Math.abs(d.getTimezoneOffset())) {
     d.setUTCHours(18, 29, 59, 999);
     return d
   }

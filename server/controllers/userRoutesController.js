@@ -94,7 +94,7 @@ export class UserRoutes {
             const { cmpId, routeId, date, deleteFrom ,parentId} = req.body;
             const userId = req.user._id;
 
-            if (isNotEmpty(cmpId) && isNotEmpty(routeId) && isNotEmpty(date) && isNotEmpty(userId) && isNotEmpty(parentId)) {              
+            if (isNotEmpty(cmpId) && isNotEmpty(routeId) &&  isNotEmpty(userId) && isNotEmpty(parentId)) {              
                 const existTravelRoute = await userRouteModel.findOneAndUpdate(
                     { $and: [{_id:parentId}, { userId }, { "company.cmpId": cmpId }] },
                     { $pull: { travel: { _id: routeId } } },
