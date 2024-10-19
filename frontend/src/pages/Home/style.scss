@@ -101,3 +101,22 @@
     bottom: 8.1px
   }
 }
+.smRotate-animate{
+  transform: rotate(0deg);
+  animation: linear 1s smRotate alternate infinite;
+}
+@keyframes smRotate {
+  from{
+    transform: rotate(0deg);
+    scale: 1;
+  }
+  to{
+  transform: rotate(30deg);
+  scale: 1.2;
+
+
+  }
+}
+body{
+  // overflow: hidden;
+}

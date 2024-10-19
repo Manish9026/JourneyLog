@@ -1,10 +1,23 @@
-import React, { Children, forwardRef, useEffect, useState } from 'react'
+import React, { Children, forwardRef, useEffect, useImperativeHandle, useState } from 'react'
 import { FaXmark } from 'react-icons/fa6'
 import './style.scss'
-const Popup = forwardRef(({children, iconBox={},active,title,bodyClass,boxClass=""},ref) => {
+import useFlexibleEle from '../../custom-hooks/useFlexibleEle';
+const Popup = forwardRef(({children,flexibleBox, iconBox={},active,title,bodyClass,boxClass=""},ref) => {
     const [isActive,setIsActive]=useState(false);
     const [width,setWidth]=useState(window.innerWidth)
+    const {textareaRef}=useFlexibleEle([flexibleBox]);
+    useImperativeHandle(
+        ref,
+      () => ({
+        toggleActive(){
+            setIsActive(prev=>!prev)
+        }
+        
+      }),
+      
+    )
     useEffect(()=>{
+        // if(active)
         setIsActive(active);
     },[active])
 
@@ -23,7 +36,7 @@ const Popup = forwardRef(({children, iconBox={},active,title,bodyClass,boxClass=
         
 
     </div> :
-    <div ref={ref} onClick={(e)=>e.stopPropagation()} className={` ${boxClass} ${isActive?"bottom-[0]  opacity-100":"bottom-[-100vh] opacity-50"} transition-all duration-1000 ease box  p-1 absolute w-full   bg-blue-500    min-h-[200px]  `} >
+    <div ref={textareaRef} onClick={(e)=>e.stopPropagation()} className={` ${boxClass} ${isActive?"bottom-[0]  opacity-100":"bottom-[-100vh] opacity-50"} transition-all duration-1000 ease box  p-1 absolute w-full   bg-blue-500    min-h-[200px]  `} >
 
         <span  className={` relative flex  invisble`}>
             <h5>{title}</h5>

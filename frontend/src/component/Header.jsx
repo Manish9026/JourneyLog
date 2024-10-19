@@ -29,7 +29,7 @@ const Header = () => {
  {userInfo && Object.keys(userInfo).length!=0?<span className="flex flex-col ">
       <h4 className='flex capitalize items-center'>Hi,<p>{userInfo?.userName} 
 
-</p><PiHandWavingFill className='ml-2 text-yellow-400' /></h4>
+</p><PiHandWavingFill className='ml-2 text-yellow-400 smRotate-animate' /></h4>
       <h6 className='text-xl'>Welcome back!</h6>
     </span>: 
     <div className='uppercase flex items-center '>

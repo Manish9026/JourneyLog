@@ -15,15 +15,26 @@ import { setPrintLoading } from '../../slices/statementSlice';
 
 export const TravelReport = ({className,travlerName,companyName}) => {
 const pdfRef=useRef()
-const triggerPdfDownload = () => {
+const [printType,setPrintType]=useState(false);
+const pdfDownload = () => {
     if (pdfRef.current) {
       pdfRef.current.handleDownloadPdf();
+    }
+  };
+  const jpgDownload = () => {
+    if (pdfRef.current) {
+      pdfRef.current.handleDownloadJpg();
     }
   };
 	return(<>
 	
 	<PdfReport ref={pdfRef} travlerName={travlerName} companyName={companyName}/>
-		<span className={className} onClick={()=>triggerPdfDownload()}> <MdPrint/></span>
+		<span className={`${className} z-[2] rounded-[5px] transition-all duration-700 relative  ${printType?"rounded-bl-[0px] rounded-br-[0px]":"rounded-[5px]"}`} onClick={()=>setPrintType(prev=>!prev)}> <MdPrint/>
+		<span className={`${printType?"top-[100%] opacity-100":"top-[0%] opacity-20 invisible"} z-[-1] transition-all duration-700 absolute  list-none   w-full items-center bg-slate-900 shadow-md  shadow-slate-500/60 right-0  flex flex-col  left-0`}>
+			<li onClick={()=>jpgDownload()} className='border-b hover:bg-sky-800/90 w-full text-center transition-all duration-500'>JPG</li>
+			<li onClick={()=>pdfDownload()} className='border-b hover:bg-sky-800/90 w-full text-center transition-all duration-500'>PDF</li>
+		</span>
+		</span>
 	</>
 	)
 
@@ -91,12 +102,34 @@ const {dispatch}=useReactHooks()
 	useImperativeHandle(
 	  ref,
 	  () => ({
+		async handleDownloadJpg(){
+			const element = componentRef.current;
+			if(!element) return toast("no records")
+				dispatch(setPrintLoading(true))
+			const canvas = await html2canvas(element);
+		
+			const data = canvas.toDataURL('image/jpg');
+			const link = document.createElement('a');
+		
+			if (typeof link.download === 'string') {
+			  link.href = data;
+			  link.download = 'travelReport.jpg';
+		
+			  document.body.appendChild(link);
+			  link.click();
+				dispatch(setPrintLoading(false))
+
+			  document.body.removeChild(link);
+			} else {
+			  window.open(data);
+			}
+		  },
 		async handleDownloadPdf(){
             // setpageCount(1)
-dispatch(setPrintLoading(true))
             
 			const element = componentRef.current;
-	if(!element) return toast("no records")
+			if(!element) return toast("no records")
+				dispatch(setPrintLoading(true))
 			const canvas = await html2canvas(element, {
 				scale: 2,
 				useCORS: true,

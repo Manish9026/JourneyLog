@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useState } from 'react'
+import React, { forwardRef, memo, useCallback, useEffect, useRef, useState } from 'react'
 import { FaArrowRight, FaSearch } from 'react-icons/fa'
 import { FaFilter, FaIndianRupeeSign } from 'react-icons/fa6';
 import { TiPrinter } from "react-icons/ti";
@@ -11,7 +11,7 @@ import { TravelReport } from '../../component/travel-report/TravelReport';
 import useReactHooks from '../../custom-hooks/useReactHooks';
 import { getStatements, sort } from '../../slices/statementSlice';
 import { BsDash } from 'react-icons/bs';
-import { deleteRoute } from '../../slices/travelRouteSlice';
+import { deleteRoute, setAlert, setDelStateData } from '../../slices/travelRouteSlice';
 import Popup from '../../component/popup/Popup';
 import Datepicker from 'react-tailwindcss-datepicker';
 import DatePicker2 from "react-datepicker";
@@ -28,8 +28,7 @@ const Statement = () => {
   const { statement, loading,printLoading } = useSelector(state => state.statement)
   const {dispatch}=useReactHooks();
   const [searchValue,setSearchValue]=useState("")
-  const [filter,setFilter]=useState(false)
-
+  const filterBoxRef=useRef();
   useEffect(()=>{
 if(!searchValue){
   let timeout=setTimeout(() => {
@@ -46,15 +45,21 @@ dispatch(sort(isSort))
 
   const isSearched=()=>{
     dispatch(getStatements({skip:0,next:5,company:searchValue}))
+console.log(filterRef);
 
   }
+  const boxStatus=()=>{
+    if(filterBoxRef?.current){
+      filterBoxRef.current.toggleActive()
+    }
+  }
   return (
-    <div className='flex relative flex-col w-full primary-p'>
-<FilterPopup active={filter} company={searchValue}/>
-{printLoading && <span className='absolute z-10 w-full flex-col capitalize primary-font center h-full light-dark top-0 left-0'><div class="loader rounded-[5px]"></div> printing...</span>}
+    <div className='flex relative flex-col w-full primary-p overflow-hidden'>
+<FilterPopup ref={filterBoxRef}  company={searchValue}/>
+{printLoading && <span className='fixed top-0 left-0 z-10 w-full flex-col capitalize primary-font center h-full light-dark top-0 left-0'><div class="loader rounded-[5px]"></div> printing...</span>}
 <span className='flex search w-full flex-col gap-1'>
-   <span className='flex w-full gap-1 relative overflow-hidden'>
-   <label htmlFor='search' className='flex items-center  p-1 light-bg w-full min-h-[40px] overflow-hidden rounded-[5px]'>
+   <span className='flex w-full gap-1 relative '>
+   <label htmlFor='search' className='flex items-center  p-1 light-bg w-full min-h-[40px]  rounded-[5px]'>
 
           
        
@@ -79,13 +84,13 @@ dispatch(sort(isSort))
 
 <TiPrinter />
     </span> */}
-    <TravelReport travlerName={userInfo?.userName} companyName={searchValue} className="min-w-[40px] center tertiary rounded-[5px] primary-font cursor-pointer"/>
+    <TravelReport travlerName={userInfo?.userName} companyName={searchValue} className="min-w-[40px] center tertiary  primary-font cursor-pointer"/>
 
    </span>
    <span className='flex justify-end w-full gap-1'>
 
     <span className="size-[35px] center tertiary rounded-[5px] primary-font cursor-pointer" onClick={()=>setIsSort(prev=>prev==1?-1:1)}><BiSortAlt2 /></span>
-    <span onClick={()=>setFilter(prev=>!prev)} className="w-[40px] center tertiary rounded-[5px] primary-font cursor-pointer"><FaFilter/></span>
+    <span onClick={()=>boxStatus()} className="w-[40px] center tertiary rounded-[5px] primary-font cursor-pointer"><FaFilter/></span>
    </span>
 </span>
 
@@ -111,7 +116,8 @@ dispatch(sort(isSort))
                               <span className='flex gap-2 items-center capitalize flex-wrap'>
                                 <p>{data?.whereFrom}</p><FaArrowRight className='text-xs font-normal mt-1' /> <p>{data?.whereTo}</p>
                               </span>
-                              <span onClick={()=>dispatch(deleteRoute({cmpId:routes.company.cmpId,routeId:data?._id,date:routes?.createdAt,deleteFrom:"statement",parentId:routes._id}))} className=' tertiary size-[25px] absolute right-[-8px] cursor-pointer secondary-font top-[50%] translate-y-[-50%] center rounded-full transition-all duration-700 active:scale-75'><BsDash/></span>
+                              
+                              <span onClick={()=>{dispatch(setDelStateData({detail:{cmpId:routes.company.cmpId,travelDetails:data,deleteFrom:"statement",parentId:routes._id},type:"add"}));dispatch(setAlert())}} className=' tertiary size-[25px] absolute right-[-8px] cursor-pointer secondary-font top-[50%] translate-y-[-50%] center rounded-full transition-all duration-700 active:scale-75'><BsDash/></span>
 
                             </span>
                             <span className='flex items-center '>
@@ -192,7 +198,8 @@ const CardSkelton=()=>{
   )
 }
 
-const FilterPopup=({active,company})=>{
+const FilterPopup=forwardRef(({company},ref)=>{
+
   const [filterData,setFilterData]=useState({
     date:{},
     amount:{
@@ -201,6 +208,10 @@ const FilterPopup=({active,company})=>{
       paid:0,
       unpaid:0
 
+    },
+    company:{
+      cmpId:"",
+      cmpName:company
     }
   })
   const [filterNav,setFilterNav]=useState({
@@ -208,7 +219,6 @@ const FilterPopup=({active,company})=>{
 
   })
   const {dispatch}=useReactHooks();
-const {textareaRef}=useFlexibleEle([filterData?.date]);
 const reset=()=>{
   setFilterData({
     date:{},amount:{
@@ -217,11 +227,14 @@ const reset=()=>{
       paid:0,
       unpaid:0
 
+    },company:{
+      cmpId:"",
+      cmpName:company
     }
   })
 }
-
   const DateBox=useCallback(()=>{
+// console.log(newRef,"new ref");
 
     return(
       <div className="flex flex-col items-center gap-2">
@@ -273,26 +286,45 @@ const reset=()=>{
     )
   },[filterData.paymentStatus])
 
+  const CompanyBox=useCallback(()=>{
+  const { userInfo } = useSelector(state => state.auth)
+
+  
+  
+    return(
+<div className="">
+
+{
+  userInfo && Array.isArray(userInfo?.company) ?userInfo.company.map((data)=>{
+    return(
+      <label htmlFor={data?._id} key={data?._id} className='w-full cursor-pointer flex items-center gap-2 capitalize'><input type="radio"  name="company" checked={data?.cmpName === (filterData.company.cmpName || company)} value={filterData.company.cmpName} id={data?._id}  onChange={(e)=>setFilterData(prev=>({...prev,company:{cmpId:data?._id,cmpName:data?.cmpName}}))}/>{data?.cmpName}</label>
+    )
+  }):null
+}
+
+</div>
+    )
+  },[filterData.company,company]
+)
   const filterHandler=()=>{
-    console.log(JSON.stringify(filterData));
-    dispatch(getStatements({skip:0,next:5,company,filterData}))
+    dispatch(getStatements({skip:0,next:5,company:filterData.company.cmpName,filterData}))
   }
 
 
   const ContentBox=useCallback(()=>{
     return(
-      filterNav?.amount ?<AmountBox/> :filterNav?.date?<DateBox/> :filterNav?.status?<StatusBox/>:null
+      filterNav?.amount ?<AmountBox/> :filterNav?.date?<DateBox/> :filterNav?.status?<StatusBox/>:filterNav?.company?<CompanyBox/>:null
     )
-  },[filterNav,filterData.date,filterData.paymentStatus])
+  },[filterNav,filterData.date,filterData.paymentStatus ,filterData.company])
   return(
 
-    <Popup bodyClass={"w-full "} ref={textareaRef} active={active} boxClass='min-h-[300px] bg-slate-900 text-slate-100'>
+    <Popup flexibleBox={filterData?.date} bodyClass={"w-full "}  ref={ref} boxClass='min-h-[300px] bg-slate-900 text-slate-100'>
       <div  className='w-full p-1 flex-col  flex  h-full flex-1 '>
         <div className="p-1 border-b">Filter </div>
         <div className='flex  flex-1  py-1'>
           <ul className='bg-sky-200/20 primary-font flex flex-col items-start py-2 capitalize h-full max-w-[100px] gap-1'>
           {
-            [["date range","date"],["amount","amount"],['status','status']].map((navTitle,id)=>{
+            [["date range","date"],["amount","amount"],['status','status',],["company","company"]].map((navTitle,id)=>{
               return(
                 <label className={`${filterNav[navTitle[1]]?"bg-blue-500":" "}  px-2 w-full capitalize transition-all cursor-pointer ease duration-700`} htmlFor={navTitle[1]+id} key={id}>
                 <input type='button' className='capitalize cursor-pointer'  name={navTitle[1]} id={navTitle[1]+id} value={navTitle[0]} onClick={(e)=>setFilterNav({[e.target.name]:1})} />
@@ -324,5 +356,5 @@ const reset=()=>{
     </Popup>
   )
 }
-
+)
 export default Statement

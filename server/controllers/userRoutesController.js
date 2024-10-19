@@ -322,7 +322,7 @@ export class UserRoutes {
         const { limit, skip, company } = req.query;
         const userId = req?.user?._id
         const { recentCompany } = req.user;
-        // console.log(recentCompany,userId,company);
+        console.log(recentCompany,userId,company);
         let cmpName = isNotEmpty(company) ? company : recentCompany;
         const filterOption=await this.getFilterOption(req.body.filter)
         console.log(filterOption);
