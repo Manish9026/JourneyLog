@@ -28,6 +28,9 @@ function convertToTimeZone(dateString) {
 const startingDate = (date) => {
   const d = new Date(date);
   console.log(d,d.getHours(),d.getMinutes(),Math.abs(d.getTimezoneOffset()),d.toLocaleTimeString([], { hour: '2-digit', hour12: false }));
+  const d1=new Date(Date.now())
+  console.log("d1",d1.getHours(),d1.getMinutes());
+  
 
   if (d.getHours()*60+d.getMinutes() > Math.abs(d.getTimezoneOffset()) ) {
     console.log(d.getHours());
