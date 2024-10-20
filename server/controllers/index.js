@@ -26,12 +26,14 @@ function convertToTimeZone(dateString) {
   return date.toISO();
 }
 const startingDate = (date) => {
+  const timeZone=new Date().getTimezoneOffset();
   const d = new Date(date);
-  console.log(d,d.getHours(),d.getMinutes(),Math.abs(d.getTimezoneOffset()),d.toLocaleTimeString([], { hour: '2-digit', hour12: false }),"date",d.toLocaleString());
+  // console.log(d,d.getHours(),d.getMinutes(),Math.abs(d.getTimezoneOffset()),d.toLocaleTimeString([], { hour: '2-digit', hour12: false }),"date",d.toLocaleString());
+console.log(timeZone,"timeZone");
 
-  const localTime = DateTime.fromISO(date, { zone: 'utc' }).toLocal();
+  // const localTime = DateTime.fromISO(date, { zone: 'utc' }).toLocal();
 
-  console.log(localTime.toString());
+  console.log(d.getUTCHours());
   
 
   if (d.getHours()*60+d.getMinutes() > Math.abs(d.getTimezoneOffset()) ) {

@@ -1,3 +1,5 @@
+import { DateTime } from "luxon";
+
 const data = [
   {
     "_id": "6713fd896eaeef7fa35352d0",
@@ -93,7 +95,9 @@ const getFormattedTravelCountPerDay = (data) => {
   return Object.values(travelByCount);
 };
 console.log(getFormattedTravelCountPerDay(data));
+const utcTimeString = "2024-10-19T20:19:47Z";
 
+// Convert to local time using Luxon
+const localTime = DateTime.fromISO(utcTimeString, { zone: 'utc' }).toLocal();
 
-const d=new Date()
-console.log(new Date(Date.now()));
+console.log(localTime.toLocal().day);
