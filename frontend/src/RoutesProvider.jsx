@@ -29,7 +29,11 @@ const dispatch=useDispatch();
     
     children:[{
       path:'/',
-      element:<Home/>
+      element:<Home/>,
+      loader:()=>{
+        dispatch(getStatements({skip:0,next:7,company:null}))
+        return 0
+      }
     },{
       path:"/add-routes",
       element:<TravelRoute/>,

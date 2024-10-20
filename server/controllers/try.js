@@ -1,82 +1,96 @@
-import moment from 'moment-timezone'
-import {DateTime} from 'luxon'
-
-const d = new Date("2024-10-31T18:29:59.999Z");
-const startDate = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), 18, 30, 0, 0)); // Note: Months are 0-indexed (0 = January)
-const y=new Date(d)
-// Setting the end date to 2024-10-18T23:59:59.999Z
-y.setUTCDate(d.getUTCDate() - 1);
-const endDate = new Date(Date.UTC(y));
-
-console.log(startDate,endDate);
-
-
-// Date in local time zone (Asia/Kolkata)
-
-// const isoDate = new Date(); // Example ISO date (UTC)
-// const date = new Date(isoDate);
-// console.log(date);
-
-// // Convert to Indian Standard Time (IST) by manually adjusting offset
-// const istOffset = 5.5 * 60; // IST is UTC+5:30
-// console.log
-// (date.getTimezoneOffset())
-// const istTime = new Date(date.getTime() + Math.abs(date.getTimezoneOffset()) * 60 * 1000);
-
-// // Format back to ISO string in the desired format (without the time zone suffix 'Z')
-// // const isoIST = istTime.toISOString().replace('Z', '');
-
-// // Output the formatted IST time in ISO format
-// console.log( new Date(istTime));
-// console.log(new Date().getTimezoneOffset());
-function convertToTimeZone() {
-    // Parse the date in UTC
-   
-    const date = DateTime.fromISO("2024-10-17T23:42:20.138+05:30", { zone: 'UTC' }).setZone((Intl.DateTimeFormat().resolvedOptions().timeZone))
-    console.log(date);
-    
-    // Convert to the desired time zone
-    return date.toISO();
+const data = [
+  {
+    "_id": "6713fd896eaeef7fa35352d0",
+    "userId": "6709349de5c2064c0a70b447",
+    "company": {
+      "cmpName": "Krishna private limited",
+      "cmpId": "670934fbe5c2064c0a70b468",
+      "_id": "6713fd896eaeef7fa35352d1"
+    },
+    "createdAt": "2024-10-19T18:42:16.862Z",
+    "updatedAt": "2024-10-20T04:07:10.120Z",
+    "travel": [
+      {
+        "whereTo": "lagpat nagar",
+        "whereFrom": "mahindra departmental store",
+        "travelBy": "metro",
+        "amount": 50,
+        "date": "2024-10-19T18:42:16.862Z",
+        "payStatus": false,
+        "_id": "6713fd896eaeef7fa35352d2"
+      },
+      {
+        "whereTo": "moti nagar",
+        "whereFrom": "ashram",
+        "travelBy": "metro",
+        "amount": 36,
+        "date": "2024-10-19T19:31:14.326Z",
+        "payStatus": false,
+        "_id": "671409033ec9bd4764d7c3a6"
+      },
+      {
+        "whereTo": "rk ashram marg",
+        "whereFrom": "mayur vihar extension ",
+        "travelBy": "metro",
+        "amount": 20,
+        "date": "2024-10-20T04:07:09.904Z",
+        "payStatus": false,
+        "_id": "671481ee2baf52981bb7f271"
+      }
+    ]
+  },
+  {
+    "_id": "6712c1c1a310e898aa77741c",
+    "userId": "6709349de5c2064c0a70b447",
+    "company": {
+      "cmpName": "Krishna private limited",
+      "cmpId": "670934fbe5c2064c0a70b468",
+      "_id": "6712c1c1a310e898aa77741d"
+    },
+    "createdAt": "2024-10-18T20:14:56.905Z",
+    "updatedAt": "2024-10-19T12:43:12.104Z",
+    "travel": [
+      {
+        "whereTo": "ashram",
+        "whereFrom": "mayur vihar",
+        "travelBy": "rapido",
+        "amount": 36,
+        "date": "2024-10-19T12:43:11.901Z",
+        "payStatus": false,
+        "_id": "6713a960f94192408d3212d8"
+      }
+    ]
   }
+]
 
 
-    const convertedDate = convertToTimeZone();
-    console.log(convertedDate);
-// const getISODate=(ISO_String)=>{
+const getFormattedTravelCountPerDay = (data) => {
+  const travelByCount = {};
 
-//     // Function to automatically convert to a specified time zone
- 
-    
-//     // Example usage
-//      // Output: "2024-10-16T18:30:00.000+05:30"
-    
+  data.forEach(record => {
+      record.travel.forEach(travelEntry => {
+          const date = new Date(travelEntry.date).toLocaleDateString('en-GB', {
+              day: 'numeric',
+              month: 'short'
+          }); // Format date as "15 Aug"
+          const travelBy = travelEntry.travelBy.toLowerCase();
 
-// //     const date1 = new Date('2024-10-17T00:00:00.000Z');
+          // Initialize if date is not in the object yet
+          if (!travelByCount[date]) {
+              travelByCount[date] = { metro: 0, rapido: 0, auto: 0, other: 0, date: date };
+          }
 
-// // // Convert to the time zone with a 5:30 offset (e.g., Asia/Kolkata)
-// // const options = { timeZone: 'Asia/Kolkata', hour12: false };
-// // const dateInKolkata = date1.toLocaleString('en-GB', options);
+          // Increment counts for specific travel methods or count as 'other' if it doesn't match known methods
+          if (travelByCount[date][travelBy] !== undefined) {
+              travelByCount[date][travelBy]++;
+          } else {
+              travelByCount[date].other++;
+          }
+      });
+  });
 
-// // console.log(dateInKolkata);
+  // Convert the object into an array format
+  return Object.values(travelByCount);
+};
+console.log(getFormattedTravelCountPerDay(data));
 
-// // // Adjust formatting back to ISO format manually
-// // const kolkataDateISO = new Date(dateInKolkata + ' GMT+0530').toISOString();
-// // console.log(kolkataDateISO);
-
-//     // const date=new Date()
-//     // const iso=new Date(ISO_String);
-//     // console.log(iso.getTime());
-    
-//     // const istTime = new Date(iso.getTime() -  Math.abs(iso.getTimezoneOffset()) * 60 * 1000);
-//     // console.log(istTime);
-    
-//     // return new Date(istTime)
-
-// }
-
-// getISODate("2024-10-16T18:30:00.000Z")
-// console.log("production");
-
-// getISODate("2024-10-17T00:00:00.000Z")
-const da=new Date();
-console.log(da.getTime()>da.getTime() + 300 *60*1000);

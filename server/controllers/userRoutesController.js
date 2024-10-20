@@ -367,7 +367,6 @@ export class UserRoutes {
         }
 
 
-
     }
     static searchPlace = async (req, res) => {
         try {
@@ -437,8 +436,60 @@ export class UserRoutes {
             badRes({ res, message: "internal error" })
         }
     }
-}
 
+    // home page 
+
+//     static getTravelDetails=async(req,res)=>{
+
+//         const userId=req.user._id;
+//         const {filter}=req.body;
+//         const { recentCompany } = req.user;
+//         console.log(recentCompany,userId,company);
+//         let cmpName = isNotEmpty(company) ? company : recentCompany;
+//         const {limit,skip}=req.query;
+//         const filterOption=this.getFilterOption()
+            
+
+//             try {
+//                 const travelRoute= await userRouteModel.aggregate([
+//                       { $match: { $expr : { $eq: [ '$userId' , { $toObjectId: userId } ] },  createdAt: filterOption.createdAt || {$lte:new Date()},"company.cmpName":cmpName} },
+//                       {
+//                           $sort: {
+//                               createdAt: -1 // Sort by createdAt in descending order
+//                           }
+//                       },
+//                       {
+//                           $limit:10  // Limit the results to 5 documents
+//                       },
+//                          {
+//                              $project: {
+//                                  _id: 1,
+//                                  userId: 1,
+//                                  company: 1,
+//                                  travel: 1,
+//                                  createdAt: 1,
+//                                  updatedAt: 1
+//                              }
+//                          },
+//                          {
+//                              $match: {
+//                                  "travel.0": { $exists: true } // Ensure only documents with matching travel records are returned
+//                              } 
+//                          },
+//                      ])
+//                      if(travelRoute.length!=0){
+//                               goodRes({res,data:travelRoute})
+//                           }else badRes({res,message:"not found"})
+      
+                     
+//               } catch (error) {
+//                   badRes({res,})
+//                       console.log(error);
+//               }
+
+    
+// }
+}
 
 [{
     "companies": [

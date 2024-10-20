@@ -41,20 +41,23 @@
 
   }
 }
-
+.label{
+  position: absolute;
+  color: red;
+}
 // home
 
 .home {
   .box-1 {
     // background: #5776d4;
-    padding: 5px 5px;
+    padding: 5px 10px;
     box-shadow: inset 1px 1px 5px rgb(179, 171, 245), inset -1px -1px 5px rgb(181, 174, 242);
     color: #78dce9;
 
-    &>:nth-child(2) {
-      @apply px-2 rounded-sm;
-      box-shadow: inset 1px 1px 0px rgb(179, 171, 245), inset -1px -1px 0px rgb(181, 174, 242);
-    }
+    // &>:nth-child(2) {
+    //   @apply px-2 rounded-sm;
+    //   box-shadow: inset 1px 1px 0px rgb(179, 171, 245), inset -1px -1px 0px rgb(181, 174, 242);
+    // }
   }
 }
 
