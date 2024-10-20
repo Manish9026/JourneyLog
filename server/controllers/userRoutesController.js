@@ -467,8 +467,8 @@ static getCombinedTotal = async (userId,cmpName) => {
                         $cond: [
                             {
                                 $and: [
-                                    { $gte: ["$travel.date", startingDate(new Date())] }, // Check if date is today
-                                    { $lte: ["$travel.date", endingDate(new Date())] }
+                                    { $gte: ["$createdAt", startingDate(new Date())] }, // Check if date is today
+                                    { $lte: ["$createdAt", endingDate(new Date())] }
                                 ]
                             },
                             "$travel.amount", // If the condition matches, include the amount
