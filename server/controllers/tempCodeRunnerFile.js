@@ -1,1 +1,1 @@
-.toLocal()
+console.log(1/24);

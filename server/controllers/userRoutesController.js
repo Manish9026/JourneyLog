@@ -2,7 +2,6 @@ import { badRes, convertToTimeZone, endingDate, goodRes, isNotEmpty, startingDat
 import { userRouteModel } from "../models/userRoutesModel.js"
 import { placeModel } from "../models/placesModel.js";
 import { userModel } from "../models/authModel.js";
-import { DateTime } from "luxon";
 
 export class UserRoutes {
 
@@ -331,9 +330,7 @@ export class UserRoutes {
         let cmpName = isNotEmpty(company) ? company : recentCompany;
         const filterOption=await this.getFilterOption(req.body.filter)
         // console.log(new Date(),"date");
-        const localTime = DateTime.fromISO(new Date().toISOString(), { zone: 'utc' }).toLocal();
 
-console.log(localTime.toString(),"date");
         
         try {
           const travelRoute= await userRouteModel.aggregate([

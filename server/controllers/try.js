@@ -95,9 +95,4 @@ const getFormattedTravelCountPerDay = (data) => {
   return Object.values(travelByCount);
 };
 console.log(getFormattedTravelCountPerDay(data));
-const utcTimeString = "2024-10-19T20:19:47Z";
-
-// Convert to local time using Luxon
-const localTime = DateTime.fromISO(utcTimeString, { zone: 'utc' }).toLocal();
-
-console.log(localTime.toLocal().day);
+console.log(21%12);

@@ -29,20 +29,26 @@ const startingDate = (date) => {
   const timeZone=new Date().getTimezoneOffset();
   const d = new Date(date);
   // console.log(d,d.getHours(),d.getMinutes(),Math.abs(d.getTimezoneOffset()),d.toLocaleTimeString([], { hour: '2-digit', hour12: false }),"date",d.toLocaleString());
-console.log(timeZone,"timeZone");
+console.log(timeZone,"timeZone",d.getUTCMinutes());
 
   // const localTime = DateTime.fromISO(date, { zone: 'utc' }).toLocal();
 
-  console.log(d.getUTCHours());
+  console.log(d.getUTCHours()<=23 && d.getUTCHours()>=18);
   
 
-  if (d.getHours()*60+d.getMinutes() > Math.abs(d.getTimezoneOffset()) ) {
-    console.log(d.getHours());
+  if (d.getUTCHours()>=0 && d.getUTCHours()<=18) {
 
+    if(d.getUTCHours()==18 && d.getUTCMinutes()<=30){
     d.setUTCDate(d.getUTCDate() - 1);
     d.setUTCHours(18, 30, 0, 0)
-
     return d
+
+  }
+   else {
+    d.setUTCHours(18, 30, 0, 0)
+    return d
+  }
+
   } else {
     d.setUTCHours(18, 30, 0, 0)
     return d
@@ -50,12 +56,20 @@ console.log(timeZone,"timeZone");
 }
 const endingDate = (date) => {
   const d = new Date(date);
-  console.log(d,d.getHours()*60+d.getMinutes() ,Math.abs(d.getTimezoneOffset()));
-  
- 
-  if (d.getHours()*60+d.getMinutes() >Math.abs(d.getTimezoneOffset())) {
+  if (d.getUTCHours()>=0 && d.getUTCHours()<=18) {
+    if(d.getUTCHours()==18 && d.getUTCMinutes()<=30){
     d.setUTCHours(18, 29, 59, 999);
-    return d
+    return d}
+    else {
+
+      let end = new Date(d);
+      end.setUTCDate(d.getUTCDate() + 1);
+      end.setUTCHours(18, 29, 59, 999);
+  
+  
+      return end
+  
+    }
   }
   else {
 
