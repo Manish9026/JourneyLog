@@ -27,7 +27,7 @@ function convertToTimeZone(dateString) {
 }
 const startingDate = (date) => {
   const d = new Date(date);
-  console.log(d,d.getHours(),d.getMinutes(),Math.abs(d.getTimezoneOffset()),d.toLocaleTimeString([], { hour: '2-digit', hour12: false }));
+  console.log(d,d.getHours(),d.getMinutes(),Math.abs(d.getTimezoneOffset()),d.toLocaleTimeString([], { hour: '2-digit', hour12: false }),"date",d.toLocaleString());
   const d1=new Date(Date.now())
   console.log("d1",d1.getHours(),d1.getMinutes());
   

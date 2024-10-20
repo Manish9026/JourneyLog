@@ -283,8 +283,8 @@ export class UserRoutes {
                 }
                 else if (Object.keys(date).includes("today")) {
                     filterOption.createdAt = {
-                        $gte:startingDate(new Date()),
-                        $lte:endingDate(new Date())
+                        $gte:startingDate(new Date().toISOString()),
+                        $lte:endingDate(new Date().toISOString())
                     }
                 } else if (Object.keys(date).includes("yesterday")) {
                     let y = new Date();
