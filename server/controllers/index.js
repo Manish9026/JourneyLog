@@ -27,7 +27,7 @@ function convertToTimeZone(dateString) {
 }
 const startingDate = (date) => {
   const d = new Date(date);
-  console.log(d,d.getHours()*60+d.getMinutes() ,Math.abs(d.getTimezoneOffset()));
+  console.log(d,d.getHours(),d.getMinutes(),Math.abs(d.getTimezoneOffset()));
 
   if (d.getHours()*60+d.getMinutes() > Math.abs(d.getTimezoneOffset()) ) {
     console.log(d.getHours());
