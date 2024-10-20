@@ -329,7 +329,8 @@ export class UserRoutes {
         const { recentCompany } = req.user;
         let cmpName = isNotEmpty(company) ? company : recentCompany;
         const filterOption=await this.getFilterOption(req.body.filter)
-
+        console.log(new Date(),"date");
+        
         try {
           const travelRoute= await userRouteModel.aggregate([
                 { $match: { $expr : { $eq: [ '$userId' , { $toObjectId: userId } ] },  createdAt: filterOption?.createdAt || {$lte:new Date()},"company.cmpName":cmpName.trim()} },
