@@ -5,7 +5,7 @@ import { urlReloader } from "../utils/urlReloder";
 
 axios.defaults.baseURL=url
 export const  getStatements=createAsyncThunk("getStatements",async(statementData,{dispatch})=>{
-    return await axios.post(`/travel/all-routes?skip=${statementData?.skip || 0}&next=${statementData?.next || 5} &company=${statementData?.company}`,{filter:statementData?.filterData},{withCredentials:true,}).then((res)=>{
+    return await axios.post(`/travel/all-routes?skip=${statementData?.skip || 0}&next=${statementData?.next || 5} &company=${statementData?.company} &getType=statement`,{filter:statementData?.filterData},{withCredentials:true,}).then((res)=>{
         urlReloader({response:res.data,dispatch,messageAllow:false});
         console.log(res.data);       
         return res.data

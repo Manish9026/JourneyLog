@@ -3,7 +3,7 @@ import Title from '../../component/Title'
 
 import { FaArrowRight, FaCross, FaTrain } from "react-icons/fa";
 import { RiEBikeLine } from "react-icons/ri";
-import { MdDirectionsCarFilled } from "react-icons/md";
+import { MdClear, MdDirectionsCarFilled } from "react-icons/md";
 import { FaRoute } from "react-icons/fa";
 import { FaGroupArrowsRotate, FaIndianRupeeSign, FaPlus, FaXmark } from "react-icons/fa6";
 import { LuArrowDownUp } from "react-icons/lu";
@@ -132,7 +132,9 @@ const TravelRoute = () => {
           <span className='w-full relative '>
             <input type="text" onFocus={() => setSrhBox(prev => ({ ...prev, one: true }))
             } className={`inputField`} name='whereFrom' onChange={onChangeHandler}   value={formData.whereFrom} placeholder='where from' />
-
+{
+  formData?.whereFrom && 
+ <span onClick={()=>setFormData(prev=>({...prev,whereFrom:""}))}  className='absolute size-[35px] transition-all duration-500 right-[20px] top-[50%] cursor-pointer translate-y-[-50%] center text-sky-400 text-lg'> <MdClear /></span>}
             {srhBox.one && <SrhContainer close={() => setSrhBox(prev => ({ ...prev, one: false }))} srhParam={formData.whereFrom} setValue={(value) => { setFormData(prev => ({ ...prev, whereFrom: value })); setSrhBox(prev => ({ ...prev, one: false })) }
             } />}
           </span>
@@ -141,7 +143,10 @@ const TravelRoute = () => {
           <span className='w-full relative '>
 
             <input type="text"  value={formData.whereTo} onChange={onChangeHandler} name='whereTo' onFocus={() => setSrhBox(prev => ({ ...prev, two: true }))} className={`inputField`} placeholder='where to' />
-
+{
+  formData?.whereTo &&
+ 
+ <span onClick={()=>setFormData(prev=>({...prev,whereTo:""}))}  className={`$ease-in absolute  size-[35px] right-[20px] top-[50%] transition-all duration-500 cursor-pointer translate-y-[-50%] center text-sky-400 text-lg`}> <MdClear /></span>}
             {srhBox.two && <SrhContainer close={() => setSrhBox(prev => ({ ...prev, two: false }))} srhParam={formData.whereTo} setValue={(value) => { setFormData(prev => ({ ...prev, whereTo: value })); setSrhBox(prev => ({ ...prev, two: false })) }
             } />}
           </span>
@@ -173,7 +178,7 @@ const TravelRoute = () => {
               <option value="auto">auto</option>
               <option value="other">other</option>
             </select>
-            <input type="text" value={formData.amount} onChange={onChangeHandler} name='amount' placeholder='Amount' className='inputField min-w-[50px] flex-1 ' />
+            <input type="number" value={formData.amount} onChange={onChangeHandler} name='amount' placeholder='Amount' className='inputField min-w-[50px] flex-1 ' />
 
           </div>
 

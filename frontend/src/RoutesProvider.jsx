@@ -16,6 +16,7 @@ import Detail from './pages/Detail/Detail.jsx'
 import { getDetails } from './slices/detailSlice.js'
 import Payment from './pages/Payment/Payment.jsx'
 import { recentPayment } from './slices/paymentSlice.js'
+import { getTravelDetail } from './slices/homeSlice.js'
 function RoutesProvider() {
 
 const dispatch=useDispatch();
@@ -31,7 +32,7 @@ const dispatch=useDispatch();
       path:'/',
       element:<Home/>,
       loader:()=>{
-        dispatch(getStatements({skip:0,next:7,company:null}))
+        dispatch(getTravelDetail({skip:0,next:7,company:""}))
         return 0
       }
     },{

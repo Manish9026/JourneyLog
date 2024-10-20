@@ -27,12 +27,6 @@ function convertToTimeZone(dateString) {
 }
 const startingDate = (date) => {
   const d = new Date(date);
-  console.log(d, "start", d.getUTCHours());
-
-  // console.log(Math.round(Math.abs(d.getTimezoneOffset())/60),d.getTime());
-  
-
-
 
   if (d.getHours()*60+d.getMinutes() > Math.abs(d.getTimezoneOffset()) ) {
     console.log(d.getHours());

@@ -5,6 +5,11 @@ import { userModel } from "../models/authModel.js";
 
 export class UserRoutes {
 
+
+
+
+
+
     static setRecentCmp = async (userId, cmpName) => {
         // console.log(userId,cmpName);
 
@@ -319,19 +324,15 @@ export class UserRoutes {
     }
 
     static getRandomRoutes = async (req, res) => {
-        const { limit, skip, company } = req.query;
+        const { limit, skip, company ,getType} = req.query;
         const userId = req?.user?._id
         const { recentCompany } = req.user;
-        console.log(recentCompany,userId,company);
         let cmpName = isNotEmpty(company) ? company : recentCompany;
         const filterOption=await this.getFilterOption(req.body.filter)
-        console.log(filterOption);
-        console.log(new Date(new Date().setHours(0, 0, 0, 0)));
-        
-        
+
         try {
           const travelRoute= await userRouteModel.aggregate([
-                { $match: { $expr : { $eq: [ '$userId' , { $toObjectId: userId } ] },  createdAt: filterOption.createdAt || {$lte:new Date()},"company.cmpName":cmpName} },
+                { $match: { $expr : { $eq: [ '$userId' , { $toObjectId: userId } ] },  createdAt: filterOption?.createdAt || {$lte:new Date()},"company.cmpName":cmpName.trim()} },
                 {
                     $sort: {
                         createdAt: -1 // Sort by createdAt in descending order
@@ -357,13 +358,21 @@ export class UserRoutes {
                    },
                ])
                if(travelRoute.length!=0){
-                        goodRes({res,data:travelRoute})
-                    }else badRes({res,message:"not found"})
+                if(getType=="home"){
+                    const result=await this.getCombinedTotal(userId,cmpName)
+                    console.log(result,"result");
+                    
+                    goodRes({res,data:{travelDetail:travelRoute,utilAmount:result}})
+                }else{
+                    goodRes({res,data:travelRoute})
+                }
+                    }
+                    else badRes({res,message:"not found"})
 
                
         } catch (error) {
+            console.log(error);
             badRes({res,})
-                console.log(error);
         }
 
 
@@ -439,56 +448,55 @@ export class UserRoutes {
 
     // home page 
 
-//     static getTravelDetails=async(req,res)=>{
+    // Combined query to get total unpaid and today's total travel amount
+static getCombinedTotal = async (userId,cmpName) => {
+    try {
 
-//         const userId=req.user._id;
-//         const {filter}=req.body;
-//         const { recentCompany } = req.user;
-//         console.log(recentCompany,userId,company);
-//         let cmpName = isNotEmpty(company) ? company : recentCompany;
-//         const {limit,skip}=req.query;
-//         const filterOption=this.getFilterOption()
-            
+        const result = await userRouteModel.aggregate([
+            { $unwind: "$travel" }, // Unwind the travel array
+            {
+                $match:{$expr : { $eq: [ '$userId' , { $toObjectId: userId } ] },"company.cmpName":cmpName.trim()}
+            },
+            // Project fields for both conditions
+            {
+                $project: {
+                    unpaidAmount: {
+                        $cond: [{ $eq: ["$travel.payStatus", false] }, "$travel.amount", 0] // Only unpaid amounts
+                    },
+                    todayAmount: {
+                        $cond: [
+                            {
+                                $and: [
+                                    { $gte: ["$travel.date", startingDate(new Date())] }, // Check if date is today
+                                    { $lte: ["$travel.date", endingDate(new Date())] }
+                                ]
+                            },
+                            "$travel.amount", // If the condition matches, include the amount
+                            0 // Otherwise, set it to 0
+                        ]
+                    }
+                }
+            },
 
-//             try {
-//                 const travelRoute= await userRouteModel.aggregate([
-//                       { $match: { $expr : { $eq: [ '$userId' , { $toObjectId: userId } ] },  createdAt: filterOption.createdAt || {$lte:new Date()},"company.cmpName":cmpName} },
-//                       {
-//                           $sort: {
-//                               createdAt: -1 // Sort by createdAt in descending order
-//                           }
-//                       },
-//                       {
-//                           $limit:10  // Limit the results to 5 documents
-//                       },
-//                          {
-//                              $project: {
-//                                  _id: 1,
-//                                  userId: 1,
-//                                  company: 1,
-//                                  travel: 1,
-//                                  createdAt: 1,
-//                                  updatedAt: 1
-//                              }
-//                          },
-//                          {
-//                              $match: {
-//                                  "travel.0": { $exists: true } // Ensure only documents with matching travel records are returned
-//                              } 
-//                          },
-//                      ])
-//                      if(travelRoute.length!=0){
-//                               goodRes({res,data:travelRoute})
-//                           }else badRes({res,message:"not found"})
-      
-                     
-//               } catch (error) {
-//                   badRes({res,})
-//                       console.log(error);
-//               }
+            // Group to sum both unpaid and today's amounts
+            {
+                $group: {
+                    _id: null,
+                    totalUnpaid: { $sum: "$unpaidAmount" }, // Sum unpaid amounts
+                    todayTotal: { $sum: "$todayAmount" } // Sum today's amounts
+                }
+            }
+        ]);
 
-    
-// }
+
+        return result[0];
+    } catch (err) {
+        console.error(err);
+        return []
+
+    }
+};
+
 }
 
 [{
