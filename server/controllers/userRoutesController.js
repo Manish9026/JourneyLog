@@ -329,10 +329,18 @@ export class UserRoutes {
         const { recentCompany } = req.user;
         let cmpName = isNotEmpty(company) ? company : recentCompany;
         const filterOption=await this.getFilterOption(req.body.filter)
-        console.log(startingDate(new Date().toISOString()),endingDate(new Date().toISOString()));
+        // console.log(startingDate(new Date()),endingDate(new Date()));
 
-        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-console.log(timeZone);
+//         const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+// console.log(timeZone);
+
+            // const find=await userRouteModel.find({userId,createdAt: {
+            //     $gte:startingDate("2024-10-21T18:29:26.801Z"),
+            //     $lt: endingDate("2024-10-21T18:29:26.801Z")
+            //   }})
+            //   console.log(find);
+              
+
         try {
           const travelRoute= await userRouteModel.aggregate([
                 { $match: { $expr : { $eq: [ '$userId' , { $toObjectId: userId } ] },  createdAt: filterOption?.createdAt || {$lte:new Date()},"company.cmpName":cmpName.trim()} },

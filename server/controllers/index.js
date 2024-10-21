@@ -26,61 +26,41 @@ function convertToTimeZone(dateString) {
   return date.toISO();
 }
 const startingDate = (date) => {
-  const timeZone=new Date().getTimezoneOffset();
   const d = new Date(date);
+
+  
+if( d.getUTCHours()*60 +d.getUTCMinutes() < 18*60 +30){
+
+  d.setUTCDate(d.getUTCDate() - 1);
   d.setUTCHours(18, 30, 0, 0)
-  return d
+  console.log("starting date",d);
 
-  // if (d.getUTCHours()>=0 && d.getUTCHours()<=18) {
+    return d
+  }
+    else{
+    d.setUTCHours(18, 30, 0, 0)
+  console.log("starting date",d);
 
-  //   if(d.getUTCHours()==18 && d.getUTCMinutes()<=30){
-  //   d.setUTCDate(d.getUTCDate() - 1);
-  //   d.setUTCHours(18, 30, 0, 0)
-  //   return d
-
-  // }
-  //  else {
-  //   d.setUTCHours(18, 30, 0, 0)
-  //   return d
-  // }
-
-  // } else {
-  //   d.setUTCHours(18, 30, 0, 0)
-  //   return d
-  // }
+    return d
+  }
 }
 const endingDate = (date) => {
   const d = new Date(date);
-  let end = new Date(d);
-      end.setUTCDate(d.getUTCDate() + 1);
-      end.setUTCHours(18, 29, 59, 999);
 
-  return end
-  // if (d.getUTCHours()>=0 && d.getUTCHours()<=18) {
-  //   if(d.getUTCHours()==18 && d.getUTCMinutes()<=30){
-  //   d.setUTCHours(18, 29, 59, 999);
-  //   return d}
-  //   else {
+if( d.getUTCHours()*60 +d.getUTCMinutes() <=18*60 +30){
 
-  //     let end = new Date(d);
-  //     end.setUTCDate(d.getUTCDate() + 1);
-  //     end.setUTCHours(18, 29, 59, 999);
+  d.setUTCHours(18, 29, 59, 999);
+  console.log("ending date",d);
   
-  
-  //     return end
-  
-  //   }
-  // }
-  // else {
+    return d
+}else{
+    let end = new Date(d);
+    end.setUTCDate(d.getUTCDate() + 1);
+    end.setUTCHours(18, 29, 59, 999);
+  console.log("ending date",end);
 
-  //   let end = new Date(d);
-  //   end.setUTCDate(d.getUTCDate() + 1);
-  //   end.setUTCHours(18, 29, 59, 999);
-
-
-  //   return end
-
-  // }
+    return end
+}
 }
 const isNotEmpty = (value) => {
   if (value == 'null' || value == 'undefined') {

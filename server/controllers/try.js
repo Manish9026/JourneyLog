@@ -96,3 +96,4 @@ const getFormattedTravelCountPerDay = (data) => {
 };
 console.log(getFormattedTravelCountPerDay(data));
 console.log(21%12);
+console.log(new Date(Date.UTC(2024,10,21,22,30,30)));
