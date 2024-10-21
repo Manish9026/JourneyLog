@@ -28,59 +28,59 @@ function convertToTimeZone(dateString) {
 const startingDate = (date) => {
   const timeZone=new Date().getTimezoneOffset();
   const d = new Date(date);
-  // console.log(d,d.getHours(),d.getMinutes(),Math.abs(d.getTimezoneOffset()),d.toLocaleTimeString([], { hour: '2-digit', hour12: false }),"date",d.toLocaleString());
-console.log(timeZone,"timeZone",d.getUTCMinutes());
+  d.setUTCHours(18, 30, 0, 0)
+  return d
 
-  // const localTime = DateTime.fromISO(date, { zone: 'utc' }).toLocal();
+  // if (d.getUTCHours()>=0 && d.getUTCHours()<=18) {
 
-  console.log(d.getUTCHours()<=23 && d.getUTCHours()>=18);
-  
+  //   if(d.getUTCHours()==18 && d.getUTCMinutes()<=30){
+  //   d.setUTCDate(d.getUTCDate() - 1);
+  //   d.setUTCHours(18, 30, 0, 0)
+  //   return d
 
-  if (d.getUTCHours()>=0 && d.getUTCHours()<=18) {
+  // }
+  //  else {
+  //   d.setUTCHours(18, 30, 0, 0)
+  //   return d
+  // }
 
-    if(d.getUTCHours()==18 && d.getUTCMinutes()<=30){
-    d.setUTCDate(d.getUTCDate() - 1);
-    d.setUTCHours(18, 30, 0, 0)
-    return d
-
-  }
-   else {
-    d.setUTCHours(18, 30, 0, 0)
-    return d
-  }
-
-  } else {
-    d.setUTCHours(18, 30, 0, 0)
-    return d
-  }
+  // } else {
+  //   d.setUTCHours(18, 30, 0, 0)
+  //   return d
+  // }
 }
 const endingDate = (date) => {
   const d = new Date(date);
-  if (d.getUTCHours()>=0 && d.getUTCHours()<=18) {
-    if(d.getUTCHours()==18 && d.getUTCMinutes()<=30){
-    d.setUTCHours(18, 29, 59, 999);
-    return d}
-    else {
-
-      let end = new Date(d);
+  let end = new Date(d);
       end.setUTCDate(d.getUTCDate() + 1);
       end.setUTCHours(18, 29, 59, 999);
+
+  return end
+  // if (d.getUTCHours()>=0 && d.getUTCHours()<=18) {
+  //   if(d.getUTCHours()==18 && d.getUTCMinutes()<=30){
+  //   d.setUTCHours(18, 29, 59, 999);
+  //   return d}
+  //   else {
+
+  //     let end = new Date(d);
+  //     end.setUTCDate(d.getUTCDate() + 1);
+  //     end.setUTCHours(18, 29, 59, 999);
   
   
-      return end
+  //     return end
   
-    }
-  }
-  else {
+  //   }
+  // }
+  // else {
 
-    let end = new Date(d);
-    end.setUTCDate(d.getUTCDate() + 1);
-    end.setUTCHours(18, 29, 59, 999);
+  //   let end = new Date(d);
+  //   end.setUTCDate(d.getUTCDate() + 1);
+  //   end.setUTCHours(18, 29, 59, 999);
 
 
-    return end
+  //   return end
 
-  }
+  // }
 }
 const isNotEmpty = (value) => {
   if (value == 'null' || value == 'undefined') {
