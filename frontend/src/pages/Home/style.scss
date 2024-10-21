@@ -53,8 +53,9 @@
     padding: 5px 10px;
     box-shadow: inset 1px 1px 5px rgb(179, 171, 245), inset -1px -1px 5px rgb(181, 174, 242);
     color: #78dce9;
-    min-width: 120px;
-    max-width: 300px;
+    min-width: 130px;
+    flex: 1;
+    max-width: 400px;
 
     // &>:nth-child(2) {
     //   @apply px-2 rounded-sm;

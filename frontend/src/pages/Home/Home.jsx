@@ -86,7 +86,7 @@ const Home = () => {
           </span>
 
         </li>
-        <li className='flex box-1   flex-1 max-w-[150px] capitalize rounded-md justify-center '>
+        <li className='flex box-1   flex-1  capitalize rounded-md justify-center '>
           <span className='p-1 flex flex-col gap-0 flex-1'>
             <span className='flex items-center justify-between'>  <p className='text-lg'>{utilAmount?.totalUnpaid}</p> <span className='center text-xl'>
 
