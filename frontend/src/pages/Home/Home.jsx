@@ -15,7 +15,7 @@ import { useEffect } from 'react';
 import { MdAccountBalanceWallet } from "react-icons/md";
 import { GoGraph } from "react-icons/go";
 import TravelChart from './TravelChart';
-import { walet } from '../../assets/icons';
+import { pending, walet } from '../../assets/icons';
 import useReactHooks from '../../custom-hooks/useReactHooks';
 import { getStatements } from '../../slices/statementSlice';
 import { getTravelDetail } from '../../slices/homeSlice';
@@ -90,7 +90,7 @@ const Home = () => {
           <span className='p-1 flex flex-col gap-0 flex-1'>
             <span className='flex items-center justify-between'>  <p className='text-lg'>{utilAmount?.totalUnpaid}</p> <span className='center text-xl'>
 
-              <GoGraph /></span></span>
+              <img src={pending} alt=""  className='size-[20px]'/></span></span>
             <p className='text-xs'>remaining balance</p>
           </span>
 
