@@ -80,7 +80,7 @@ if(date)
       <ul className='w-full flex gap-2 flex-wrap justify-center px-1 py-2'>
         <li className='flex box-1   flex-1 max-w-[150px] capitalize rounded-md justify-start  '>
           <span className='p-1 flex flex-col gap-0 flex-1'>
-            <span className='flex items-center justify-between'>  <p className='text-lg'>{(userInfo?.company?.find((c) => c.cmpName == selectValue)?.remainingAmount)}</p> <span className='center text-xl'>
+            <span className='flex items-center justify-between'>  <p className='text-lg'>{(userInfo?.company?.find((c) => c.cmpName == selectValue)?.remainingAmount) || 0}</p> <span className='center text-xl'>
 
               <MdAccountBalanceWallet /></span></span>
             <p className='text-xs'>walet balance</p>
