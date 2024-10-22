@@ -329,16 +329,8 @@ export class UserRoutes {
         const { recentCompany } = req.user;
         let cmpName = isNotEmpty(company) ? company : recentCompany;
         const filterOption=await this.getFilterOption(req.body.filter)
-        // console.log(startingDate(new Date()),endingDate(new Date()));
+console.log(cmpName);
 
-//         const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-// console.log(timeZone);
-
-            // const find=await userRouteModel.find({userId,createdAt: {
-            //     $gte:startingDate("2024-10-21T18:29:26.801Z"),
-            //     $lt: endingDate("2024-10-21T18:29:26.801Z")
-            //   }})
-            //   console.log(find);
               
 
         try {
@@ -463,42 +455,122 @@ export class UserRoutes {
 static getCombinedTotal = async (userId,cmpName) => {
     try {
 
+        // const result = await userRouteModel.aggregate([
+        //     { $unwind: "$travel" }, // Unwind the travel array
+        //     {
+        //         $match:{$expr : { $eq: [ '$userId' , { $toObjectId: userId } ] },"company.cmpName":cmpName.trim()}
+        //     },
+        //     // Project fields for both conditions
+        //     {
+        //         $project: {
+        //             unpaidAmount: {
+        //                 $cond: [{ $eq: ["$travel.payStatus", false] }, "$travel.amount", 0] // Only unpaid amounts
+        //             },
+        //             todayAmount: {
+        //                 $cond: [
+        //                     {
+        //                         $and: [
+        //                             { $gte: ["$createdAt", startingDate(new Date())] }, // Check if date is today
+        //                             { $lte: ["$createdAt", endingDate(new Date())] }
+        //                         ]
+        //                     },
+        //                     "$travel.amount", // If the condition matches, include the amount
+        //                     0 // Otherwise, set it to 0
+        //                 ]
+        //             }
+        //         }
+        //     },
+
+        //     // Group to sum both unpaid and today's amounts
+        //     {
+        //         $group: {
+        //             _id: null,
+        //             totalUnpaid: { $sum: "$unpaidAmount" }, // Sum unpaid amounts
+        //             todayTotal: { $sum: "$todayAmount" } // Sum today's amounts
+        //         }
+        //     }
+        // ]);
         const result = await userRouteModel.aggregate([
             { $unwind: "$travel" }, // Unwind the travel array
             {
-                $match:{$expr : { $eq: [ '$userId' , { $toObjectId: userId } ] },"company.cmpName":cmpName.trim()}
-            },
-            // Project fields for both conditions
-            {
-                $project: {
-                    unpaidAmount: {
-                        $cond: [{ $eq: ["$travel.payStatus", false] }, "$travel.amount", 0] // Only unpaid amounts
+                $match: {
+                    $expr: {
+                        $eq: ['$userId', { $toObjectId: userId }]
                     },
-                    todayAmount: {
-                        $cond: [
-                            {
-                                $and: [
-                                    { $gte: ["$createdAt", startingDate(new Date())] }, // Check if date is today
-                                    { $lte: ["$createdAt", endingDate(new Date())] }
-                                ]
-                            },
-                            "$travel.amount", // If the condition matches, include the amount
-                            0 // Otherwise, set it to 0
-                        ]
-                    }
+                    "company.cmpName": cmpName.trim()
                 }
             },
-
-            // Group to sum both unpaid and today's amounts
+            // Project fields for amount and payment status
+            {
+                $project: {
+                    amount: "$travel.amount", // Include the amount (both paid and unpaid)
+                    payStatus: "$travel.payStatus", // Include payment status
+                    createdAt: "$createdAt" // Include the createdAt date
+                }
+            },
+            // Group to sum amounts and find min/max dates conditionally
             {
                 $group: {
-                    _id: null,
-                    totalUnpaid: { $sum: "$unpaidAmount" }, // Sum unpaid amounts
-                    todayTotal: { $sum: "$todayAmount" } // Sum today's amounts
+                    _id: null, // Group all documents together
+                    totalUnpaid: {
+                        $sum: {
+                            $cond: [{ $eq: ["$payStatus", false] }, "$amount", 0] // Sum unpaid amounts
+                        }
+                    },
+                    totalPaid: {
+                        $sum: {
+                            $cond: [{ $eq: ["$payStatus", true] }, "$amount", 0] // Sum paid amounts
+                        }
+                    },
+                    todayTotalUnpaid: {
+                        $sum: {
+                            $cond: [
+                                { $and: [
+                                    { $gte: ["$createdAt", startingDate(new Date())] }, // Check if date is today
+                                    { $lte: ["$createdAt", endingDate(new Date())]}
+                                ]},
+                                {
+                                    $cond: [{ $eq: ["$payStatus", false] }, "$amount", 0] // Include only unpaid amounts for today
+                                },
+                                0 // Otherwise, add 0
+                            ]
+                        }
+                    },
+                    todayTotalPaid: {
+                        $sum: {
+                            $cond: [
+                                { $and: [
+                                    { $gte: ["$createdAt", startingDate(new Date())] }, // Check if date is today
+                                    { $lte: ["$createdAt", endingDate(new Date())]}
+                                ]},
+                                {
+                                    $cond: [{ $eq: ["$payStatus", true] }, "$amount", 0] // Include only paid amounts for today
+                                },
+                                0 // Otherwise, add 0
+                            ]
+                        }
+                    },
+                    unpaidMinDate: {
+                        $min: {
+                            $cond: [{ $eq: ["$payStatus", false] }, "$createdAt", null] // Find min date only if unpaid
+                        }
+                    },
+                    unpaidMaxDate: {
+                        $max: {
+                            $cond: [{ $eq: ["$payStatus", false] }, "$createdAt", null] // Find max date only if unpaid
+                        }
+                    }
                 }
             }
         ]);
+        
 
+        // Prepare the output message
+
+
+        console.log(result);
+        
+        
 
         return result[0];
     } catch (err) {

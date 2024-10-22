@@ -24,7 +24,7 @@ import { CiNoWaitingSign } from "react-icons/ci";
 const Statement = () => {
 
   const { userInfo } = useSelector(state => state.auth)
-    const [isSort,setIsSort]=useState(1);
+    const [isSort,setIsSort]=useState(-1);
   const { statement, loading,printLoading } = useSelector(state => state.statement)
   const {dispatch}=useReactHooks();
   const [searchValue,setSearchValue]=useState("")
@@ -33,7 +33,7 @@ const Statement = () => {
 if(!searchValue){
   let timeout=setTimeout(() => {
     setSearchValue(userInfo?.recentCompany || "" )
-    dispatch(getStatements({skip:0,next:5,company:searchValue}))
+    // dispatch(getStatements({skip:0,next:5,company:searchValue}))
   }, 1000);
 
 return ()=>clearTimeout(timeout)}
@@ -45,7 +45,6 @@ dispatch(sort(isSort))
 
   const isSearched=()=>{
     dispatch(getStatements({skip:0,next:5,company:searchValue}))
-console.log(filterRef);
 
   }
   const boxStatus=()=>{

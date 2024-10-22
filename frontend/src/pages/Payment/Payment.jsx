@@ -46,7 +46,7 @@ const Payment = () => {
 
                     <span className='flex flex-col' onClick={()=>setIsSelected(prev=>!prev)}>
                         <label htmlFor='search' className='flex items-center  p-1 bg-sky-200/80 w-full min-h-[40px] overflow-hidden rounded-[5px]'>
-                            <input type='text' placeholder='Pick Company' id='search' value={formData?.company?.cmpName} onChange={(e) => ""} className=" placeholder:text-blue-900 flex outline-none min-w-[100px] bg-transparent px-2 h-full  flex-1 w-full" />
+                            <input type='text'  placeholder='Pick Company' id='search' value={formData?.company?.cmpName} onChange={(e) => ""} className=" placeholder:text-blue-900 flex outline-none min-w-[100px] bg-transparent px-2 h-full  flex-1 w-full" />
                             <span onClick={""} className='text-[15px] min-w-[40px] text-sky-400 center  h-full'>
                                 <FaChevronDown className={` ${isSelected?"rotate-180":"rotate-0"} transition-all duration-700 text-blue-950 `} />
                             </span>
@@ -163,7 +163,7 @@ const DropDownContainer = memo(({ paymentDetails}) => {
         </span>
         {/*hide*/}
   
-        <span className={`${isActive ? "max-h-[400px] pb-2 opacity-100 " : "max-h-0 opacity-0  pb-0"} transition-all duration-700 t-container flex  px-2 gap-2 flex-col `}>
+        <span className={`${isActive ? "h-[100px] pb-2 opacity-100 " : "h-0 opacity-0 overflow-hidden  p-0"} transition-all t-body duration-700 t-container flex  px-2 gap-2 flex-col `}>
         
         <span className='t-body flex items-center list-none flex-wrap relative ' >
              

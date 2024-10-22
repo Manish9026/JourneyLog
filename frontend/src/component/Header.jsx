@@ -16,14 +16,16 @@ import { BiSolidUserDetail } from "react-icons/bi";
 import { MdPayments } from "react-icons/md";
 
 
+import { TiHome } from "react-icons/ti";
+
 
 
 const Header = () => {
-    const [isNavActive,setIsNavActive]=useState(false)
+    const [isNavActive,setIsNavActive]=useState(true)
     const {userInfo}=useSelector(state=>state.auth)
     const {dispatch}=useReactHooks();
   return (
-    <header className='w-full primary-px  transition ease-in' >
+    <header className='w-full primary-px sticky top-0 z-50 primary-bg transition ease-in' >
    <div className="w-full h-[70px] items-center flex justify-between  primary-font">
 
  {userInfo && Object.keys(userInfo).length!=0?<span className="flex flex-col ">
@@ -58,6 +60,24 @@ const Header = () => {
    }
    <li className='flex items-center gap-2 cursor-pointer' onClick={()=>dispatch(logout())}> <IoMdLogOut /> logout</li>
    </div>
+   {/* <div className={`${isNavActive?"translate-x-[0%]":""} w-screen h-screen  absolute left-0  translate-x-[-100%] transition-all ease duration-500 z-[100]`}>
+   
+   <span className=' flex h-full max-w-[250px] bg-[#18283b]'>
+
+    <div className="flex w-full flex-col primary-p">
+
+      <span className='w-full pb-2 px-2 flex text-xl primary-font border-b  max-h-[50px]'>journeylog</span> 
+      <ul className='w-full  p-2 flex text-xl primary-font border-b  max-h-[50px]'>
+        <li className='flex text-slate-400 cursor-pointer items-center p-1 gap-2 bg-red- flex-1'>
+          <span><TiHome /></span> <h3>Overview</h3>
+          </li>
+      </ul>
+      {/* <span className='w-full flex  max-h-[50px]'><img src={userInfo?.profileImage} alt="" className='size-[50px] rounded-full ' /></span> <span></span> 
+
+    </div>
+
+   </span>
+   </div> */}
    </header>
   )
 }

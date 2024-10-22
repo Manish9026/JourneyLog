@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
 import { Mousewheel, Navigation, Pagination } from 'swiper/modules';
 import { GrNext, GrPrevious } from "react-icons/gr";
@@ -23,6 +23,7 @@ import { getTravelDetail } from '../../slices/homeSlice';
 
 
 
+
 const Home = () => {
   const [selectValue, setSelectValue] = useState("")
   const { userInfo } = useSelector(state => state.auth);
@@ -34,6 +35,15 @@ const Home = () => {
       setSelectValue(userInfo?.recentCompany)
 
   }, [userInfo?.recentCompany])
+
+  const getLocaldate=useCallback((date)=>{
+if(date)
+ return new Date(date).toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'short'
+  });
+  return "?"
+  },[])
 
   const getGraph = (cmpName) => {
 
@@ -79,7 +89,7 @@ const Home = () => {
         </li>
         <li className='flex box-1   flex-1 max-w-[150px] capitalize rounded-md justify-center '>
           <span className='p-1 flex flex-col gap-0 flex-1'>
-            <span className='flex items-center justify-between'>  <p className='text-lg'>{utilAmount?.todayTotal}</p> <span className='center text-xl'>
+            <span className='flex items-center justify-between'>  <p className='text-lg'>{(utilAmount?.todayTotalUnpaid+utilAmount?.todayTotalPaid) || 0}</p> <span className='center text-xl'>
 
               <GoGraph /></span></span>
             <p className='text-xs'>today  balance</p>
@@ -88,10 +98,14 @@ const Home = () => {
         </li>
         <li className='flex box-1   flex-1  capitalize rounded-md justify-center '>
           <span className='p-1 flex flex-col gap-0 flex-1'>
-            <span className='flex items-center justify-between'>  <p className='text-lg'>{utilAmount?.totalUnpaid}</p> <span className='center text-xl'>
+            <span className='flex items-center justify-between'>  <p className='text-lg'>{(utilAmount?.totalUnpaid) || 0}</p> <span className='center text-xl'>
 
               <img src={pending} alt=""  className='size-[20px]'/></span></span>
-            <p className='text-xs'>remaining balance</p>
+              <span className='text-xs flex gap-2'>
+
+            <p >remaining balance</p>
+            <p>( {getLocaldate(utilAmount?.unpaidMinDate)} - {getLocaldate(utilAmount?.unpaidMaxDate)} )</p>
+              </span>
           </span>
 
         </li>

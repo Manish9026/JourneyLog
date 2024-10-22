@@ -35,6 +35,9 @@ const authSchema=mongoose.Schema({
     recentCompany:{
        type:String 
     },
+    recentCompanyID:{
+        type:mongoose.Types.ObjectId
+    },
 
 
     userToken:String
