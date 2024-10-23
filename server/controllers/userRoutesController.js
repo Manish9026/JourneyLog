@@ -124,6 +124,32 @@ export class UserRoutes {
             return badRes({ res, data: [], message: "internal  error" })
         }
     }
+    static  updateTravelRoute = async (req,res) => {
+
+        const {whereFrom,whereTo,travelBy,parentId,cmpId,_id,amount,editFrom,payStatus}=req.body;
+        const userId=req.user._id;
+
+        try {
+            if(isNotEmpty(parentId) && isNotEmpty(cmpId) && isNotEmpty(userId) ){
+                const updatedDocument = await userRouteModel.findOneAndUpdate(
+                    { _id: parentId, userId,"travel._id": _id ,"company.cmpId":cmpId},  // Match the document and specific travel item
+                    { $set: { "travel.$.whereFrom":whereFrom,"travel.$.whereTo":whereTo,"travel.$.amount":amount,"travel.$.travelBy":travelBy  } },         // Use the positional operator "$" to update the specific element
+                    { new: true, runValidators: true }            // Return the updated document and run validation
+                );
+                if(updatedDocument)
+                goodRes({res,data:{editFrom,message:"updated"}})
+            }
+            else{
+                goodRes({res,message:"please choose correct option"})
+            }
+           
+             
+        } catch (err) {
+            badRes({res,message:"internal error"})
+            console.error("Error updating travel:", err);
+        }
+    };
+    
 
     static addPlace = async (whereFrom, whereTo) => {
         whereFrom = whereFrom.toLowerCase().trim()

@@ -64,6 +64,32 @@ export const searchPlace=createAsyncThunk("searchPlace",async(srhParam)=>{
         alert(err)
     })
 })
+
+export const updateTravelRoute=createAsyncThunk("updateTravelRoute",async(data,{dispatch})=>{
+    console.log(data,"data");
+    
+        return await axios.patch("/travel/update",data,{withCredentials:true}).then((res)=>{
+        
+        urlReloader({response:res.data,dispatch});
+    
+        if(res.data.status){
+            if(res.data.data.editFrom=="statement"){
+                dispatch(getStatements({skip:0,next:5,company:""}))
+                console.log("statement");
+                
+            }
+            else
+                dispatch(recentRoutes())
+                dispatch(setEditAlert({type:"clear"}))
+
+        }
+        return res.data
+        }).catch((err)=>{
+            console.log(err);
+            
+            alert(err)
+        })
+    })
 const travelRouteSlice=createSlice({
     name:"travelRoute",
     initialState:{
@@ -80,6 +106,11 @@ const travelRouteSlice=createSlice({
             alert:false,
             loading:false,
             data:[],
+        },
+        editState:{
+            alert:false,
+            loading:false,
+            data:{},
         }
     },
     reducers:{
@@ -95,7 +126,25 @@ const travelRouteSlice=createSlice({
         },
         setAlert:({deleteState})=>{
             deleteState.alert=!deleteState.alert
+        },
+        setEditAlert:({editState},{payload})=>{
+            if(payload && payload.type=="clear"){
+                editState.data={}
+            }
+
+            editState.alert=!editState.alert;
+        },
+        setEditData:({editState},{payload})=>{
+            if(payload){
+            if(payload){
+                editState.data=payload;
+            }}
+            // if(payload.type=="edit"){
+            //     editState.data=({...editState.data,detail:{...editState.data?.detail,[payload.name]:payload.value}})
+            // }
         }
+        
+        
 
     },
     extraReducers:(builder)=>{
@@ -123,5 +172,5 @@ const travelRouteSlice=createSlice({
         })
     }
 })
-export const {setDelStateData,setAlert}=travelRouteSlice.actions;
+export const {setDelStateData,setAlert,setEditAlert,setEditData}=travelRouteSlice.actions;
 export default travelRouteSlice.reducer;

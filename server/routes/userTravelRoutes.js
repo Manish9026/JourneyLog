@@ -6,6 +6,8 @@ export const travelRoutes=express.Router();
 
 travelRoutes.post('/add',authMiddleWare, UserRoutes.addRoute)
 travelRoutes.delete('/delete',authMiddleWare,UserRoutes.deleteRoute)
+travelRoutes.patch('/update',authMiddleWare,UserRoutes.updateTravelRoute)
+
 travelRoutes.post("/all-routes",authMiddleWare,UserRoutes.getRandomRoutes)
 travelRoutes.get("/getRecentRoutes",authMiddleWare,UserRoutes.getRecentRoutes)
 travelRoutes.get("/places",UserRoutes.searchPlace)

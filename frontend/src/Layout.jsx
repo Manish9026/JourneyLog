@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Header from './component/Header';
 import Popup from './component/popup/Popup';
 import DelAlert from './component/DelAlert';
+import PopupChildren from './component/popup/PopupChildren';
 export const Layout = () => {
   const {status,formStatus}=useSelector(state=>state.auth)
 
@@ -41,6 +42,7 @@ pauseOnHover
 
 <div className="relative w-full h-full">
  <DelAlert/>
+ <PopupChildren/>
         <Outlet/>
 </div>
    

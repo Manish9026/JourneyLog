@@ -11,7 +11,7 @@ import { TravelReport } from '../../component/travel-report/TravelReport';
 import useReactHooks from '../../custom-hooks/useReactHooks';
 import { getStatements, sort } from '../../slices/statementSlice';
 import { BsDash } from 'react-icons/bs';
-import { deleteRoute, setAlert, setDelStateData } from '../../slices/travelRouteSlice';
+import { deleteRoute, setAlert, setDelStateData, setEditAlert, setEditData } from '../../slices/travelRouteSlice';
 import Popup from '../../component/popup/Popup';
 import Datepicker from 'react-tailwindcss-datepicker';
 import DatePicker2 from "react-datepicker";
@@ -20,6 +20,7 @@ import useFlexibleEle from '../../custom-hooks/useFlexibleEle';
 import "react-datepicker/dist/react-datepicker.css";
 import { FcPaid } from "react-icons/fc";
 import { CiNoWaitingSign } from "react-icons/ci";
+import { MdEdit } from 'react-icons/md';
 
 const Statement = () => {
 
@@ -116,7 +117,14 @@ dispatch(sort(isSort))
                                 <p>{data?.whereFrom}</p><FaArrowRight className='text-xs font-normal mt-1' /> <p>{data?.whereTo}</p>
                               </span>
                               
-                              <span onClick={()=>{dispatch(setDelStateData({detail:{cmpId:routes.company.cmpId,travelDetails:data,deleteFrom:"statement",parentId:routes._id},type:"add"}));dispatch(setAlert())}} className=' tertiary size-[25px] absolute right-[-8px] cursor-pointer secondary-font top-[50%] translate-y-[-50%] center rounded-full transition-all duration-700 active:scale-75'><BsDash/></span>
+                              <div className="  flex items-center flex-col gap-1  absolute justify-center right-[-10px] h-full top-0">
+
+                              <span onClick={()=>{dispatch(setDelStateData({detail:{cmpId:routes.company.cmpId,travelDetails:data,deleteFrom:"statement",parentId:routes._id},type:"add"}));dispatch(setAlert())}} className=' tertiary size-[25px]   cursor-pointer secondary-font  center rounded-full transition-all duration-700 active:scale-75'><BsDash/></span>
+                              <span onClick={()=>{dispatch(setEditData({cmpId:routes.company.cmpId,...data,editFrom:"statement",parentId:routes._id})); dispatch(setEditAlert())}} className=' tertiary size-[25px]   cursor-pointer secondary-font  center rounded-full transition-all duration-700 active:scale-75'><MdEdit className='text-sm' /></span>
+                              </div>
+
+
+
 
                             </span>
                             <span className='flex items-center '>
