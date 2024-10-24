@@ -14,10 +14,10 @@ const DelAlert = (({}) => {
     const {data,loading,alert} =useSelector(state=>state.travelRoute.deleteState)
     const {dispatch}=useReactHooks();
   return (
-    <Popup active={alert} iconBox={{display:'none'}}>
+    // <Popup active={alert} iconBox={{display:'none'}}>
         <span className='bg-slate-900 w-full h-full flex flex-col '>
             <div className='border-b primary-p'><Title title={"delete confirmation"}/></div>
-            <span className='t-container primary-p flex-1 flex flex-col gap-y-2 max-h-[100px] overflow-auto'>
+            <span className='t-container primary-p flex-1 flex flex-col gap-y-2 max-h-[200px] overflow-auto'>
            {
             Array.isArray(data) && data.map((travel,id)=>{
                 return(
@@ -50,7 +50,7 @@ const DelAlert = (({}) => {
        
 
 
-    </Popup>
+     /* </Popup> */
   )
 })
 

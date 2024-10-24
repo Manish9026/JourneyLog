@@ -27,7 +27,7 @@ console.log(data,"data");
 
     if(res.data.status){
         if(res.data.data.deleteFrom=="statement")
-            dispatch(getStatements())
+            dispatch(getStatements({skip:0,next:5,company:""}))
         else
             dispatch(recentRoutes())
     }
@@ -111,7 +111,8 @@ const travelRouteSlice=createSlice({
             alert:false,
             loading:false,
             data:{},
-        }
+        },
+        popupType:""
     },
     reducers:{
         setDelStateData:({deleteState},{payload})=>{
@@ -124,24 +125,23 @@ const travelRouteSlice=createSlice({
         }
         
         },
-        setAlert:({deleteState})=>{
-            deleteState.alert=!deleteState.alert
+        setAlert:(state)=>{
+            state.deleteState.alert=state.deleteState.alert===1?true:1;
+            state.popupType="del"
         },
-        setEditAlert:({editState},{payload})=>{
+        setEditAlert:(state,{payload})=>{
             if(payload && payload.type=="clear"){
-                editState.data={}
+                state.editState.data={}
             }
 
-            editState.alert=!editState.alert;
+            state.editState.alert=state.editState.alert===1?true:1;
+            state.popupType="edit";
         },
         setEditData:({editState},{payload})=>{
             if(payload){
-            if(payload){
+
                 editState.data=payload;
-            }}
-            // if(payload.type=="edit"){
-            //     editState.data=({...editState.data,detail:{...editState.data?.detail,[payload.name]:payload.value}})
-            // }
+            }
         }
         
         

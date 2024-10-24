@@ -7,18 +7,22 @@ import { FaIndianRupeeSign } from 'react-icons/fa6';
 import { travler } from '../../pages/travelRoute.jsx/TravelRoute';
 import { setEditAlert, setEditData, updateTravelRoute } from '../../slices/travelRouteSlice';
 import useReactHooks from '../../custom-hooks/useReactHooks';
+import DelAlert from '../DelAlert';
+import { payment } from '../../slices/paymentSlice';
 
 
 const PopupChildren = () => {
     const boxRef = useRef();
     const { dispatch } = useReactHooks();
-    const { editState } = useSelector(state => state.travelRoute);
+    const { editState,deleteState,popupType } = useSelector(state => state.travelRoute);
+    const trackPopup=useRef();
     useEffect(() => {
+        if(trackPopup.current)
         isactive()
 
-        console.log(editState?.alert);
-
-    }, [editState?.alert])
+        // console.log(editState?.alert);
+        trackPopup.current=true;
+    }, [editState?.alert,deleteState?.alert])
 
     const isactive = () => {
         if (boxRef.current) {
@@ -38,11 +42,13 @@ const PopupChildren = () => {
             if(editState?.data)
             setFormData({...editState?.data})
 
-        }, [editState?.data])
+        }, [editState])
 
         const updateHandler = (e) => {
         setFormData(prev=>({...prev,[e.target.name]:e.target.value}))
-        console.log(formData);
+        console.log({[e.target.name]:e.target.value});
+        
+        // console.log(formData);
         
         }
         return (
@@ -57,11 +63,11 @@ const PopupChildren = () => {
 
                                   {travler.map((items, indx) => {
                         if (items[0] ==formData.travelBy)
-                          return (<li className='size-[25px] tertiary center rounded-lg primary-font'>
+                          return (<li key={indx} className='size-[25px] tertiary center rounded-lg primary-font'>
                                 {items[1]}</li>)
                       })}
                                 
-                                <li><select name="travelBy" onChange={updateHandler} defaultValue={formData.travelBy} className=' cursor-pointer bg-transparent border-b-2 capitalize' id="travel_By">
+                                <li><select name="travelBy" onChange={updateHandler} value={formData.travelBy} className=' cursor-pointer bg-transparent border-b-2 capitalize' id="travel_By">
                                     {
                                         travler.map((item, id) => {
 
@@ -79,8 +85,26 @@ const PopupChildren = () => {
                             </span>
 
                         </span>
+
                         <label htmlFor='amount' className='p-2 rounded-md bg-slate-900/60 flex-1 secondary-font placeholder:secondary-font gap-2  capitalize flex  items-center'>
                             <FaIndianRupeeSign className='text-sm mt-1' /><input type="number" onChange={updateHandler} name="amount" defaultValue={formData?.amount} className='bg-transparent border-b outline-none max-w-[100px]' id="amount" /></label>
+                            
+
+                        <span className='px-2 flex flex-wrap   rounded-md bg-slate-900/60 flex-1 secondary-font placeholder:secondary-font   capitalize flex  items-center'>
+                        <Title title={"payment"}/>
+                        <label  htmlFor="paid" className="flex items-center gap-2 min-w-[150px] flex-1 ">
+
+                        <input type="radio" onClick={updateHandler} name="payStatus" defaultChecked={formData?.payStatus} id="paid" value={true}  className='size-[15px] border-0 outline-none bg-green-600'   />
+                        <p>paid</p>
+                        </label>
+                        <label htmlFor='unpaid' className="flex items-center gap-2 min-w-[150px] flex-1 ">
+
+                        <input type="radio" value={false} onClick={updateHandler
+                        }     name="payStatus" id="unpaid" defaultChecked={!formData?.payStatus} className='size-[15px] border-0 outline-none bg-green-600'   />
+                        <p>unpaid </p>
+                        </label>
+                       
+                        </span>
                         {/* <span onClick={()=>dispatch(deleteRoute({cmpId,routeId:data?._id,date,parentId}))}className=' tertiary size-[25px] absolute right-[-8px] cursor-pointer secondary-font top-[50%] translate-y-[-50%] center rounded-full transition-all duration-700 active:scale-75'><BsDash /></span> */}
 
                         <p className='absolute top-1 right-[20px] text-slate-900 text-[10px]'></p>
@@ -96,9 +120,9 @@ const PopupChildren = () => {
     },[editState?.data]
     )
     return (
-        <Popup ref={boxRef} boxClass='rounded-t-2xl  overflow-hidden  min-h-[300px]' flexibleBox={""} >
-            <Editbox />
-
+        <Popup ref={boxRef} active={true} boxClass='rounded-t-2xl  overflow-hidden  min-h-[300px]' flexibleBox={[setEditData]} >
+          { popupType=="edit" && <Editbox />}
+        {popupType=="del" && <DelAlert/>}
 
         </Popup>
     )
