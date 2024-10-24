@@ -120,7 +120,7 @@ const PopupChildren = () => {
     },[editState?.data]
     )
     return (
-        <Popup ref={boxRef} active={true} boxClass='rounded-t-2xl  overflow-hidden  min-h-[300px]' flexibleBox={[setEditData]} >
+        <Popup ref={boxRef}  boxClass='rounded-t-2xl  overflow-hidden  min-h-[300px]' flexibleBox={[setEditData]} >
           { popupType=="edit" && <Editbox />}
         {popupType=="del" && <DelAlert/>}
 
