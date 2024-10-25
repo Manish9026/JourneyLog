@@ -13,3 +13,11 @@ createRoot(document.getElementById('root')).render(
    </Provider>
 
 )
+
+import { registerSW } from 'virtual:pwa-register';
+// import {} from 'virt'
+
+registerSW({
+  onNeedRefresh() {},
+  onOfflineReady() {}
+});

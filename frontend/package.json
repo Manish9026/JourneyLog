@@ -30,7 +30,8 @@
     "react-tailwindcss-datepicker": "^1.7.2",
     "react-toastify": "^10.0.5",
     "sass": "^1.78.0",
-    "swiper": "^11.1.14"
+    "swiper": "^11.1.14",
+    "vite-plugin-pwa": "^0.20.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
