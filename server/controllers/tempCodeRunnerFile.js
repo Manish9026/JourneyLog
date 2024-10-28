@@ -1,1 +1,1 @@
-const getFormattedTravelCountPerDay = (data) => {
+3600

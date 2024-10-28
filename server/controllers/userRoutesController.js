@@ -9,7 +9,17 @@ export class UserRoutes {
 
 
 
-
+    static dateDiff=(startDate,endDate)=>{
+        console.log(startDate,endDate);
+        
+        let Difference_In_Time =
+            new Date(startDate) - new Date(endDate)
+        
+        // Calculating the no. of days between
+        // two dates
+        
+           return (Math.abs(Math.floor(Difference_In_Time / (1000 * 3600 * 24))))
+    }
     static setRecentCmp = async (userId, cmpName) => {
         // console.log(userId,cmpName);
 
@@ -293,11 +303,11 @@ export class UserRoutes {
                     ]
                 } // Filter travel records where amount > 40
             }
-        }};
+        },limit:0};
         try {
             if(!isNotEmpty(filterData)) return {}
             const { date, amount, paymentStatus } = filterData;
-            console.log(date);
+            // console.log(date);
             
             if (isNotEmpty(date)) {
                 if (Object.keys(date).includes("range") && isNotEmpty(date.range)) {
@@ -307,6 +317,8 @@ export class UserRoutes {
                             $gte:startingDate(startDate),
                             $lte:endingDate(endDate)
                         }
+                    filterOption.limit=this.dateDiff(startDate,endDate) + 1;
+
 
                 }
                 else if (Object.keys(date).includes("today")) {
@@ -357,8 +369,9 @@ export class UserRoutes {
         const { recentCompany } = req.user;
         let cmpName = isNotEmpty(company) ? company : recentCompany;
         const filterOption=await this.getFilterOption(req.body.filter)
-console.log(cmpName);
+// console.log(cmpName);
 
+              console.log(filterOption.limit);
               
 
         try {
@@ -370,7 +383,7 @@ console.log(cmpName);
                     }
                 },
                 {
-                    $limit: 5 // Limit the results to 5 documents
+                    $limit:filterOption.limit ||  5 // Limit the results to 5 documents
                 },
                    {
                        $project: {
