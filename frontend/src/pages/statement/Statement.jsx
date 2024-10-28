@@ -325,7 +325,7 @@ const reset=()=>{
   },[filterNav,filterData.date,filterData.paymentStatus ,filterData.company])
   return(
 
-    <Popup flexibleBox={[filterData?.date]} bodyClass={"w-full "}  ref={ref} boxClass='min-h-[300px] bg-slate-900 text-slate-100'>
+    <Popup flexibleBox={[filterData?.date]} bodyClass={"w-full "}  ref={ref} boxClass='min-h-[300px] max-h-[600px] bg-slate-900 text-slate-100'>
       <div  className='w-full p-1 flex-col  flex  h-full flex-1 '>
         <div className="p-1 border-b">Filter </div>
         <div className='flex  flex-1  py-1'>
