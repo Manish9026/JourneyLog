@@ -97,7 +97,7 @@ export const Login = memo(() => {
         }
         return (
             <div className={"signin"}>
-    {loading?<Loader/>:""}
+    {1?<Loader/>:""}
                 <span className="mdIcons" onClick={() => {dispatch(setFormStatus({login:false}))}}>
                     <FaArrowLeft />
                 </span>
