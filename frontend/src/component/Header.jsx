@@ -35,7 +35,7 @@ const Header = () => {
       <h6 className='text-xl'>Welcome back!</h6>
     </span>: 
     <div className='uppercase flex items-center '>
-        <span className='flex gap-2 items-center'><img src={logo} className='size-[40px]' alt="" />journeyLog</span>
+        <span className='flex gap-2 items-center'><img src={logo} className='size-[50px]' alt="" />journeyLog</span>
        <PiHandWavingFill className='ml-2 text-yellow-400' /> 
         </div>}
 
