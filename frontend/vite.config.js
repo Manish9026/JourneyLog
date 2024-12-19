@@ -33,7 +33,12 @@ export default defineConfig({
         }
       },
       workbox: {
-        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // Set the limit to 5 MiB
+        runtimeCaching: [
+          {
+            urlPattern: /index-5iszAZTi\.js$/,
+            handler: 'NetworkFirst', // Use network-first strategy instead of precaching
+          },
+        ],
       },
     })
   ]
