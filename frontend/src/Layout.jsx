@@ -40,7 +40,7 @@ pauseOnHover
 
       <Header/>
 
-<div className="relative w-full h-full">
+<div className="relative w-full h-full  ">
  {/* <DelAlert/> */}
  <PopupChildren/>
         <Outlet/>

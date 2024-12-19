@@ -15,6 +15,7 @@ export default defineConfig({
         short_name: 'journeylog',
         description: 'A Vite-based Progressive Web App',
         theme_color: '#ffffff',
+        background_color:"#080d1f",
         icons: [
           {
             src: 'logo.png',

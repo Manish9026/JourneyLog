@@ -30,3 +30,12 @@
     return []
   }
   };
+
+  export const getSortMonthWithDate=(date)=>{
+    if(date)
+    return new Date(date).toLocaleDateString('en-GB', {
+        day: 'numeric',
+        month: 'short'
+    })
+    return "?"
+  }

@@ -9,7 +9,9 @@ function checkDateStatus(dateString) {
         checkIfDate.setDate(today.getDate() - 4);
 
         // logic of date chickig
-        if(givenDate.getDate()>=checkIfDate.getDate()){           
+        // return givenDate.toLocaleDateString();
+
+        if(givenDate.getTime()>=checkIfDate.getTime()){           
             if(givenDate.getDate()==today.getDate()){
                 return "today";
             }
@@ -24,7 +26,7 @@ function checkDateStatus(dateString) {
     
         }
         else{
-            console.log("local");
+            // console.log("local");
             
             return givenDate.toLocaleDateString();
         }

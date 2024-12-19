@@ -20,7 +20,12 @@ import useFlexibleEle from '../../custom-hooks/useFlexibleEle';
 import "react-datepicker/dist/react-datepicker.css";
 import { FcPaid } from "react-icons/fc";
 import { CiNoWaitingSign } from "react-icons/ci";
-import { MdEdit } from 'react-icons/md';
+import { MdAccountBalanceWallet, MdEdit, MdOutlineUpdate } from 'react-icons/md';
+import { LuIndianRupee } from 'react-icons/lu';
+import Lottie from "lottie-react";
+import { getSortMonthWithDate } from '../../utils/dataTransformation';
+import money from "../../assets/animations/money.json"
+import not_found from "../../assets/animations/notFound.json"
 
 const Statement = () => {
 
@@ -54,7 +59,7 @@ dispatch(sort(isSort))
     }
   }
   return (
-    <div className='flex relative flex-col w-full primary-p overflow-hidden'>
+    <div className='flex relative flex-col w-full primary-p overflow-hidden h-full '>
 <FilterPopup ref={filterBoxRef}  company={searchValue}/>
 {printLoading && <span className='fixed top-0 left-0 z-10 w-full flex-col capitalize primary-font center h-full light-dark top-0 left-0'><div class="loader rounded-[5px]"></div> printing...</span>}
 <span className='flex search w-full flex-col gap-1'>
@@ -89,12 +94,31 @@ dispatch(sort(isSort))
    </span>
    <span className='flex justify-end w-full gap-1'>
 
-    <span className="size-[35px] center tertiary rounded-[5px] primary-font cursor-pointer" onClick={()=>setIsSort(prev=>prev==1?-1:1)}><BiSortAlt2 /></span>
-    <span onClick={()=>boxStatus()} className="w-[40px] center tertiary rounded-[5px] primary-font cursor-pointer"><FaFilter/></span>
+    {
+      
+      <ul className="leaderboad flex flex-1  gap-2 text-slate-200 sticky top-0">
+      <li style={{boxShadow:"inset 1px 1px 5px 0px  #7a98eb , inset -1px -1px 5px 0px #7a98eb"}} className='max-w-[200px] min-w-[100px] px-2 py-1 gap-1  justify-center flex flex-col   rounded-md'>
+        {/* <span className='flex items-center gap-1'><h6 className='capitalize text-sm'>from</h6></span> */}
+        <MdOutlineUpdate className='text-sky-200'/>
+        <p className='text-xs '>{ getSortMonthWithDate(statement[0]?.createdAt)}{'\t - \t'}{getSortMonthWithDate(statement[statement.length-1]?.createdAt)}</p>
+        
+      </li>
+      <li style={{boxShadow:"inset 1px 1px 5px 0px  #7a98eb , inset -1px -1px 5px 0px #7a98eb"}} className='max-w-[200px] min-w-[100px] px-2 py-1 gap-1   justify-center flex flex-col   rounded-md'>
+        {/* <span className='flex items-center gap-1'><h6 className='capitalize text-sm'>from</h6></span> */}
+        {/* <MdAccountBalanceWallet className='text-sky-200'/> */}
+        <span className='size-[20px] flex'><Lottie animationData={money} loop={true} /></span>
+        <p className='text-xs flex items-center gap-1 font-semibold'><LuIndianRupee className='text-xm relative top-[1px]' />{Array.isArray(statement) && statement.reduce((sum,item)=>sum + item.travel.reduce((sum,data)=>sum + data.amount,0),0) || 0}</p>
+        
+      </li>
+
+    </ul>}
+
+    <span className="size-[40px] center tertiary rounded-[5px] primary-font cursor-pointer" onClick={()=>setIsSort(prev=>prev==1?-1:1)}><BiSortAlt2 /></span>
+    <span onClick={()=>boxStatus()} className="size-[40px]  center tertiary rounded-[5px] primary-font cursor-pointer"><FaFilter/></span>
    </span>
 </span>
 
-<span className=' flex flex-col gap-2 py-2 w-full'>
+<span className=' flex flex-col gap-2 py-2 w-full h-full'>
 {loading?<CardSkelton/>: statement.length != 0 ?
             statement.map((routes, id) => {
 
@@ -165,8 +189,11 @@ dispatch(sort(isSort))
 
             }) :
 
-            <div className="">
-              recent not routes avilable
+            <div className="flex w-full min-h-[400px]  justify-center items-center">
+              <span className='size-[200px] center flex-col capitalize text-sky-200'>
+              <Lottie animationData={not_found} loop={false} />
+              !! not found
+              </span>
             </div>
           }
 </span>
