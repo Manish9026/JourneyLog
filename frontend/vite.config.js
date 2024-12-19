@@ -32,14 +32,10 @@ export default defineConfig({
           globPatterns: ['**/*.{js,css,html,,scss,jsx,png,svg,ico}']
         }
       },
-      workbox: {
-        runtimeCaching: [
-          {
-            urlPattern: /index-5iszAZTi\.js$/,
-            handler: 'NetworkFirst', // Use network-first strategy instead of precaching
-          },
-        ],
-      },
+     
     })
-  ]
+  ],
+  build: {
+    chunkSizeWarningLimit: 3000, // Set a higher limit (in KB)
+  },
 });

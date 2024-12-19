@@ -9,11 +9,11 @@ import Header from './component/Header';
 import Popup from './component/popup/Popup';
 import DelAlert from './component/DelAlert';
 import PopupChildren from './component/popup/PopupChildren';
-export const Layout = () => {
+const Layout = () => {
   const {status,formStatus}=useSelector(state=>state.auth)
 
   return (
-    <div className='flex relative primary-bg flex-col items-center w-screen min-h-screen h-full '>
+    <div className='flex relative primary-bg flex-col items-center w-screen h-screen h-full '>
 
       {/* <ToastContainer /> */}
 
@@ -40,7 +40,7 @@ pauseOnHover
 
       <Header/>
 
-<div className="relative w-full h-full  ">
+<div className="relative w-full h-full primary-bg ">
  {/* <DelAlert/> */}
  <PopupChildren/>
         <Outlet/>
@@ -49,4 +49,6 @@ pauseOnHover
     </div>
   )
 }
+
+export default Layout
 

@@ -51,9 +51,9 @@ if(date)
   }
   return (
     <div className='w-full home primary-bg primary-p d gap-3 h-full flex flex-1 flex-col border-t'>
-      <div className="flex flex-1 flex-col items-center">
+      <div className="flex flex-col items-center">
         
-      <span className='flex flex-col flex-1 w-full'>
+      <span className='flex flex-col w-full'>
         <label onClick={() => setIsSelected(prev => !prev)} htmlFor='search' className='flex items-center   p-1 bg-sky-200/80 w-full min-h-[40px] overflow-hidden rounded-[5px]'>
           <input type='text' id='search' readOnly value={selectValue || ""} onChange={(e) => ""} className="cursor-pointer flex outline-none min-w-[100px] bg-transparent px-2 h-full  flex-1 w-full" />
           <span onClick={() => setIsSelected(prev => !prev)} className='text-[15px] min-w-[40px] cursor-pointer text-sky-400 center  h-full'>

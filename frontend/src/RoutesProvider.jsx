@@ -1,22 +1,32 @@
-
+import React, { lazy, Suspense } from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-// import {Layout} from './Layout.jsx'
 import './index.scss'
-import Home from './pages/Home/Home.jsx'
+import './pages/Home/style.scss'
 import {useDispatch} from 'react-redux'
-
-import { Layout } from './Layout.jsx'
+import pageLoad from './assets/animations/pageLoad.json'
+// import {Layout} from './Layout.jsx'
+// import Home from './pages/Home/Home.jsx'
+// import TravelRoute from './pages/travelRoute.jsx/TravelRoute.jsx';
+// import Detail from './pages/Detail/Detail.jsx';
+const Home=lazy(() => import('./pages/Home/Home.jsx'))
+const Layout =lazy(() => import('./Layout.jsx'));
+const TravelRoute=lazy(() => import('./pages/travelRoute.jsx/TravelRoute.jsx'))
+const Detail =lazy(() => import('./pages/Detail/Detail.jsx'));
+const Statement=lazy(()=>import("./pages/statement/Statement.jsx"));
+const TravelReport =lazy(()=>import("./component/travel-report/TravelReport.jsx"));
+const Payment=lazy(()=>import("./pages/Payment/Payment.jsx"));
+// import Statement from './pages/statement/Statement.jsx';
+// import { TravelReport } from './component/travel-report/TravelReport.jsx'
+// import Payment from './pages/Payment/Payment.jsx'
+// import Detail from './pages/Detail/Detail.jsx'
 import { isVerified } from './slices/authSlice.js'
-import TravelRoute from './pages/travelRoute.jsx/TravelRoute.jsx'
 import { recentRoutes } from './slices/travelRouteSlice.js'
-import Statement from './pages/statement/Statement.jsx'
-import { TravelReport } from './component/travel-report/TravelReport.jsx'
 import { getStatements } from './slices/statementSlice.js'
-import Detail from './pages/Detail/Detail.jsx'
 import { getDetails } from './slices/detailSlice.js'
-import Payment from './pages/Payment/Payment.jsx'
 import { recentPayment } from './slices/paymentSlice.js'
 import { getTravelDetail } from './slices/homeSlice.js'
+import Lottie from 'lottie-react'
+
 function RoutesProvider() {
 
 const dispatch=useDispatch();
@@ -25,7 +35,7 @@ const dispatch=useDispatch();
     element:<Layout/>,
     loader:()=>{
       dispatch(isVerified())
-      return 0
+      return null
     },
     
     children:[{
@@ -33,21 +43,21 @@ const dispatch=useDispatch();
       element:<Home/>,
       loader:()=>{
         dispatch(getTravelDetail({skip:0,next:7,company:""}))
-        return 0
+        return null
       }
     },{
       path:"/add-routes",
       element:<TravelRoute/>,
       loader:()=>{
         dispatch(recentRoutes())
-        return 0
+        return null
       }
     },{
       path:"statement",
       element:<Statement/>,
       loader:()=>{
         dispatch(getStatements({skip:0,next:5,company:""}))
-        return 0
+        return null
       }
     },{
       path:"/pdf",
@@ -57,7 +67,7 @@ const dispatch=useDispatch();
       element:<Detail/>,
       loader:()=>{
         dispatch(getDetails())
-        return 0
+        return null
       }
     },{
       path:"/payment",
@@ -66,11 +76,29 @@ const dispatch=useDispatch();
         dispatch(recentPayment())
         return null
       }
+    },{
+      path:"/h",
+      element:<div className='flex center w-full h-full primary-bg '>
+
+        <span className='size-[200px] center flex-col text-sky-200 text-xl'>
+        <Lottie animationData={pageLoad} loop={true} />
+        Loading...
+        </span>
+      </div>
     }]
   
   }])
 
-  return <RouterProvider router={router}/>
+  return <Suspense fallback={<div className='flex center w-full h-screen primary-bg '>
+
+    <span className='size-[200px] center flex-col text-sky-200 text-xl'>
+    <Lottie animationData={pageLoad} loop={true} />
+    Loading...
+    </span>
+  </div>}>
+<RouterProvider router={router}/>
+</Suspense>
+// return  <RouterProvider router={router}/>
 }
 
 export default RoutesProvider
