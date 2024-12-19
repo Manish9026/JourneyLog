@@ -13,7 +13,7 @@ const Layout = () => {
   const {status,formStatus}=useSelector(state=>state.auth)
 
   return (
-    <div className='flex relative primary-bg flex-col items-center w-screen h-screen h-full '>
+    <div className='flex relative primary-bg flex-col items-center w-screen min-h-screen h-full '>
 
       {/* <ToastContainer /> */}
 
