@@ -17,6 +17,8 @@ import { MdPayments } from "react-icons/md";
 
 
 import { TiHome } from "react-icons/ti";
+import useSticky from '../custom-hooks/useSticky';
+import { useEffect } from 'react';
 
 
 
@@ -24,6 +26,13 @@ const Header = () => {
     const [isNavActive,setIsNavActive]=useState(true)
     const {userInfo}=useSelector(state=>state.auth)
     const {dispatch}=useReactHooks();
+
+    const headerActive=useSticky(0,20);
+
+    useEffect(() => {
+      setIsNavActive(!headerActive)
+    }, [headerActive])
+    
   return (
     <header className='w-full primary-px sticky top-0 z-50 primary-bg transition ease-in' >
    <div className="w-full h-[70px] items-center flex justify-between  primary-font">
