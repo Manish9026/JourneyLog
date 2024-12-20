@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { lazy, useCallback, useRef, useState } from 'react'
 import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
 import { Mousewheel, Navigation, Pagination } from 'swiper/modules';
 import { GrNext, GrPrevious } from "react-icons/gr";
@@ -19,8 +19,7 @@ import { pending, walet } from '../../assets/icons';
 import useReactHooks from '../../custom-hooks/useReactHooks';
 import { getStatements } from '../../slices/statementSlice';
 import { getTravelDetail } from '../../slices/homeSlice';
-
-
+const SpinCounter=lazy(()=>import("../../component/SpinCounter"));
 
 
 
@@ -80,7 +79,7 @@ if(date)
       <ul className='w-full flex gap-2 flex-wrap justify-center px-1 py-2'>
         <li className='flex box-1   flex-1 max-w-[150px] capitalize rounded-md justify-start  '>
           <span className='p-1 flex flex-col gap-0 flex-1'>
-            <span className='flex items-center justify-between'>  <p className='text-lg'>{(userInfo?.company?.find((c) => c.cmpName == selectValue)?.remainingAmount) || 0}</p> <span className='center text-xl'>
+            <span className='flex items-center justify-between'>  <p className='text-lg'>{<SpinCounter amount={(userInfo?.company?.find((c) => c.cmpName == selectValue)?.remainingAmount)}/>}</p> <span className='center text-xl'>
 
               <MdAccountBalanceWallet /></span></span>
             <p className='text-xs'>walet balance</p>
@@ -89,7 +88,7 @@ if(date)
         </li>
         <li className='flex box-1   flex-1 max-w-[150px] capitalize rounded-md justify-center '>
           <span className='p-1 flex flex-col gap-0 flex-1'>
-            <span className='flex items-center justify-between'>  <p className='text-lg'>{(utilAmount?.todayTotalUnpaid+utilAmount?.todayTotalPaid) || 0}</p> <span className='center text-xl'>
+            <span className='flex items-center justify-between'>  <p className='text-lg'><SpinCounter amount={(utilAmount?.todayTotalUnpaid+utilAmount?.todayTotalPaid)}/></p> <span className='center text-xl'>
 
               <GoGraph /></span></span>
             <p className='text-xs'>today  balance</p>
@@ -98,7 +97,7 @@ if(date)
         </li>
         <li className='flex box-1   flex-1  capitalize rounded-md justify-center '>
           <span className='p-1 flex flex-col gap-0 flex-1'>
-            <span className='flex items-center justify-between'>  <p className='text-lg'>{(utilAmount?.totalUnpaid) || 0}</p> <span className='center text-xl'>
+            <span className='flex items-center justify-between'>  <p className='text-lg'><SpinCounter amount={(utilAmount?.totalUnpaid)}/></p> <span className='center text-xl'>
 
               <img src={pending} alt=""  className='size-[20px]'/></span></span>
               <span className='text-xs flex gap-2'>

@@ -51,8 +51,9 @@
   .box-1 {
     // background: #5776d4;
     padding: 5px 10px;
-    box-shadow: inset 1px 1px 5px rgb(179, 171, 245), inset -1px -1px 5px rgb(181, 174, 242);
-    color: #78dce9;
+    // box-shadow: inset 1px 1px 5px rgb(179, 171, 245), inset -1px -1px 5px rgb(181, 174, 242);
+    color: #5cd4e4;
+    box-shadow: inset 1px 1px 5px 0px  #7a98eb , inset -1px -1px 5px 0px #7a98eb;
     min-width: 130px;
     flex: 1;
     max-width: 400px;
