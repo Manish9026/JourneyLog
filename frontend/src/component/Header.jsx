@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react'
 import { PiHandWavingFill } from "react-icons/pi";
 import { LuMenu } from "react-icons/lu";
 import { Button } from './UI component/Button';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { AiFillHome } from "react-icons/ai";
 import { HiDocumentMagnifyingGlass } from "react-icons/hi2";
 import { MdPostAdd } from "react-icons/md";
@@ -20,6 +20,8 @@ import { TiHome } from "react-icons/ti";
 import useSticky from '../custom-hooks/useSticky';
 import { useEffect } from 'react';
 
+import { TiTick } from "react-icons/ti";
+
 
 
 const Header = () => {
@@ -27,10 +29,10 @@ const Header = () => {
     const {userInfo}=useSelector(state=>state.auth)
     const {dispatch}=useReactHooks();
 
-    const headerActive=useSticky(0,20);
+    const headerActive=useSticky(90,20);
 
     useEffect(() => {
-      setIsNavActive(!headerActive)
+      setIsNavActive(0)
     }, [headerActive])
     
   return (
@@ -60,9 +62,10 @@ const Header = () => {
    {
     [["home","/",<AiFillHome />],["add","/add-routes",<MdPostAdd />],["statements","/statement",<HiDocumentMagnifyingGlass />],["detail","/detail",<BiSolidUserDetail />],["payment",'/payment',<MdPayments />]].map((title,id)=>{
         return (
-            <Link to={title[1]} key={id}>
-            <li className='flex items-center gap-2 '>{title[2]}{title[0]}</li>
-            </Link>
+            <NavLink to={title[1]} key={id} className={isActive=>isActive?.isActive?"NavActive":"NavDeActive"} end>
+
+            <li className='flex items-center gap-2 '>{title[2]}{title[0]} <TiTick className={` tick text-green-500`}/></li>
+            </NavLink>
         )
 
     })

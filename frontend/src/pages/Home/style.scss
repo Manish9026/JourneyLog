@@ -17,6 +17,17 @@
   color: rgb(118, 237, 248);
 }
 
+.NavActive{
+
+  .tick{
+    display: flex;
+  }
+}
+.NavDeActive{
+  .tick{
+    display: none;
+  }
+}
 .btn {
   &:active {
     scale: .5;
