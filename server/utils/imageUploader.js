@@ -2,8 +2,8 @@ import { v2 as cloudinary } from 'cloudinary';
 import dotenv from 'dotenv';
 dotenv.config();
 const cloudnaryConfig = () => {
-    console.log(process.env.CLOUDNARY_NAME, process.env.CLOUDNARY_SECRETKEY,process.env.CLOUDNARY_APIKEY);
-    
+    console.log(process.env.CLOUDNARY_NAME, process.env.CLOUDNARY_SECRETKEY, process.env.CLOUDNARY_APIKEY);
+
     cloudinary.config({
         cloud_name: process.env.CLOUDNARY_NAME,
         api_key: process.env.CLOUDNARY_APIKEY,
@@ -11,7 +11,6 @@ const cloudnaryConfig = () => {
     });
 }
 export const imageUploader = async (bufferImg) => {
-
 
     try {
         cloudnaryConfig();

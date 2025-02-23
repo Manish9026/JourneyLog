@@ -16,7 +16,7 @@ import Datepicker from 'react-tailwindcss-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { FcPaid } from "react-icons/fc";
 import { CiNoWaitingSign } from "react-icons/ci";
-import { MdAccountBalanceWallet, MdEdit, MdOutlineUpdate } from 'react-icons/md';
+import { MdAccountBalanceWallet, MdDeleteSweep, MdEdit, MdOutlineUpdate } from 'react-icons/md';
 import { LuIndianRupee } from 'react-icons/lu';
 import Lottie from "lottie-react";
 import { getSortMonthWithDate } from '../../utils/dataTransformation';
@@ -24,7 +24,7 @@ import money from "../../assets/animations/money.json"
 import not_found from "../../assets/animations/notFound.json"
 import { debounce } from '../../utils/optimization';
 import useSticky from '../../custom-hooks/useSticky';
-const SpinCounter=lazy(()=>import("../../component/SpinCounter"));
+const SpinCounter = lazy(() => import("../../component/SpinCounter"));
 const Statement = () => {
 
   const { userInfo } = useSelector(state => state.auth)
@@ -33,8 +33,11 @@ const Statement = () => {
   const { dispatch } = useReactHooks();
   const [searchValue, setSearchValue] = useState("")
   const filterBoxRef = useRef();
+  const deleteBoxRef = useRef();
+
+  const [deleteBoxActive, setDeleteBoxActive] = useState(1)
   // const [headerActive,setHeaderActive]=useState(0)
-  const headerActive=useSticky(100,50);
+  const headerActive = useSticky(100, 50);
   useEffect(() => {
     if (!searchValue) {
       let timeout = setTimeout(() => {
@@ -59,70 +62,50 @@ const Statement = () => {
       filterBoxRef.current.toggleActive()
     }
   }
-  // useEffect(() => {
 
- 
-
-  //   window.addEventListener("scroll", handleScroll);
-  //   return () => {
-  //     window.removeEventListener("scroll", handleScroll);
-  //   };
-  // }, []);
-  const handleScroll = debounce(() => {
-    const scrollTop = window.scrollY; // Get the vertical scroll position
-
-    if(scrollTop>200 && !headerActive ){
-      setHeaderActive(1);
-      console.log("active");
-      
-    }
-    else if(scrollTop<200 && headerActive ){
-      setHeaderActive(0)
-      console.log("deactive");
-
-    }
-    else{
-      setHeaderActive(0)
-
-    }
-    
-    // console.log(scrollTop,"scrolltop",headerActive);
-    
-    // setIsSticky(scrollTop > 100); // Make sticky after scrolling 100px
-  },50)
-  const AmountDisplay=memo(()=>{
+  const AmountDisplay = useCallback(() => {
     return (
       <span className=' flex justify-end w-full gap-1'>
 
+
+
+        <ul className="leaderboad flex flex-1  gap-2 text-slate-200 sticky top-0">
+          <li style={{ boxShadow: "inset 1px 1px 5px 0px  #7a98eb , inset -1px -1px 5px 0px #7a98eb" }} className='max-w-[200px] min-w-[100px] px-2 py-1 gap-1  justify-center flex flex-col   rounded-md'>
+            {/* <span className='flex items-center gap-1'><h6 className='capitalize text-sm'>from</h6></span> */}
+            <MdOutlineUpdate className='text-sky-200' />
+            <p className='text-xs '>{getSortMonthWithDate(statement[0]?.createdAt)}{'\t - \t'}{getSortMonthWithDate(statement[statement.length - 1]?.createdAt)}</p>
+
+          </li>
+          <li style={{ boxShadow: "inset 1px 1px 5px 0px  #7a98eb , inset -1px -1px 5px 0px #7a98eb" }} className='max-w-[200px] min-w-[100px] px-2 py-1 gap-1   justify-center flex flex-col   rounded-md'>
+            {/* <span className='flex items-center gap-1'><h6 className='capitalize text-sm'>from</h6></span> */}
+            {/* <MdAccountBalanceWallet className='text-sky-200'/> */}
+            <span className='size-[20px] flex'><Lottie animationData={money} loop={true} /></span>
+            <p className='text-xs flex items-center gap-1 font-semibold'><LuIndianRupee className='text-xm relative top-[1px]' />{Array.isArray(statement) && <SpinCounter amount={statement.reduce((sum, item) => sum + item.travel.reduce((sum, data) => sum + data.amount, 0), 0)} duration={3.5} /> || 0}</p>
+
+          </li>
+
+        </ul>
+        <span className="size-[40px] center tertiary rounded-[5px] primary-font cursor-pointer" onClick={() =>deleteBoxRef?.current?.toggleActive()}><MdDeleteSweep /></span>
+        <span className="size-[40px] center tertiary rounded-[5px] primary-font cursor-pointer" onClick={() => setIsSort(prev => prev == 1 ? -1 : 1)}><BiSortAlt2 /></span>
        
-
-      <ul className="leaderboad flex flex-1  gap-2 text-slate-200 sticky top-0">
-        <li style={{ boxShadow: "inset 1px 1px 5px 0px  #7a98eb , inset -1px -1px 5px 0px #7a98eb" }} className='max-w-[200px] min-w-[100px] px-2 py-1 gap-1  justify-center flex flex-col   rounded-md'>
-          {/* <span className='flex items-center gap-1'><h6 className='capitalize text-sm'>from</h6></span> */}
-          <MdOutlineUpdate className='text-sky-200' />
-          <p className='text-xs '>{getSortMonthWithDate(statement[0]?.createdAt)}{'\t - \t'}{getSortMonthWithDate(statement[statement.length - 1]?.createdAt)}</p>
-
-        </li>
-        <li style={{ boxShadow: "inset 1px 1px 5px 0px  #7a98eb , inset -1px -1px 5px 0px #7a98eb" }} className='max-w-[200px] min-w-[100px] px-2 py-1 gap-1   justify-center flex flex-col   rounded-md'>
-          {/* <span className='flex items-center gap-1'><h6 className='capitalize text-sm'>from</h6></span> */}
-          {/* <MdAccountBalanceWallet className='text-sky-200'/> */}
-          <span className='size-[20px] flex'><Lottie animationData={money} loop={true} /></span>
-          <p className='text-xs flex items-center gap-1 font-semibold'><LuIndianRupee className='text-xm relative top-[1px]' />{Array.isArray(statement) && <SpinCounter amount={statement.reduce((sum, item) => sum + item.travel.reduce((sum, data) => sum + data.amount, 0), 0)} duration={3.5} /> || 0}</p>
-
-        </li>
-
-      </ul>
-
-    <span className="size-[40px] center tertiary rounded-[5px] primary-font cursor-pointer" onClick={() => setIsSort(prev => prev == 1 ? -1 : 1)}><BiSortAlt2 /></span>
-    <span onClick={() => boxStatus()} className="size-[40px]  center tertiary rounded-[5px] primary-font cursor-pointer"><FaFilter /></span>
-  </span>
+        <span onClick={() => boxStatus()} className="size-[40px]  center tertiary rounded-[5px] primary-font cursor-pointer"><FaFilter /></span>
+      </span>
     )
-  })
+  },[statement])
   return (
-    <div  className='flex relative flex-col w-full primary-p h-full overflow-hidden '>
-      
-     
+    <div className='flex relative flex-col w-full primary-p h-full overflow-hidden '>
+
+
       <FilterPopup ref={filterBoxRef} company={searchValue} />
+      {<Popup ref={deleteBoxRef} buttonToggle ={(value)=>{setDeleteBoxActive(value) }}  boxClass="min-h-[60vh]"  >
+        <div className='flex flex-col gap-2 p-2 w-full  bg-slate-900 text-slate-100'>
+
+          <span className='flex gap-2 items-center'>
+            <h3>Delete Statement</h3>
+          </span>
+          <span className='flex gap-2 items-center'></span>
+        </div>
+      </Popup>}
       {printLoading && <span className='fixed top-0 left-0 z-10 w-full flex-col capitalize primary-font center h-full light-dark top-0 left-0'><div class="loader rounded-[5px]"></div> printing...</span>}
       <span className='flex search w-full flex-col  gap-1'>
         <span className='flex w-full gap-1 '>
@@ -153,15 +136,15 @@ const Statement = () => {
     </span> */}
           <TravelReport travlerName={userInfo?.userName} companyName={searchValue} className="min-w-[40px]  center tertiary  primary-font cursor-pointer" />
 
-       </span>
-       <AmountDisplay/>
+        </span>
+        <AmountDisplay />
       </span>
 
 
       <span className='relative flex-col  gap-2 py-2 w-full h-full'>
-       <span  className={`fixed  ${headerActive?'visible top-[0] opacity-100':'visible top-[-100px] opacity-30' } center flex primary-bg min-h-[70px] transition-all ease duration-700  z-[110] flex-1 w-full left-0 right-0 primary-p  `}>
-       <AmountDisplay/>
-       </span>
+        <span className={`fixed  ${headerActive ? 'visible top-[0] opacity-100' : 'visible top-[-100px] opacity-30'} center flex primary-bg min-h-[70px] transition-all ease duration-700  z-[110] flex-1 w-full left-0 right-0 primary-p  `}>
+          <AmountDisplay />
+        </span>
         {loading ? <CardSkelton /> : statement.length != 0 ?
           statement.map((routes, id) => {
 

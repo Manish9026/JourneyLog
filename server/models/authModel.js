@@ -1,46 +1,46 @@
 import mongoose from "mongoose";
 
 
-const authSchema=mongoose.Schema({
+const authSchema = mongoose.Schema({
 
-    userName:{
-        type:String,
+    userName: {
+        type: String,
 
     },
-    userEmail:{
-        type:String,
-        required:true,
-        index: true ,
+    userEmail: {
+        type: String,
+        required: true,
+        index: true,
     },
-    password:{
-        type:String
+    password: {
+        type: String
     },
-    current_location:{
-        type:Object
+    current_location: {
+        type: Object
     },
-    profileImage:{
-        type:String,
+    profileImage: {
+        type: String,
     },
-    company:{
-        type:[{
-            cmpName:String,
-            createdAt:{
-                type:Date,
-                default:Date.now
+    company: {
+        type: [{
+            cmpName: String,
+            createdAt: {
+                type: Date,
+                default: Date.now
             },
-            remainingAmount:{type:Number,default:0},
-            recentPayment:Date
+            remainingAmount: { type: Number, default: 0 },
+            recentPayment: Date
         }]
     },
-    recentCompany:{
-       type:String 
+    recentCompany: {
+        type: String
     },
-    recentCompanyID:{
-        type:mongoose.Types.ObjectId
+    recentCompanyID: {
+        type: mongoose.Types.ObjectId
     },
 
 
-    userToken:String
+    userToken: String
 })
 
-export  const userModel=mongoose.model("user",authSchema);
+export const userModel = mongoose.model("user", authSchema);

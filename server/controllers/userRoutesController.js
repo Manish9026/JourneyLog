@@ -9,16 +9,16 @@ export class UserRoutes {
 
 
 
-    static dateDiff=(startDate,endDate)=>{
-        console.log(startDate,endDate);
-        
+    static dateDiff = (startDate, endDate) => {
+        console.log(startDate, endDate);
+
         let Difference_In_Time =
             new Date(startDate) - new Date(endDate)
-        
+
         // Calculating the no. of days between
         // two dates
-        
-           return (Math.abs(Math.floor(Difference_In_Time / (1000 * 3600 * 24))))
+
+        return (Math.abs(Math.floor(Difference_In_Time / (1000 * 3600 * 24))))
     }
     static setRecentCmp = async (userId, cmpName) => {
         // console.log(userId,cmpName);
@@ -45,17 +45,17 @@ export class UserRoutes {
             const { whereTo, whereFrom, amount, travelBy, company, date: { dateValue: { startDate }, type } } = req.body;
             console.log(startDate, type);
 
-            let chooseDate = startDate!== null && startDate ? new Date(startDate) : new Date();
+            let chooseDate = startDate !== null && startDate ? new Date(startDate) : new Date();
 
             // console.log(chooseDate,startingDate(chooseDate), endingDate(chooseDate));
-            
+
 
             if (whereTo && whereFrom && amount && travelBy && userId || type == "new") {
                 await this.addPlace(whereFrom, whereTo);
                 this.setRecentCmp(userId, company?.cmpName)
 
                 // validate existing routes is available or not 
-                const existTravelRoute = await userRouteModel.findOne({ $and: [{ createdAt: { $lte: endingDate(chooseDate) } }, { createdAt: { $gte: startingDate(chooseDate)} }, { userId }, { "company.cmpId": company?.cmpId }] })
+                const existTravelRoute = await userRouteModel.findOne({ $and: [{ createdAt: { $lte: endingDate(chooseDate) } }, { createdAt: { $gte: startingDate(chooseDate) } }, { userId }, { "company.cmpId": company?.cmpId }] })
                 console.log(existTravelRoute);
 
                 if (existTravelRoute) {
@@ -106,20 +106,20 @@ export class UserRoutes {
 
     static deleteRoute = async (req, res) => {
         try {
-            const { cmpId, routeId, date, deleteFrom ,parentId} = req.body;
+            const { cmpId, routeId, date, deleteFrom, parentId } = req.body;
             const userId = req.user._id;
 
-            if (isNotEmpty(cmpId) && isNotEmpty(routeId) &&  isNotEmpty(userId) && isNotEmpty(parentId)) {              
+            if (isNotEmpty(cmpId) && isNotEmpty(routeId) && isNotEmpty(userId) && isNotEmpty(parentId)) {
                 const existTravelRoute = await userRouteModel.findOneAndUpdate(
-                    { $and: [{_id:parentId}, { userId }, { "company.cmpId": cmpId }] },
+                    { $and: [{ _id: parentId }, { userId }, { "company.cmpId": cmpId }] },
                     { $pull: { travel: { _id: routeId } } },
                     { new: true } // To return the updated document
                 )
                 if (existTravelRoute) {
-                    if(existTravelRoute && existTravelRoute?.travel?.length==0){
-                      await  userRouteModel.deleteOne({ _id: parentId })
+                    if (existTravelRoute && existTravelRoute?.travel?.length == 0) {
+                        await userRouteModel.deleteOne({ _id: parentId })
                     }
-                   
+
                     return goodRes({ res, data: { existTravelRoute, deleteFrom }, message: "removed", })
                 } else {
                     return badRes({ res, data: [], message: "already removed" })
@@ -134,34 +134,34 @@ export class UserRoutes {
             return badRes({ res, data: [], message: "internal  error" })
         }
     }
-    static  updateTravelRoute = async (req,res) => {
+    static updateTravelRoute = async (req, res) => {
 
-        const {whereFrom,whereTo,travelBy,parentId,cmpId,_id,amount,editFrom,payStatus}=req.body;
-        const userId=req.user._id;
-        console.log(payStatus=="false"?false:true,payStatus);
-        
+        const { whereFrom, whereTo, travelBy, parentId, cmpId, _id, amount, editFrom, payStatus } = req.body;
+        const userId = req.user._id;
+        console.log(payStatus == "false" ? false : true, payStatus);
+
 
         try {
-            if(isNotEmpty(parentId) && isNotEmpty(cmpId) && isNotEmpty(userId) ){
+            if (isNotEmpty(parentId) && isNotEmpty(cmpId) && isNotEmpty(userId)) {
                 const updatedDocument = await userRouteModel.findOneAndUpdate(
-                    { _id: parentId, userId,"travel._id": _id ,"company.cmpId":cmpId},  // Match the document and specific travel item
-                    { $set: { "travel.$.whereFrom":whereFrom,"travel.$.whereTo":whereTo,"travel.$.amount":amount,"travel.$.travelBy":travelBy , "travel.$.payStatus":payStatus=="true"?true:false} },         // Use the positional operator "$" to update the specific element
+                    { _id: parentId, userId, "travel._id": _id, "company.cmpId": cmpId },  // Match the document and specific travel item
+                    { $set: { "travel.$.whereFrom": whereFrom, "travel.$.whereTo": whereTo, "travel.$.amount": amount, "travel.$.travelBy": travelBy, "travel.$.payStatus": payStatus == "true" ? true : false } },         // Use the positional operator "$" to update the specific element
                     { new: true, runValidators: true }            // Return the updated document and run validation
                 );
-                if(updatedDocument)
-                goodRes({res,data:{editFrom,message:"updated"}})
+                if (updatedDocument)
+                    goodRes({ res, data: { editFrom, message: "updated" } })
             }
-            else{
-                goodRes({res,message:"please choose correct option"})
+            else {
+                goodRes({ res, message: "please choose correct option" })
             }
-           
-             
+
+
         } catch (err) {
-            badRes({res,message:"internal error"})
+            badRes({ res, message: "internal error" })
             console.error("Error updating travel:", err);
         }
     };
-    
+
 
     static addPlace = async (whereFrom, whereTo) => {
         whereFrom = whereFrom.toLowerCase().trim()
@@ -188,7 +188,7 @@ export class UserRoutes {
 
         }
     }
- 
+
     static getRecentRoutes = async (req, res) => {
 
         try {
@@ -201,72 +201,72 @@ export class UserRoutes {
             if (userId && company.length != 0) {
                 await userRouteModel.aggregate([
                     {
-                      $match: { userId } // Match by userId
+                        $match: { userId } // Match by userId
                     },
                     {
-                      $unwind: "$travel" // Unwind the travel array
+                        $unwind: "$travel" // Unwind the travel array
                     },
                     {
-                      $addFields: {
-                        travelDate: {
-                          $dateToString: { format: "%Y-%m-%d", date: "$travel.date" ,"timezone": "+05:30"} // Format the date
+                        $addFields: {
+                            travelDate: {
+                                $dateToString: { format: "%Y-%m-%d", date: "$travel.date", "timezone": "+05:30" } // Format the date
+                            }
                         }
-                      }
                     },
                     {
-                      $match: { "company.cmpName": { $in: company } } // Match documents by company names
+                        $match: { "company.cmpName": { $in: company } } // Match documents by company names
                     },
                     {
-                      $group: {
-                        _id: {
-                          travelDate: "$travelDate",
-                          company: "$company.cmpName",
-                          cmpId: "$company.cmpId"
-                        },
-                        travelDetails: {
-                          $push: {
-                            whereTo: "$travel.whereTo",
-                            whereFrom: "$travel.whereFrom",
-                            travelBy: "$travel.travelBy",
-                            amount: "$travel.amount",
-                            date: "$travel.date",
-                            _id: "$travel._id"
-                          }
-                        },
-                        // Store the original document's _id for later use
-                        routeId: { $first: "$_id" } // Use $first to get the _id from the first document in the group
-                      }
-                    },
-                    {
-                      $group: {
-                        _id: "$_id.travelDate", // Group by travel date
-                        routeId: { $first: "$routeId" }, // Retain the routeId
-                        companies: {
-                          $push: {
-                            company: "$_id.company",
-                            cmpId: "$_id.cmpId",
-                            travelDetails: "$travelDetails"
-                          }
+                        $group: {
+                            _id: {
+                                travelDate: "$travelDate",
+                                company: "$company.cmpName",
+                                cmpId: "$company.cmpId"
+                            },
+                            travelDetails: {
+                                $push: {
+                                    whereTo: "$travel.whereTo",
+                                    whereFrom: "$travel.whereFrom",
+                                    travelBy: "$travel.travelBy",
+                                    amount: "$travel.amount",
+                                    date: "$travel.date",
+                                    _id: "$travel._id"
+                                }
+                            },
+                            // Store the original document's _id for later use
+                            routeId: { $first: "$_id" } // Use $first to get the _id from the first document in the group
                         }
-                      }
                     },
                     {
-                      $project: {
-                        _id: 0, // Exclude default _id
-                        date: "$_id", // Rename the grouped _id to "date"
-                        companies: 1,
-                        routeId: 1 // Include the routeId
-                      }
+                        $group: {
+                            _id: "$_id.travelDate", // Group by travel date
+                            routeId: { $first: "$routeId" }, // Retain the routeId
+                            companies: {
+                                $push: {
+                                    company: "$_id.company",
+                                    cmpId: "$_id.cmpId",
+                                    travelDetails: "$travelDetails"
+                                }
+                            }
+                        }
                     },
                     {
-                      $sort: { date: -1 } // Sort by date descending
+                        $project: {
+                            _id: 0, // Exclude default _id
+                            date: "$_id", // Rename the grouped _id to "date"
+                            companies: 1,
+                            routeId: 1 // Include the routeId
+                        }
                     },
                     {
-                      $limit: 3 // Limit the output to 3 documents
+                        $sort: { date: -1 } // Sort by date descending
+                    },
+                    {
+                        $limit: 3 // Limit the output to 3 documents
                     }
-                  ])
-                  
-                  
+                ])
+
+
                     .then(result => {
                         //   console.log(result);
                         //   res.send(result) 
@@ -293,45 +293,47 @@ export class UserRoutes {
     static getFilterOption = async (filterData) => {
 
 
-        let filterOption = {travelArray: {
-            $filter: {
-                input: "$travel",
-                as: "travelItem",
-                cond: {
-                    $and: [
-                     // Filter for amount <= maxAmount
-                    ]
-                } // Filter travel records where amount > 40
-            }
-        },limit:0};
+        let filterOption = {
+            travelArray: {
+                $filter: {
+                    input: "$travel",
+                    as: "travelItem",
+                    cond: {
+                        $and: [
+                            // Filter for amount <= maxAmount
+                        ]
+                    } // Filter travel records where amount > 40
+                }
+            }, limit: 0
+        };
         try {
-            if(!isNotEmpty(filterData)) return {}
+            if (!isNotEmpty(filterData)) return {}
             const { date, amount, paymentStatus } = filterData;
             // console.log(date);
-            
+
             if (isNotEmpty(date)) {
                 if (Object.keys(date).includes("range") && isNotEmpty(date.range)) {
                     let { startDate, endDate } = date.range;
                     if (startDate && endDate)
                         filterOption.createdAt = {
-                            $gte:startingDate(startDate),
-                            $lte:endingDate(endDate)
+                            $gte: startingDate(startDate),
+                            $lte: endingDate(endDate)
                         }
-                    filterOption.limit=this.dateDiff(startDate,endDate) + 1;
+                    filterOption.limit = this.dateDiff(startDate, endDate) + 1;
 
 
                 }
                 else if (Object.keys(date).includes("today")) {
                     filterOption.createdAt = {
-                        $gte:startingDate(new Date().toISOString()),
-                        $lte:endingDate(new Date().toISOString())
+                        $gte: startingDate(new Date().toISOString()),
+                        $lte: endingDate(new Date().toISOString())
                     }
                 } else if (Object.keys(date).includes("yesterday")) {
                     let y = new Date();
                     y.setUTCDate(new Date().getUTCDate() - 1)
                     filterOption.createdAt = {
-                        $gte:startingDate(y),
-                        $lte:endingDate(y)
+                        $gte: startingDate(y),
+                        $lte: endingDate(y)
                     }
                 }
                 // console.log(date,);       
@@ -339,17 +341,17 @@ export class UserRoutes {
             if (isNotEmpty(amount)) {
                 const { min, max } = amount;
                 if (min && max)
-                    filterOption.travelArray.$filter.cond.$and.push( { $gte: ["$$travelItem.amount", parseInt(min)] },
-                { $lte: ["$$travelItem.amount", parseInt(max)] })
+                    filterOption.travelArray.$filter.cond.$and.push({ $gte: ["$$travelItem.amount", parseInt(min)] },
+                        { $lte: ["$$travelItem.amount", parseInt(max)] })
             }
             if (isNotEmpty(paymentStatus)) {
                 console.log(paymentStatus);
-                const {paid, unpaid}=paymentStatus
-                if(paid){
-                    filterOption.travelArray.$filter.cond.$and.push({$eq:["$$travelItem.payStatus",true]})
+                const { paid, unpaid } = paymentStatus
+                if (paid) {
+                    filterOption.travelArray.$filter.cond.$and.push({ $eq: ["$$travelItem.payStatus", true] })
                 }
-                if(unpaid){
-                    filterOption.travelArray.$filter.cond.$and.push({$eq:["$$travelItem.payStatus",false]})
+                if (unpaid) {
+                    filterOption.travelArray.$filter.cond.$and.push({ $eq: ["$$travelItem.payStatus", false] })
                 }
             }
 
@@ -358,65 +360,65 @@ export class UserRoutes {
 
         } catch (error) {
             console.log(error);
-                return {}
-            
+            return {}
+
         }
     }
 
     static getRandomRoutes = async (req, res) => {
-        const { limit, skip, company ,getType} = req.query;
+        const { limit, skip, company, getType } = req.query;
         const userId = req?.user?._id
         const { recentCompany } = req.user;
         let cmpName = isNotEmpty(company) ? company : recentCompany;
-        const filterOption=await this.getFilterOption(req.body.filter)
-// console.log(cmpName);
+        const filterOption = await this.getFilterOption(req.body.filter)
+        // console.log(cmpName);
 
-              console.log(filterOption.limit);
-              
+        console.log(filterOption.limit);
+
 
         try {
-          const travelRoute= await userRouteModel.aggregate([
-                { $match: { $expr : { $eq: [ '$userId' , { $toObjectId: userId } ] },  createdAt: filterOption?.createdAt || {$lte:new Date()},"company.cmpName":cmpName.trim()} },
+            const travelRoute = await userRouteModel.aggregate([
+                { $match: { $expr: { $eq: ['$userId', { $toObjectId: userId }] }, createdAt: filterOption?.createdAt || { $lte: new Date() }, "company.cmpName": cmpName.trim() } },
                 {
                     $sort: {
                         createdAt: -1 // Sort by createdAt in descending order
                     }
                 },
                 {
-                    $limit:filterOption.limit ||  5 // Limit the results to 5 documents
+                    $limit: filterOption.limit || 5 // Limit the results to 5 documents
                 },
-                   {
-                       $project: {
-                           _id: 1,
-                           userId: 1,
-                           company: 1,
-                           travel: filterOption.travelArray || 1,
-                           createdAt: 1,
-                           updatedAt: 1
-                       }
-                   },
-                   {
-                       $match: {
-                           "travel.0": { $exists: true } // Ensure only documents with matching travel records are returned
-                       } 
-                   },
-               ])
-               if(travelRoute.length!=0){
-                if(getType=="home"){
-                    const result=await this.getCombinedTotal(userId,cmpName)
-                    console.log(result,"result");
-                    
-                    goodRes({res,data:{travelDetail:travelRoute,utilAmount:result}})
-                }else{
-                    goodRes({res,data:travelRoute})
-                }
+                {
+                    $project: {
+                        _id: 1,
+                        userId: 1,
+                        company: 1,
+                        travel: filterOption.travelArray || 1,
+                        createdAt: 1,
+                        updatedAt: 1
                     }
-                    else badRes({res,message:"not found"})
+                },
+                {
+                    $match: {
+                        "travel.0": { $exists: true } // Ensure only documents with matching travel records are returned
+                    }
+                },
+            ])
+            if (travelRoute.length != 0) {
+                if (getType == "home") {
+                    const result = await this.getCombinedTotal(userId, cmpName)
+                    console.log(result, "result");
 
-               
+                    goodRes({ res, data: { travelDetail: travelRoute, utilAmount: result } })
+                } else {
+                    goodRes({ res, data: travelRoute })
+                }
+            }
+            else badRes({ res, message: "not found" })
+
+
         } catch (error) {
             console.log(error);
-            badRes({res,})
+            badRes({ res, })
         }
 
 
@@ -493,184 +495,149 @@ export class UserRoutes {
     // home page 
 
     // Combined query to get total unpaid and today's total travel amount
-static getCombinedTotal = async (userId,cmpName) => {
-    try {
+    static getCombinedTotal = async (userId, cmpName) => {
+        try {
 
-        // const result = await userRouteModel.aggregate([
-        //     { $unwind: "$travel" }, // Unwind the travel array
-        //     {
-        //         $match:{$expr : { $eq: [ '$userId' , { $toObjectId: userId } ] },"company.cmpName":cmpName.trim()}
-        //     },
-        //     // Project fields for both conditions
-        //     {
-        //         $project: {
-        //             unpaidAmount: {
-        //                 $cond: [{ $eq: ["$travel.payStatus", false] }, "$travel.amount", 0] // Only unpaid amounts
-        //             },
-        //             todayAmount: {
-        //                 $cond: [
-        //                     {
-        //                         $and: [
-        //                             { $gte: ["$createdAt", startingDate(new Date())] }, // Check if date is today
-        //                             { $lte: ["$createdAt", endingDate(new Date())] }
-        //                         ]
-        //                     },
-        //                     "$travel.amount", // If the condition matches, include the amount
-        //                     0 // Otherwise, set it to 0
-        //                 ]
-        //             }
-        //         }
-        //     },
+            // const result = await userRouteModel.aggregate([
+            //     { $unwind: "$travel" }, // Unwind the travel array
+            //     {
+            //         $match:{$expr : { $eq: [ '$userId' , { $toObjectId: userId } ] },"company.cmpName":cmpName.trim()}
+            //     },
+            //     // Project fields for both conditions
+            //     {
+            //         $project: {
+            //             unpaidAmount: {
+            //                 $cond: [{ $eq: ["$travel.payStatus", false] }, "$travel.amount", 0] // Only unpaid amounts
+            //             },
+            //             todayAmount: {
+            //                 $cond: [
+            //                     {
+            //                         $and: [
+            //                             { $gte: ["$createdAt", startingDate(new Date())] }, // Check if date is today
+            //                             { $lte: ["$createdAt", endingDate(new Date())] }
+            //                         ]
+            //                     },
+            //                     "$travel.amount", // If the condition matches, include the amount
+            //                     0 // Otherwise, set it to 0
+            //                 ]
+            //             }
+            //         }
+            //     },
 
-        //     // Group to sum both unpaid and today's amounts
-        //     {
-        //         $group: {
-        //             _id: null,
-        //             totalUnpaid: { $sum: "$unpaidAmount" }, // Sum unpaid amounts
-        //             todayTotal: { $sum: "$todayAmount" } // Sum today's amounts
-        //         }
-        //     }
-        // ]);
-        const result = await userRouteModel.aggregate([
-            { $unwind: "$travel" }, // Unwind the travel array
-            {
-                $match: {
-                    $expr: {
-                        $eq: ['$userId', { $toObjectId: userId }]
-                    },
-                    "company.cmpName": cmpName.trim()
-                }
-            },
-            // Project fields for amount and payment status
-            {
-                $project: {
-                    amount: "$travel.amount", // Include the amount (both paid and unpaid)
-                    payStatus: "$travel.payStatus", // Include payment status
-                    createdAt: "$createdAt" // Include the createdAt date
-                }
-            },
-            // Group to sum amounts and find min/max dates conditionally
-            {
-                $group: {
-                    _id: null, // Group all documents together
-                    totalUnpaid: {
-                        $sum: {
-                            $cond: [{ $eq: ["$payStatus", false] }, "$amount", 0] // Sum unpaid amounts
-                        }
-                    },
-                    totalPaid: {
-                        $sum: {
-                            $cond: [{ $eq: ["$payStatus", true] }, "$amount", 0] // Sum paid amounts
-                        }
-                    },
-                    todayTotalUnpaid: {
-                        $sum: {
-                            $cond: [
-                                { $and: [
-                                    { $gte: ["$createdAt", startingDate(new Date())] }, // Check if date is today
-                                    { $lte: ["$createdAt", endingDate(new Date())]}
-                                ]},
-                                {
-                                    $cond: [{ $eq: ["$payStatus", false] }, "$amount", 0] // Include only unpaid amounts for today
-                                },
-                                0 // Otherwise, add 0
-                            ]
-                        }
-                    },
-                    todayTotalPaid: {
-                        $sum: {
-                            $cond: [
-                                { $and: [
-                                    { $gte: ["$createdAt", startingDate(new Date())] }, // Check if date is today
-                                    { $lte: ["$createdAt", endingDate(new Date())]}
-                                ]},
-                                {
-                                    $cond: [{ $eq: ["$payStatus", true] }, "$amount", 0] // Include only paid amounts for today
-                                },
-                                0 // Otherwise, add 0
-                            ]
-                        }
-                    },
-                    unpaidMinDate: {
-                        $min: {
-                            $cond: [{ $eq: ["$payStatus", false] }, "$createdAt", null] // Find min date only if unpaid
-                        }
-                    },
-                    unpaidMaxDate: {
-                        $max: {
-                            $cond: [{ $eq: ["$payStatus", false] }, "$createdAt", null] // Find max date only if unpaid
+            //     // Group to sum both unpaid and today's amounts
+            //     {
+            //         $group: {
+            //             _id: null,
+            //             totalUnpaid: { $sum: "$unpaidAmount" }, // Sum unpaid amounts
+            //             todayTotal: { $sum: "$todayAmount" } // Sum today's amounts
+            //         }
+            //     }
+            // ]);
+            const result = await userRouteModel.aggregate([
+                { $unwind: "$travel" }, // Unwind the travel array
+                {
+                    $match: {
+                        $expr: {
+                            $eq: ['$userId', { $toObjectId: userId }]
+                        },
+                        "company.cmpName": cmpName.trim()
+                    }
+                },
+                // Project fields for amount and payment status
+                {
+                    $project: {
+                        amount: "$travel.amount", // Include the amount (both paid and unpaid)
+                        payStatus: "$travel.payStatus", // Include payment status
+                        createdAt: "$createdAt" // Include the createdAt date
+                    }
+                },
+                // Group to sum amounts and find min/max dates conditionally
+                {
+                    $group: {
+                        _id: null, // Group all documents together
+                        totalUnpaid: {
+                            $sum: {
+                                $cond: [{ $eq: ["$payStatus", false] }, "$amount", 0] // Sum unpaid amounts
+                            }
+                        },
+                        totalPaid: {
+                            $sum: {
+                                $cond: [{ $eq: ["$payStatus", true] }, "$amount", 0] // Sum paid amounts
+                            }
+                        },
+                        todayTotalUnpaid: {
+                            $sum: {
+                                $cond: [
+                                    {
+                                        $and: [
+                                            { $gte: ["$createdAt", startingDate(new Date())] }, // Check if date is today
+                                            { $lte: ["$createdAt", endingDate(new Date())] }
+                                        ]
+                                    },
+                                    {
+                                        $cond: [{ $eq: ["$payStatus", false] }, "$amount", 0] // Include only unpaid amounts for today
+                                    },
+                                    0 // Otherwise, add 0
+                                ]
+                            }
+                        },
+                        todayTotalPaid: {
+                            $sum: {
+                                $cond: [
+                                    {
+                                        $and: [
+                                            { $gte: ["$createdAt", startingDate(new Date())] }, // Check if date is today
+                                            { $lte: ["$createdAt", endingDate(new Date())] }
+                                        ]
+                                    },
+                                    {
+                                        $cond: [{ $eq: ["$payStatus", true] }, "$amount", 0] // Include only paid amounts for today
+                                    },
+                                    0 // Otherwise, add 0
+                                ]
+                            }
+                        },
+                        unpaidMinDate: {
+                            $min: {
+                                $cond: [{ $eq: ["$payStatus", false] }, "$createdAt", null] // Find min date only if unpaid
+                            }
+                        },
+                        unpaidMaxDate: {
+                            $max: {
+                                $cond: [{ $eq: ["$payStatus", false] }, "$createdAt", null] // Find max date only if unpaid
+                            }
                         }
                     }
                 }
-            }
-        ]);
-        
-
-        // Prepare the output message
+            ]);
 
 
-        console.log(result);
-        
-        
+            // Prepare the output message
 
-        return result[0];
-    } catch (err) {
-        console.error(err);
-        return []
 
+            console.log(result);
+
+
+
+            return result[0];
+        } catch (err) {
+            console.error(err);
+            return []
+
+        }
+    };
+
+    static deleteRouteWithRange=async(req,res)=>{
+
+        try {
+            const {cmpId,range}=req.body;
+
+            
+        } catch (error) {
+            
+        }
     }
-};
 
+    
 }
 
-[{
-    "companies": [
-        {
-            "company": "manish",
-            "travelDetails": [
-                {
-                    "whereTo": "meerut ",
-                    "whereFrom": "lucknow",
-                    "travelBy": "metro",
-                    "amount": 30,
-                    "date": "2024-10-10T18:36:06.679Z",
-                    "_id": "67081e96f8a3cf5d7639b22b"
-                },
-                {
-                    "whereTo": "mayur vihar",
-                    "whereFrom": "asharm",
-                    "travelBy": "metro",
-                    "amount": 25,
-                    "date": "2024-10-10T18:46:05.769Z",
-                    "_id": "670820ed75d9dd12bb429930"
-                },
-                {
-                    "whereTo": "mumbai",
-                    "whereFrom": "kanpur",
-                    "travelBy": "metro",
-                    "amount": 200,
-                    "date": "2024-10-10T19:41:41.774Z",
-                    "_id": "67082df53be42cc8f38268f1"
-                }
-            ]
-        }
-    ],
-    "date": "2024-10-10T18:36:06.683Z"
-}, {
-    "companies": [
-        {
-            "company": "krisna oversiease",
-            "travelDetails": [
-                {
-                    "whereTo": "agra",
-                    "whereFrom": "asharm",
-                    "travelBy": "rapido",
-                    "amount": 56,
-                    "date": "2024-10-10T19:51:01.260Z",
-                    "_id": "67083025726e33449cbd6c46"
-                }
-            ]
-        }
-    ],
-    "date": "2024-10-10T19:51:01.261Z"
-},]

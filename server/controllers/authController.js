@@ -21,9 +21,9 @@ export class AuthTools {
         return bcrypt.compare(checkPass, hash).then(res => res).catch(err => console.log(err));
     }
 
-    static genJWT_Token = async (userEmail, userId,authType) => {
+    static genJWT_Token = async (userEmail, userId, authType) => {
         console.log(userEmail, userId);
-        return await jwt.sign({ userEmail, userId,authType}, process.env.SECRET_KEY)
+        return await jwt.sign({ userEmail, userId, authType }, process.env.SECRET_KEY)
 
 
     }
@@ -71,17 +71,17 @@ export class AuthTools {
         }
     }
 }
-export class Auth extends AuthTools{
+export class Auth extends AuthTools {
     static login = async (req, res) => {
         try {
 
             console.log(req.body);
 
             let { userEmail, password, tc, } = req.body;
-            userEmail=userEmail.toLowerCase();
+            userEmail = userEmail.toLowerCase();
             console.log(userEmail);
-            if (userEmail && password ) {
-                let match = await userModel.findOne({userEmail})
+            if (userEmail && password) {
+                let match = await userModel.findOne({ userEmail })
                 console.log(match);
                 if (match) {
                     if (await this.bycriptPass(password, match.password)) {
@@ -90,19 +90,19 @@ export class Auth extends AuthTools{
                         console.log(loginToken);
                         //  delete match['password']
                         res.cookie("uid", loginToken, {
-                            sameSite: process.env.DEPLOYMENT_TYPE=="local"?'Strict':"None",
-                                        secure: process.env.DEPLOYMENT_TYPE=="local"?false:true,
-                                        httpOnly:process.env.DEPLOYMENT_TYPE=="local"?false:true,
+                            sameSite: process.env.DEPLOYMENT_TYPE == "local" ? 'Strict' : "None",
+                            secure: process.env.DEPLOYMENT_TYPE == "local" ? false : true,
+                            httpOnly: process.env.DEPLOYMENT_TYPE == "local" ? false : true,
                         }).json({
                             message: "successfully login",
                             status: true,
-                            data:[]
+                            data: []
                         })
                     } else {
                         res.json({
                             message: "password not matched",
                             status: 0,
-                            data:[]
+                            data: []
                         })
                     }
                 }
@@ -146,90 +146,90 @@ export class Auth extends AuthTools{
                     return
                 }
                 else {
-                 
-                    if(files.file){
+
+                    if (files.file) {
 
 
-                        
-                    
-                    const file = files.file[0]
-                    const { filepath } = file;
-                    let { userName, userEmail, password,mobileNo } = fields
-                    userName = String(userName).toLowerCase();
-                    userEmail = String(userEmail).toLowerCase();
-                    password = String(password),
-                    mobileNo=Number(mobileNo)
-                    
-                    // console.log(fields,files);
-                    
-                    // const imageUrl=await imageUploader(filepath)
 
-                    console.log(userName, userEmail,mobileNo, password,filepath);
 
-                    if( userEmail && userName && password){
-                        console.log("sadbhsd");
-                        let hashedPass=await this.hashPass(password)
-                        // console.log(hashedPass)
-                        const match =await userModel.findOne({userEmail})
+                        const file = files.file[0]
+                        const { filepath } = file;
+                        let { userName, userEmail, password, mobileNo } = fields
+                        userName = String(userName).toLowerCase();
+                        userEmail = String(userEmail).toLowerCase();
+                        password = String(password),
+                            mobileNo = Number(mobileNo)
 
-                        if(!match){
-                            const imageUrl=await imageUploader(filepath)
+                        // console.log(fields,files);
 
-                            console.log("hggff");
-                        const userDetail= await userModel({
+                        // const imageUrl=await imageUploader(filepath)
 
-                            userName,
-                            userEmail,
-                            password:hashedPass,
-                            // userProfile:""/
-                        })
-                        
+                        console.log(userName, userEmail, mobileNo, password, filepath);
 
-                           userDetail.userId=userDetail._id;
-                        userDetail.profileImage=imageUrl;
-                        const loginToken = await this.genJWT_Token(userDetail.userEmail, userDetail._id)
-                        console.log(loginToken);
-                        userDetail.userToken=loginToken;
+                        if (userEmail && userName && password) {
+                            console.log("sadbhsd");
+                            let hashedPass = await this.hashPass(password)
+                            // console.log(hashedPass)
+                            const match = await userModel.findOne({ userEmail })
 
-                       
+                            if (!match) {
+                                const imageUrl = await imageUploader(filepath)
 
-                       if(await userDetail.save()){
-                        
-                        res.cookie("uid", loginToken, {
-                            sameSite: 'None',
-                            secure: true,
-                            expires: new Date(Date.now() + 3600000)
-                        }).status(200).json({
-                            message:"successfully register",
-                            status:true
-                        })
-                       }else{
-                        res.status(404).json({
-                            message:"try after some time",
-                            status:false
-                        })
-                       }
+                                console.log("hggff");
+                                const userDetail = await userModel({
+
+                                    userName,
+                                    userEmail,
+                                    password: hashedPass,
+                                    // userProfile:""/
+                                })
+
+
+                                userDetail.userId = userDetail._id;
+                                userDetail.profileImage = imageUrl;
+                                const loginToken = await this.genJWT_Token(userDetail.userEmail, userDetail._id)
+                                console.log(loginToken);
+                                userDetail.userToken = loginToken;
+
+
+
+                                if (await userDetail.save()) {
+
+                                    res.cookie("uid", loginToken, {
+                                        sameSite: 'None',
+                                        secure: true,
+                                        expires: new Date(Date.now() + 3600000)
+                                    }).status(200).json({
+                                        message: "successfully register",
+                                        status: true
+                                    })
+                                } else {
+                                    res.status(404).json({
+                                        message: "try after some time",
+                                        status: false
+                                    })
+                                }
+                            }
+                            else {
+                                res.status(200).json({
+                                    message: "all ready exist emailid please enter another one",
+                                    status: false
+                                })
+                            }
+
                         }
-                        else{
-                            res.status(200).json({
-                                message:"all ready exist emailid please enter another one",
-                                status:false
+                        else {
+                            res.status(201).json({
+                                message: "all fields are required",
+                                status: false
                             })
                         }
 
-                    }
-                    else{
+                    } else {
                         res.status(201).json({
-                            message:"all fields are required",
-                            status:false
+                            message: "all Fields are required",
+                            status: false
                         })
-                    }
-
-                    }else{
-                       res.status(201).json({
-                        message:"all Fields are required",
-                        status:false
-                       })
 
                     }
                 }
@@ -245,36 +245,36 @@ export class Auth extends AuthTools{
         }
     }
 
-    
-    static verify=async(req,res)=>{
+
+    static verify = async (req, res) => {
         console.log("sdndfh");
-        
+
         try {
-            const {user}=req;
-            if(user){
+            const { user } = req;
+            if (user) {
                 res.status(200).json({
-                    status:true,
-                    data:user
+                    status: true,
+                    data: user
                 })
             }
-            else{
+            else {
                 res.status(201).json({
-                    status:false,
-                    data:[]
+                    status: false,
+                    data: []
                 })
             }
         } catch (error) {
-            
+
         }
     }
-    
+
     static logout = async (req, res) => {
         try {
-           
+
             res.clearCookie('uid', {
-                sameSite: process.env.DEPLOYMENT_TYPE=="local"?'Strict':"None",
-                            secure: process.env.DEPLOYMENT_TYPE=="local"?false:true,
-                            httpOnly:process.env.DEPLOYMENT_TYPE=="local"?false:true,
+                sameSite: process.env.DEPLOYMENT_TYPE == "local" ? 'Strict' : "None",
+                secure: process.env.DEPLOYMENT_TYPE == "local" ? false : true,
+                httpOnly: process.env.DEPLOYMENT_TYPE == "local" ? false : true,
             });
 
             res.send({

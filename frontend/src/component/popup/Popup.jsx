@@ -2,8 +2,8 @@ import React, { Children, forwardRef, useEffect, useImperativeHandle, useState }
 import { FaXmark } from 'react-icons/fa6'
 import './style.scss'
 import useFlexibleEle from '../../custom-hooks/useFlexibleEle';
-const Popup = forwardRef(({children,flexibleBox, iconBox={},active,title,bodyClass,boxClass=""},ref) => {
-    const [isActive,setIsActive]=useState(false);
+const Popup = forwardRef(({children,flexibleBox, iconBox={},active,title,bodyClass,boxClass="",buttonToggle},ref) => {
+    const [isActive,setIsActive]=useState(active && false);
     const [width,setWidth]=useState(window.innerWidth)
     const {textareaRef}=useFlexibleEle(flexibleBox);
     useImperativeHandle(
@@ -17,10 +17,13 @@ const Popup = forwardRef(({children,flexibleBox, iconBox={},active,title,bodyCla
       }),
       
     )
-    useEffect(()=>{
-        // if(active)
-        setIsActive(active);
-    },[active])
+
+
+    // useEffect(()=>{
+
+    // },[isActive])
+
+    
 
   return (
     <div onClick={(e)=> {e.stopPropagation();setIsActive(0)}} className={`${bodyClass}  ${width<=700 && "bg-transparent"}  ${isActive?" visible opacity-100 z-[100]":" opacity-[50] invisible"} flex items-center justify-center tansition-all duration-700 left-0 fixed w-full top-0  bg-slate-300/20 min-h-full `}>
