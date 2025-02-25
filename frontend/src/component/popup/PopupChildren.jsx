@@ -52,7 +52,7 @@ const PopupChildren = () => {
         
         }
         return (
-            <span className='bg-slate-900 w-full h-full flex flex-col '>
+            <span className=' bg-slate-900  w-full h-full flex flex-col '>
                 <div className='border-b primary-p'><Title title={"edit confirmation"} /></div>
                 <span className='t-container primary-p flex-1 flex flex-col gap-y-2 max-h-[200px] overflow-auto'>
 
@@ -120,7 +120,7 @@ const PopupChildren = () => {
     },[editState?.data]
     )
     return (
-        <Popup ref={boxRef}  boxClass='rounded-t-2xl  overflow-hidden  min-h-[300px]' flexibleBox={[setEditData]} >
+        <Popup ref={boxRef}  boxClass=' min-h-[300px] max-h-[600px] bg-slate-900 text-slate-900 relative  rounded-t-2xl  overflow-hidden  min-h-[300px]' bodyClass={"w-full items-end  transition-height duration-500"} >
           { popupType=="edit" && <Editbox />}
         {popupType=="del" && <DelAlert/>}
 

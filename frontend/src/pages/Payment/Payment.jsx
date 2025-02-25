@@ -128,19 +128,22 @@ const Payment = () => {
     )
 }
 
-export const DateField = memo(({ title, className, value, onChange }) => {
+export const DateField = memo(({ title, className,popupClass, value, onChange,dateDirection="down" }) => {
 
     return (
         <span className={`min-w-[200px] max-w-[300px] flex-1  ${className}`}>
             <Title title={title} className={"px-2"} />
             <Datepicker
-
+                popoverDirection={ dateDirection ?? "down"}
                 selected={value}
                 useRange={false}
                 asSingle={true}
                 onChange={onChange}
                 value={value}
+                containerClassName="relative w-full max-w-xs"
                 inputClassName={"w-full px-4 py-2 border border-gray-300 bg-[#1e293b] rounded-md"}
+              
+                // popupClassName={"absolute z-50 w-[200px]  left-1/2 transform -translate-x-1/2"}
             />
         </span>
     )

@@ -1,5 +1,5 @@
 import React, { forwardRef, lazy, memo, useCallback, useEffect, useRef, useState } from 'react'
-import { FaArrowRight, FaSearch } from 'react-icons/fa'
+import { FaArrowRight, FaPlus, FaSearch } from 'react-icons/fa'
 import { FaFilter, FaIndianRupeeSign } from 'react-icons/fa6';
 import { BiSortAlt2 } from "react-icons/bi";
 import { useSelector } from 'react-redux';
@@ -24,6 +24,8 @@ import money from "../../assets/animations/money.json"
 import not_found from "../../assets/animations/notFound.json"
 import { debounce } from '../../utils/optimization';
 import useSticky from '../../custom-hooks/useSticky';
+import { DateField } from '../Payment/Payment';
+import SlideButton from '../../component/UI component/SlidingButton';
 const SpinCounter = lazy(() => import("../../component/SpinCounter"));
 const Statement = () => {
 
@@ -97,15 +99,8 @@ const Statement = () => {
 
 
       <FilterPopup ref={filterBoxRef} company={searchValue} />
-      {<Popup ref={deleteBoxRef} buttonToggle ={(value)=>{setDeleteBoxActive(value) }}  boxClass="min-h-[60vh]"  >
-        <div className='flex flex-col gap-2 p-2 w-full  bg-slate-900 text-slate-100'>
-
-          <span className='flex gap-2 items-center'>
-            <h3>Delete Statement</h3>
-          </span>
-          <span className='flex gap-2 items-center'></span>
-        </div>
-      </Popup>}
+      <DeleteBox ref={deleteBoxRef} recentCompany={userInfo?.recentCompany} />
+     
       {printLoading && <span className='fixed top-0 left-0 z-10 w-full flex-col capitalize primary-font center h-full light-dark top-0 left-0'><div class="loader rounded-[5px]"></div> printing...</span>}
       <span className='flex search w-full flex-col  gap-1'>
         <span className='flex w-full gap-1 '>
@@ -258,6 +253,82 @@ const CardSkelton = () => {
   )
 }
 
+const DeleteBox=forwardRef(({recentCompany},ref)=>{
+
+  const [isActive,setIsActive]=useState(0);
+  const userInfo = useSelector(state => state.auth.userInfo);
+  const [formData,setFormData]=useState({
+    company:{
+      cmpName:"",
+      cmpId:""
+    },
+    date:{
+      startDate: Date.now,
+      endDate: Date.now,
+    },
+
+  })
+
+  useEffect(() => {
+    if (userInfo?.company) {
+      const result = userInfo?.company.find((ele) => { return userInfo?.recentCompany == ele.cmpName })
+      setFormData(prev => ({ ...prev, company: { cmpId: result?._id, cmpName: result?.cmpName } }))
+
+    }
+  
+
+  }, [])
+  
+
+
+  return(
+    <Popup ref={ref}  buttonToggle ={(value)=>{setDeleteBoxActive(value) }}  boxClass={`${ref?.current?.clientHeight} min-h-[300px] max-h-[600px] bg-slate-900 text-slate-100 relative  `} bodyClass={"w-full items-end  transition-height duration-500"}  >
+    <div className='flex flex-col  transition-height duration-500 gap-2 p-2 w-full h-full bg-slate-900 text-slate-100'>
+
+      <span className='flex gap-2 pb-1 border-b items-center'>
+        <h3>Delete Statement</h3>
+      </span>
+      
+       <span onFocus={() => { setIsActive(1) }} className="flex   flex-col w-full placeholder:capitalize">
+                  <input type="text" value={formData?.company?.cmpName ?? ""} readOnly className="inputField" placeholder='choose company' />
+                  <span className={`w-full secondary-bg  relative z-[1]  ${isActive ? "max-h-[150px] opacity-100  px-2 py-1  " : "p-[0] max-h-[0px]  opacity-0 hidden "} transition-height duration-500 overflow-auto  flex flex-col gap-1   list-none`}>
+                    {
+      
+                      userInfo && Array.isArray(userInfo?.company) && userInfo?.company.length != 0 ?
+                        userInfo?.company.map((data, id) => {
+                          return (
+                            <li key={data?._id} className='border px-1 rounded-md center capitalize secondary-font cursor-pointer' onClick={() => { setFormData(prev => ({ ...prev, company: { cmpName: data?.cmpName, cmpId: data?._id } })); setIsActive(0) }}>{data?.cmpName}</li>
+                          )
+                        }) :
+                        <span className="capitalize w-full min-h-[100px] center flex-col">
+                          <p className='tertiary-font center'> company dosen't exist in own record</p>
+                          <p className='center secondary-font'> please add company details after that fill entry</p>
+                          <button onClick={() => navigate("/detail")} className='flex w-full gap-2 capitalize  cursor-pointer center max-w-[150px] mt-2 primary-font bg-sky-400 flex-1 max-h-[40px] rounded-md'><FaPlus /> <p>add</p></button>
+                        </span>
+                    }</span>
+                </span>
+
+
+       <span className="flex gap-2 flex-wrap">
+        {/* <DateField /> */}
+      <SingleDateField placeHolder="Start Date" onChange={(value)=>{console.log(value); setFormData((prev) => ({ ...prev, date: {startDate:value,endDate:prev?.date?.endDate} }))}} value={formData?.date?.startDate} />
+ 
+      <SingleDateField placeHolder="End Date" onChange={(value)=>{console.log(value); setFormData((prev) => ({ ...prev, date: {endDate:value,startDate:prev?.date?.startDate} }))}} value={formData?.date?.endDate} />
+
+
+        
+
+
+        </span>         
+      <span className='flex gap-2 items-center'>
+
+      <SlideButton status='success' onConfirm={()=>alert("confirmed")}/>
+      </span>
+    </div>
+  </Popup>
+  )
+})
+
 const FilterPopup = forwardRef(({ company }, ref) => {
 
   const [filterData, setFilterData] = useState({
@@ -379,11 +450,11 @@ const FilterPopup = forwardRef(({ company }, ref) => {
   }, [filterNav, filterData.date, filterData.paymentStatus, filterData.company])
   return (
 
-    <Popup flexibleBox={[filterData?.date]} bodyClass={"w-full "} ref={ref} boxClass='min-h-[300px] max-h-[600px] bg-slate-900 text-slate-100'>
-      <div className='w-full p-1 flex-col  flex  h-full flex-1 '>
+    <Popup flexibleBox={[filterData?.date]} bodyClass={"w-full "} ref={ref} boxClass='min-h-[200px]  bg-slate-900 text-slate-100'>
+      <div className='w-full tansition-all duration-700 max-h-[600px] p-1 flex-col  flex  h-full flex-1 '>
         <div className="p-1 border-b">Filter </div>
-        <div className='flex  flex-1  py-1'>
-          <ul className='bg-sky-200/20 primary-font flex flex-col items-start py-2 capitalize h-full max-w-[100px] gap-1'>
+        <div className='flex  flex-1   py-1'>
+          <ul className='bg-sky-200/20 primary-font flex flex-col items-start py-2 capitalize rounded-[5px] min-h-full max-w-[100px] gap-1'>
             {
               [["date range", "date"], ["amount", "amount"], ['status', 'status',], ["company", "company"]].map((navTitle, id) => {
                 return (
@@ -418,4 +489,27 @@ const FilterPopup = forwardRef(({ company }, ref) => {
   )
 }
 )
+
+export const SingleDateField = memo(({ title,placeHolder="Enter Date", className,popupClass, value, onChange,dateDirection="down" }) => {
+  return (
+      <span className={`min-w-[250px] max-w-[500px] flex-1  ${className}`}>
+          <Title title={title} className={"px-2"} />
+          <Datepicker
+             useRange={false}
+             asSingle={true}
+            value={{startDate:(value) ,endDate:(value)}}
+            onChange={(value)=>onChange(value.startDate)}
+            placeholder={placeHolder}
+            inputClassName="w-full px-4 py-2 border border-gray-300 bg-[#1e293b] rounded-md"
+            containerClassName="relative  max-w-full transition-height duration-500"
+            popoverDirection={dateDirection}
+            showShortcuts={false}  // Hides shortcuts (optional)
+            showSingleCalendar={true}
+            // popupClassName={" bg-red-500 relative overflow-visible max-w-full max-h-[300px] transition-all ease-out duration-300  z-10 mt-[1px] text-sm lg:text-xs 2xl:text-sm mb-2.5 mt-2.5  translate-y-0 opacity-0 hidden"}
+          popupClassName={"max-h-[300px] relative  transition-all duration-500 overflow-auto hidden"}
+         
+          />
+      </span>
+  )
+})
 export default Statement
