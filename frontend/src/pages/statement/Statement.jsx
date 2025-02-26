@@ -571,7 +571,7 @@ const CustomRecordSelect=({endDate,startDate,title,isSlected=false,onClick})=>{
   }
   return(
     <ul className={`flex-col cursor-pointer justify-start gap-2 ${isSlected ?" border":" "} px-2 py-1 rounded-lg `} onClick={onClick}>
-            <li className='relative flex items-center   gap-2 capitalize'><PingDot/><p className='mt-[-5px]'>{title}</p></li>
+            <li className='relative flex items-center   gap-2 capitalize'><PingDot size={10}/><p className='mt-[-5px]'>{title}</p></li>
             <li className='text-[.6rem] flex justify-center'>{extactDate(startDate)}-{extactDate(endDate)}</li>
             </ul>
   )
@@ -579,7 +579,7 @@ const CustomRecordSelect=({endDate,startDate,title,isSlected=false,onClick})=>{
 const PingDot = ({ size = 10 }) => {
 
   return (
-    <span class={`relative flex size-[${size}px]`}>  <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-600 opacity-75"></span>  <span class={`relative inline-flex size-[${size}px] rounded-full bg-sky-500`}></span></span>
+    <span class={`relative flex size-[${size+"px"}] `}>  <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-600 opacity-75"></span>  <span class={`relative inline-flex size-[${size+"px"}] rounded-full bg-sky-500`}></span></span>
   )
 }
 
