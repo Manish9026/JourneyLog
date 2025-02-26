@@ -547,14 +547,15 @@ export const SingleDateField = memo(({ title, placeHolder = "Enter Date", classN
         value={{ startDate: (value), endDate: (value) }}
         onChange={(value) => onChange(value.startDate)}
         placeholder={placeHolder}
-        inputClassName="w-full px-4 py-2 border border-gray-300 bg-[#1e293b] rounded-md"
-        containerClassName="relative  min-w-full transition-height duration-500"
+        inputClassName="w-full text-slate-200 px-4 py-2 border border-gray-300 bg-[#1e293b] rounded-md"
+        containerClassName="relative text-gray-900  min-w-full transition-height  duration-500"
         popoverDirection={dateDirection}
         showShortcuts={false}  // Hides shortcuts (optional)
         showSingleCalendar={true}
-        toggleClassName={"absolute right-2 top-0 translate-y-1/2"}
-        // popupClassName={" bg-red-500 relative overflow-visible max-w-full max-h-[300px] transition-all ease-out duration-300  z-10 mt-[1px] text-sm lg:text-xs 2xl:text-sm mb-2.5 mt-2.5  translate-y-0 opacity-0 hidden"}
-        popupClassName={"max-h-[300px] min-w-full relative  transition-all duration-500 overflow-y-auto  hidden scrollHide"}
+        
+        toggleClassName={"absolute right-2 top-0 translate-y-1/2 text-sky-400"}
+
+        popupClassName={"  relative overflow-visible max-w-full max-h-[300px] transition-all ease-out duration-300  z-10 mt-[1px] text-sm lg:text-xs 2xl:text-sm mb-2.5 mt-2.5  translate-y-0 opacity-0 hidden"}
 
       />
     </span>
