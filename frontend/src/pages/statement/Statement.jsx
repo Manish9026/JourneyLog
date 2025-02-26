@@ -552,7 +552,7 @@ export const SingleDateField = memo(({ title, placeHolder = "Enter Date", classN
         popoverDirection={dateDirection}
         showShortcuts={false}  // Hides shortcuts (optional)
         showSingleCalendar={true}
-        
+
         toggleClassName={"absolute right-2 top-0 translate-y-1/2 text-sky-400"}
 
         popupClassName={"  relative overflow-visible max-w-full max-h-[300px] transition-all ease-out duration-300  z-10 mt-[1px] text-sm lg:text-xs 2xl:text-sm mb-2.5 mt-2.5  translate-y-0 opacity-0 hidden"}
@@ -579,7 +579,7 @@ const CustomRecordSelect=({endDate,startDate,title,isSlected=false,onClick})=>{
 const PingDot = ({ size = 10 }) => {
 
   return (
-    <span class={`relative flex size-[${size}px] `}>  <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-600 opacity-75"></span>  <span class={`relative inline-flex size-[${size}px] rounded-full bg-sky-500`}></span></span>
+    <span class={`relative flex size-[${size}px]`}>  <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-600 opacity-75"></span>  <span class={`relative inline-flex size-[${size}px] rounded-full bg-sky-500`}></span></span>
   )
 }
 

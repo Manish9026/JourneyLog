@@ -630,6 +630,8 @@ export class UserRoutes {
 
     static deleteTravelRecordsForCompany = async (req,res
       ) => {
+
+        
         try {
             const userId = req?.user?._id || null
             const { company: { cmpId },date: {startDate, endDate }} = req.body;
@@ -694,6 +696,21 @@ export class UserRoutes {
         }
 
     }  
+
+
+    // static updateUserIdByCompany = async (companyId, newUserId) => {
+    //     try {
+    //       const result = await userRouteModel.updateMany(
+    //         { "company.cmpId": companyId }, // Find documents where company.cmpId matches
+    //         { $set: { userId: new mongoose.Types.ObjectId(newUserId) } } // Update userId
+    //       );
+      
+    //       console.log("Update result:", result);
+    //       return result;
+    //     } catch (error) {
+    //       console.error("Error updating userId:", error);
+    //     }
+    //   };
     
 }
 
