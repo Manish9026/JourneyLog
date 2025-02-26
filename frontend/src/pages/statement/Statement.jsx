@@ -579,7 +579,7 @@ const CustomRecordSelect=({endDate,startDate,title,isSlected=false,onClick})=>{
 const PingDot = ({ size = 10 }) => {
 
   return (
-    <span class={`relative flex size-[${size+"px"}] `}>  <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-600 opacity-75"></span>  <span class={`relative inline-flex size-[${size+"px"}] rounded-full bg-sky-500`}></span></span>
+    <span className={`relative flex size-[${size+"px"}] `}>  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-600 opacity-75"></span>  <span  className={`relative inline-flex size-[${size+"px"}] rounded-full bg-sky-500`}></span></span>
   )
 }
 
