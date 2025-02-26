@@ -15,3 +15,6 @@ travelRoutes.get("/places",UserRoutes.searchPlace)
 // detail page routes
 travelRoutes.post("/add-company",authMiddleWare,UserRoutes.addCompany)
 travelRoutes.get("/all-details",authMiddleWare,UserRoutes.getDetails)
+
+travelRoutes.post("/delete-rocord-company",authMiddleWare,UserRoutes.deleteTravelRecordsForCompany)
+travelRoutes.get("/getTravelRecords",authMiddleWare,UserRoutes.getTravelRecords)

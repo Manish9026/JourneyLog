@@ -10,7 +10,7 @@ import { TravelReport } from '../../component/travel-report/TravelReport';
 import useReactHooks from '../../custom-hooks/useReactHooks';
 import { getStatements, sort } from '../../slices/statementSlice';
 import { BsDash } from 'react-icons/bs';
-import { setAlert, setDelStateData, setEditAlert, setEditData } from '../../slices/travelRouteSlice';
+import { deleteTravelRecords, getTravelRecord, setAlert, setDelStateData, setEditAlert, setEditData } from '../../slices/travelRouteSlice';
 import Popup from '../../component/popup/Popup';
 import Datepicker from 'react-tailwindcss-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
@@ -19,6 +19,7 @@ import { CiNoWaitingSign } from "react-icons/ci";
 import { MdAccountBalanceWallet, MdDeleteSweep, MdEdit, MdOutlineUpdate } from 'react-icons/md';
 import { LuIndianRupee } from 'react-icons/lu';
 import Lottie from "lottie-react";
+import { ImSpinner9 } from "react-icons/im";
 import { getSortMonthWithDate } from '../../utils/dataTransformation';
 import money from "../../assets/animations/money.json"
 import not_found from "../../assets/animations/notFound.json"
@@ -67,7 +68,7 @@ const Statement = () => {
 
   const AmountDisplay = useCallback(() => {
     return (
-      <span className=' flex justify-end w-full gap-1'>
+      <span className=' flex justify-end w-full items-center gap-1'>
 
 
 
@@ -87,20 +88,20 @@ const Statement = () => {
           </li>
 
         </ul>
-        <span className="size-[40px] center tertiary rounded-[5px] primary-font cursor-pointer" onClick={() =>deleteBoxRef?.current?.toggleActive()}><MdDeleteSweep /></span>
+        <span className="size-[40px] center tertiary rounded-[5px] primary-font cursor-pointer" onClick={() => deleteBoxRef?.current?.toggleActive()}><MdDeleteSweep /></span>
         <span className="size-[40px] center tertiary rounded-[5px] primary-font cursor-pointer" onClick={() => setIsSort(prev => prev == 1 ? -1 : 1)}><BiSortAlt2 /></span>
-       
+
         <span onClick={() => boxStatus()} className="size-[40px]  center tertiary rounded-[5px] primary-font cursor-pointer"><FaFilter /></span>
       </span>
     )
-  },[statement])
+  }, [statement])
   return (
     <div className='flex relative flex-col w-full primary-p h-full overflow-hidden '>
 
 
       <FilterPopup ref={filterBoxRef} company={searchValue} />
       <DeleteBox ref={deleteBoxRef} recentCompany={userInfo?.recentCompany} />
-     
+
       {printLoading && <span className='fixed top-0 left-0 z-10 w-full flex-col capitalize primary-font center h-full light-dark top-0 left-0'><div class="loader rounded-[5px]"></div> printing...</span>}
       <span className='flex search w-full flex-col  gap-1'>
         <span className='flex w-full gap-1 '>
@@ -253,21 +254,31 @@ const CardSkelton = () => {
   )
 }
 
-const DeleteBox=forwardRef(({recentCompany},ref)=>{
+const DeleteBox = forwardRef(({ recentCompany }, ref) => {
 
-  const [isActive,setIsActive]=useState(0);
+  const [isActive, setIsActive] = useState(0);
   const userInfo = useSelector(state => state.auth.userInfo);
-  const [formData,setFormData]=useState({
-    company:{
-      cmpName:"",
-      cmpId:""
+  const { deleteAllRecordsState:{loading, message, error,status},travelRecords } = useSelector(state => state.travelRoute);
+  const { dispatch } = useReactHooks();
+  const [selectDateOption, setSelectDateOption] = useState({
+    paid:1,
+    unpaid:0,
+    other:0,
+    recentSelection:"paid"
+
+  });
+  const [formData, setFormData] = useState({
+    company: {
+      cmpName: "",
+      cmpId: ""
     },
-    date:{
+    date: {
       startDate: Date.now,
       endDate: Date.now,
     },
 
   })
+
 
   useEffect(() => {
     if (userInfo?.company) {
@@ -275,57 +286,93 @@ const DeleteBox=forwardRef(({recentCompany},ref)=>{
       setFormData(prev => ({ ...prev, company: { cmpId: result?._id, cmpName: result?.cmpName } }))
 
     }
-  
+    // if(travelRecords?.data)
+    // setFormData(prev=>({...prev,date:{startDate:travelRecords?.data?.paid?.minDate,endDate:travelRecords?.data?.paid?.maxDate}}))
 
   }, [])
-  
 
+  useEffect(() => {
+    if(status=="success" || formData.company.cmpId)
+    dispatch(getTravelRecord({company:formData?.company}))
 
-  return(
-    <Popup ref={ref}  buttonToggle ={(value)=>{setDeleteBoxActive(value) }}  boxClass={`${ref?.current?.clientHeight} min-h-[300px] max-h-[600px] bg-slate-900 text-slate-100 relative  `} bodyClass={"w-full items-end  transition-height duration-500"}  >
-    <div className='flex flex-col  transition-height duration-500 gap-2 p-2 w-full h-full bg-slate-900 text-slate-100'>
+  }, [formData.company,status])
 
-      <span className='flex gap-2 pb-1 border-b items-center'>
-        <h3>Delete Statement</h3>
-      </span>
-      
-       <span onFocus={() => { setIsActive(1) }} className="flex   flex-col w-full placeholder:capitalize">
-                  <input type="text" value={formData?.company?.cmpName ?? ""} readOnly className="inputField" placeholder='choose company' />
-                  <span className={`w-full secondary-bg  relative z-[1]  ${isActive ? "max-h-[150px] opacity-100  px-2 py-1  " : "p-[0] max-h-[0px]  opacity-0 hidden "} transition-height duration-500 overflow-auto  flex flex-col gap-1   list-none`}>
-                    {
-      
-                      userInfo && Array.isArray(userInfo?.company) && userInfo?.company.length != 0 ?
-                        userInfo?.company.map((data, id) => {
-                          return (
-                            <li key={data?._id} className='border px-1 rounded-md center capitalize secondary-font cursor-pointer' onClick={() => { setFormData(prev => ({ ...prev, company: { cmpName: data?.cmpName, cmpId: data?._id } })); setIsActive(0) }}>{data?.cmpName}</li>
-                          )
-                        }) :
-                        <span className="capitalize w-full min-h-[100px] center flex-col">
-                          <p className='tertiary-font center'> company dosen't exist in own record</p>
-                          <p className='center secondary-font'> please add company details after that fill entry</p>
-                          <button onClick={() => navigate("/detail")} className='flex w-full gap-2 capitalize  cursor-pointer center max-w-[150px] mt-2 primary-font bg-sky-400 flex-1 max-h-[40px] rounded-md'><FaPlus /> <p>add</p></button>
-                        </span>
-                    }</span>
-                </span>
+  useEffect(() => {
 
+    
+    if(selectDateOption?.recentSelection=="paid" || selectDateOption?.recentSelection=="unpaid" )
+      setFormData(prev=>({...prev,date:{startDate:travelRecords?.data?.[selectDateOption?.recentSelection]?.minDate,endDate:travelRecords?.data?.[selectDateOption?.recentSelection]?.maxDate}}))
+    else
+      setFormData(prev=>({...prev,date:{startDate:null,endDate:null}}))
+    
+  }, [selectDateOption,formData.company])
 
-       <span className="flex gap-2 flex-wrap">
-        {/* <DateField /> */}
-      <SingleDateField placeHolder="Start Date" onChange={(value)=>{console.log(value); setFormData((prev) => ({ ...prev, date: {startDate:value,endDate:prev?.date?.endDate} }))}} value={formData?.date?.startDate} />
- 
-      <SingleDateField placeHolder="End Date" onChange={(value)=>{console.log(value); setFormData((prev) => ({ ...prev, date: {endDate:value,startDate:prev?.date?.startDate} }))}} value={formData?.date?.endDate} />
+const onSelectDate=(type)=>{
+  setSelectDateOption(prev=>({...prev,recentSelection:type,[prev.recentSelection]:0,[type]:1}))
+    
+}
 
+  return (
+    <Popup ref={ref} buttonToggle={(value) => { setDeleteBoxActive(value) }} boxClass={`${ref?.current?.clientHeight} min-h-[300px] max-h-[600px] bg-slate-900 text-slate-100 relative overflow-hidden md:justify-center  md:max-h-[400px]  md:min-w-[400px] md:rounded-xl`} bodyClass={"w-full items-end md:items-center transition-height duration-500"}  >
+      <div className='flex flex-col  transition-height duration-500 gap-2 p-2 w-full h-full bg-slate-900 text-slate-100'>
 
+        <span className='flex gap-2 pb-1 border-b items-center'>
+          <h3>Delete Statement</h3>
+        </span>
+
+        <span className=" justify-start flex flex-col gap-2">
+          <h6 className=' capitalize'>record</h6>
+          <span className='relative flex gap-5 flex-wrap w-full'>
+          
+
+          <CustomRecordSelect isSlected={selectDateOption?.paid} onClick={()=>{onSelectDate("paid")}} startDate={travelRecords?.data?.paid?.minDate} endDate={travelRecords?.data?.paid?.maxDate} title={"paid"}/>
+          <CustomRecordSelect startDate={travelRecords?.data?.unpaid?.minDate} isSlected={selectDateOption?.unpaid} endDate={travelRecords?.data?.unpaid?.maxDate} onClick={()=>{onSelectDate("unpaid")}} title={"Unpaid"}/>
+
+          <CustomRecordSelect startDate={null} isSlected={selectDateOption?.other} endDate={null} onClick={()=>{onSelectDate("other")}} title={"other"}/>
+       
+          </span>
         
 
+        </span>
 
-        </span>         
-      <span className='flex gap-2 items-center'>
+        <span onFocus={() => { setIsActive(1) }} className="flex   flex-col w-full placeholder:capitalize">
+          <input type="text" value={formData?.company?.cmpName ?? ""} readOnly className="inputField" placeholder='choose company' />
+          <span className={`w-full secondary-bg  relative z-[1]  ${isActive ? "max-h-[150px] opacity-100  px-2 py-1  " : "p-[0] max-h-[0px]  opacity-0 hidden "} transition-height duration-500 overflow-auto  flex flex-col gap-1   list-none`}>
+            {
 
-      <SlideButton status='success' onConfirm={()=>alert("confirmed")}/>
-      </span>
-    </div>
-  </Popup>
+              userInfo && Array.isArray(userInfo?.company) && userInfo?.company.length != 0 ?
+                userInfo?.company.map((data, id) => {
+                  return (
+                    <li key={data?._id} className='border px-1 rounded-md center capitalize secondary-font cursor-pointer' onClick={() => { setFormData(prev => ({ ...prev, company: { cmpName: data?.cmpName, cmpId: data?._id } })); setIsActive(0) }}>{data?.cmpName}</li>
+                  )
+                }) :
+                <span className="capitalize w-full min-h-[100px] center flex-col">
+                  <p className='tertiary-font center'> company dosen't exist in own record</p>
+                  <p className='center secondary-font'> please add company details after that fill entry</p>
+                  <button onClick={() => navigate("/detail")} className='flex w-full gap-2 capitalize  cursor-pointer center max-w-[150px] mt-2 primary-font bg-sky-400 flex-1 max-h-[40px] rounded-md'><FaPlus /> <p>add</p></button>
+                </span>
+            }</span>
+        </span>
+
+
+        <span className="flex gap-2 flex-wrap">
+          {/* <DateField /> */}
+          <SingleDateField placeHolder="Start Date" onChange={(value) => { console.log(value); setFormData((prev) => ({ ...prev, date: { startDate: value, endDate: prev?.date?.endDate } })) }} value={formData?.date?.startDate} />
+
+          <SingleDateField placeHolder="End Date" onChange={(value) => { console.log(value); setFormData((prev) => ({ ...prev, date: { endDate: value, startDate: prev?.date?.startDate } })) }} value={formData?.date?.endDate} />
+
+
+
+
+
+        </span>
+        <span className='flex gap-2 items-center md:justify-center'>
+
+          <SlideButton status={loading ? "wait" : 'success'} onConfirm={() => dispatch(deleteTravelRecords(formData))} />
+
+        </span>
+      </div>
+    </Popup>
   )
 })
 
@@ -450,10 +497,10 @@ const FilterPopup = forwardRef(({ company }, ref) => {
   }, [filterNav, filterData.date, filterData.paymentStatus, filterData.company])
   return (
 
-    <Popup flexibleBox={[filterData?.date]} bodyClass={"w-full "} ref={ref} boxClass='min-h-[200px]  bg-slate-900 text-slate-100'>
+    <Popup bodyClass={"w-full md:items-center"} ref={ref} boxClass='min-h-[200px] md:max-h-[400px]  md:min-w-[400px] md:rounded-xl  bg-slate-900 text-slate-100'>
       <div className='w-full tansition-all duration-700 max-h-[600px] p-1 flex-col  flex  h-full flex-1 '>
-        <div className="p-1 border-b">Filter </div>
-        <div className='flex  flex-1   py-1'>
+        <div className="p-1 border-b md:p-2">Filter </div>
+        <div className='flex  flex-1   py-1 md:px-2'>
           <ul className='bg-sky-200/20 primary-font flex flex-col items-start py-2 capitalize rounded-[5px] min-h-full max-w-[100px] gap-1'>
             {
               [["date range", "date"], ["amount", "amount"], ['status', 'status',], ["company", "company"]].map((navTitle, id) => {
@@ -490,26 +537,50 @@ const FilterPopup = forwardRef(({ company }, ref) => {
 }
 )
 
-export const SingleDateField = memo(({ title,placeHolder="Enter Date", className,popupClass, value, onChange,dateDirection="down" }) => {
+export const SingleDateField = memo(({ title, placeHolder = "Enter Date", className, popupClass, value, onChange, dateDirection = "down" }) => {
   return (
-      <span className={`min-w-[250px] max-w-[500px] flex-1  ${className}`}>
-          <Title title={title} className={"px-2"} />
-          <Datepicker
-             useRange={false}
-             asSingle={true}
-            value={{startDate:(value) ,endDate:(value)}}
-            onChange={(value)=>onChange(value.startDate)}
-            placeholder={placeHolder}
-            inputClassName="w-full px-4 py-2 border border-gray-300 bg-[#1e293b] rounded-md"
-            containerClassName="relative  max-w-full transition-height duration-500"
-            popoverDirection={dateDirection}
-            showShortcuts={false}  // Hides shortcuts (optional)
-            showSingleCalendar={true}
-            // popupClassName={" bg-red-500 relative overflow-visible max-w-full max-h-[300px] transition-all ease-out duration-300  z-10 mt-[1px] text-sm lg:text-xs 2xl:text-sm mb-2.5 mt-2.5  translate-y-0 opacity-0 hidden"}
-          popupClassName={"max-h-[300px] relative  transition-all duration-500 overflow-auto hidden"}
-         
-          />
-      </span>
+    <span className={`min-w-[250px]  md:min-w-[300px] max-w-[500px] flex-1  ${className}`}>
+      <Title title={title} className={"px-2"} />
+      <Datepicker
+        useRange={false}
+        asSingle={true}
+        value={{ startDate: (value), endDate: (value) }}
+        onChange={(value) => onChange(value.startDate)}
+        placeholder={placeHolder}
+        inputClassName="w-full px-4 py-2 border border-gray-300 bg-[#1e293b] rounded-md"
+        containerClassName="relative  min-w-full transition-height duration-500"
+        popoverDirection={dateDirection}
+        showShortcuts={false}  // Hides shortcuts (optional)
+        showSingleCalendar={true}
+        toggleClassName={"absolute right-2 top-0 translate-y-1/2"}
+        // popupClassName={" bg-red-500 relative overflow-visible max-w-full max-h-[300px] transition-all ease-out duration-300  z-10 mt-[1px] text-sm lg:text-xs 2xl:text-sm mb-2.5 mt-2.5  translate-y-0 opacity-0 hidden"}
+        popupClassName={"max-h-[300px] min-w-full relative  transition-all duration-500 overflow-y-auto  hidden scrollHide"}
+
+      />
+    </span>
   )
 })
+
+const CustomRecordSelect=({endDate,startDate,title,isSlected=false,onClick})=>{
+
+  const extactDate=(date)=>{
+    if(!date)
+      return "?"
+    return new Date(date).toLocaleDateString()
+  }
+  return(
+    <ul className={`flex-col cursor-pointer justify-start gap-2 ${isSlected ?" border":" "} px-2 py-1 rounded-lg `} onClick={onClick}>
+            <li className='relative flex items-center   gap-2 capitalize'><PingDot/><p className='mt-[-5px]'>{title}</p></li>
+            <li className='text-[.6rem] flex justify-center'>{extactDate(startDate)}-{extactDate(endDate)}</li>
+            </ul>
+  )
+}
+const PingDot = ({ size = 10 }) => {
+
+  return (
+    <span class={`relative flex size-[${size}px] `}>  <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-600 opacity-75"></span>  <span class={`relative inline-flex size-[${size}px] rounded-full bg-sky-500`}></span></span>
+  )
+}
+
+
 export default Statement

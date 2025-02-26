@@ -90,6 +90,36 @@ export const updateTravelRoute=createAsyncThunk("updateTravelRoute",async(data,{
             alert(err)
         })
     })
+
+    export const deleteTravelRecords=createAsyncThunk("deleteTravelRecords",async(data,{dispatch})=>{
+        console.log(data,"data");
+        
+            return await axios.post("/travel/delete-rocord-company",data,{withCredentials:true}).then((res)=>{
+            
+            urlReloader({response:res.data,dispatch});
+        
+            return res.data
+            }).catch((err)=>{
+                console.log(err);
+                
+                alert(err)
+            })
+        })
+
+    export const getTravelRecord=createAsyncThunk("getTravelRecord",async(data,{dispatch})=>{
+            console.log(data,"data");
+            
+                return await axios.get("/travel/getTravelRecords",{withCredentials:true,params:data}).then((res)=>{
+                
+                urlReloader({response:res.data,dispatch,messageAllow:false});
+            
+                return res.data
+                }).catch((err)=>{
+                    console.log(err);
+                    
+                    alert(err)
+                })
+            })  
 const travelRouteSlice=createSlice({
     name:"travelRoute",
     initialState:{
@@ -111,6 +141,16 @@ const travelRouteSlice=createSlice({
             alert:false,
             loading:false,
             data:{},
+        },
+        deleteAllRecordsState:{
+            message:"",
+            loading:false,
+            error:"",
+            status:""
+        },
+        travelRecords:{
+            loading:false,
+            data:[]
         },
         popupType:""
     },
@@ -170,6 +210,29 @@ const travelRouteSlice=createSlice({
             addRoute.srhResult.data=payload?.data || [];
 
         })
+
+        builder.addCase(deleteTravelRecords.pending,({deleteAllRecordsState})=>{
+            deleteAllRecordsState.loading=true;
+        })
+        builder.addCase(deleteTravelRecords.fulfilled,({deleteAllRecordsState},{payload})=>{
+            deleteAllRecordsState.loading=false;
+            deleteAllRecordsState.message=payload?.message || "";
+            deleteAllRecordsState.error=payload?.error || "";
+            deleteAllRecordsState.status=payload?.status
+        })
+
+        builder.addCase(getTravelRecord.pending,({travelRecords})=>{        
+            travelRecords.loading=true;
+            
+        })
+
+        builder.addCase(getTravelRecord.fulfilled,({travelRecords},{payload})=>{
+            travelRecords.loading=false;
+            travelRecords.data=payload?.data || [];
+
+        })
+
+
     }
 })
 export const {setDelStateData,setAlert,setEditAlert,setEditData}=travelRouteSlice.actions;

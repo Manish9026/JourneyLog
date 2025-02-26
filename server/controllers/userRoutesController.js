@@ -2,6 +2,7 @@ import { badRes, convertToTimeZone, endingDate, goodRes, isNotEmpty, startingDat
 import { userRouteModel } from "../models/userRoutesModel.js"
 import { placeModel } from "../models/placesModel.js";
 import { userModel } from "../models/authModel.js";
+import mongoose from "mongoose";
 
 export class UserRoutes {
 
@@ -627,17 +628,72 @@ export class UserRoutes {
         }
     };
 
-    static deleteRouteWithRange=async(req,res)=>{
+    static deleteTravelRecordsForCompany = async (req,res
+      ) => {
+        try {
+            const userId = req?.user?._id || null
+            const { company: { cmpId },date: {startDate, endDate }} = req.body;
+
+            if(!isNotEmpty(cmpId))
+                 return badRes({ res, message: `please choose company!` });
+            if(!(isNotEmpty(startDate) && isNotEmpty(endDate)))
+                return badRes({ res, message: `date not entered yet` });
+
+          const result = await userRouteModel.deleteMany(
+            { $and: [ { userId }, { "company.cmpId": cmpId },{ createdAt: { $gte: startingDate(startDate), $lte: endingDate(endDate) }}] }, 
+          );
+
+            if (result.deletedCount > 0) {
+                return goodRes({ res, message: `${result?.deletedCount} record deleted` });
+            } else {
+                return badRes({ res, message: "no records found" });
+            }
+
+        } catch (error) {
+            console.error("Error deleting records:", error);
+            return badRes({ res, message: "try after sometime" });
+
+        }
+      };
+
+    static getTravelRecords = async (req, res) => {
 
         try {
-            const {cmpId,range}=req.body;
+            const userId = req?.user?._id || null
+            const { company: { cmpId }} = req.query;
+
+
+            if(!isNotEmpty(cmpId))
+                return goodRes({ res, message: `please choose company!` });
+            const result = await userRouteModel.aggregate([
+                {
+                  $match: {
+                    userId: new mongoose.Types.ObjectId(userId), // Filter by userId
+                    "company.cmpId": cmpId, // Filter by companyId
+                  },
+                },
+                { $unwind: "$travel" }, // Split travel array into separate documents
+                {
+                    $group: {
+                      _id: "$travel.payStatus", // Group by payment status (true/
+                      minDate: { $min: "$travel.date" }, // Get earliest date
+                      maxDate: { $max: "$travel.date" }, // Get latest date
+                    },
+                  },
+              ]);
+              const paid = result.find((r) => r._id === true) || { minDate: null, maxDate: null };
+              const unpaid = result.find((r) => r._id === false) || { minDate: null, maxDate: null };
+
+              return goodRes({ res, message: `please choose company!`,data:{paid,unpaid} });
 
             
         } catch (error) {
-            
-        }
-    }
 
+            console.log(error);
+            return badRes({ res, message: "internal error" })
+        }
+
+    }  
     
 }
 

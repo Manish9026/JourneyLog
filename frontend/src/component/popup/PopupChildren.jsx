@@ -120,8 +120,8 @@ const PopupChildren = () => {
     },[editState?.data]
     )
     return (
-        <Popup ref={boxRef}  boxClass=' min-h-[300px] max-h-[600px] bg-slate-900 text-slate-900 relative  rounded-t-2xl  overflow-hidden  min-h-[300px]' bodyClass={"w-full items-end  transition-height duration-500"} >
-          { popupType=="edit" && <Editbox />}
+        <Popup ref={boxRef}  boxClass=' min-h-[300px] max-h-[600px] bg-slate-900 text-slate-900 relative  rounded-t-2xl  overflow-hidden  min-h-[300px]  md:max-h-[400px]  md:min-w-[400px] md:rounded-xl' bodyClass={"w-full items-end md:items-center transition-height duration-500"} >
+          {popupType=="edit" && <Editbox />}
         {popupType=="del" && <DelAlert/>}
 
         </Popup>
