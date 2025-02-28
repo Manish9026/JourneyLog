@@ -48,20 +48,32 @@ const dealerSchemaWithValidation = Joi.object({
     static getDealerDetail=async(req,res)=>{
         try {
             const userId=req?.user?._id;
-            const { shopName, ownerName, shopAddress,cmpId } = req.query;
-    
-            console.log(req.query);
-            
+            const { shopName, shopOwner, area,cmpId,query,type } = req.query;
             // Build a dynamic filter object
+            console.log(query,type);
+            
             let filter = {};
             if(userId) filter.userId=userId;
             if (shopName) filter.shopName = { $regex: shopName, $options: 'i' }; // Case-insensitive search
-            if (ownerName) filter.ownerName = { $regex: ownerName, $options: 'i' };
-            if (shopAddress) filter.shopAddress = { $regex: shopAddress, $options: 'i' };
+            if (shopOwner) filter.shopOwner = { $regex: shopOwner, $options: 'i' };
+            if (area) filter.area = { $regex: shopAddress, $options: 'i' };
             if(cmpId) filter['company.cmpId']=cmpId;
             console.log(filter); 
-            
-            const dealerData = await dealerModel.find(filter);
+            let dealerData={};
+            if(type=="multipleSrh"){
+             dealerData = await dealerModel.find({userId,
+                $or: [
+                    { shopName: { $regex: query, $options: "i" } }, // Case-insensitive search for shopName
+                    { shopOwner: { $regex: query, $options: "i" } }, // Case-insensitive search for shopOwner
+                    { area: { $regex: query, $options: "i" } } // Case-insensitive search for area
+                ]
+            });
+        console.log("search",dealerData);
+        
+        }
+            else
+            dealerData = await dealerModel.find(filter);
+
             
             // res.status(200).json({ success: true, count: shops.length, data: shops });
             goodRes({res,message:"",data:{records:dealerData,count: dealerData.length}})

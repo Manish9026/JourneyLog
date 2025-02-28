@@ -8,7 +8,7 @@ export const dealerApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: url ,credentials:'include' }),
   endpoints: (builder) => ({
     getDealerDetails: builder.query({
-      query: ({cmpId,shopName, shopOwner, shopAddress}={}) => {
+      query: ({cmpId,shopName, shopOwner, shopAddress,type,query}={}) => {
         console.log(cmpId,shopName, shopOwner, shopAddress);
         
         const params = new URLSearchParams();
@@ -16,6 +16,9 @@ export const dealerApi = createApi({
       if (shopOwner) params.append('shopOwner', shopOwner);
       if (shopAddress) params.append('shopAddress', shopAddress);
       if (cmpId) params.append('cmpId', cmpId);
+      if (query) params.append('query', query);
+      if (type) params.append('type', type);
+
       return `/dealer/dealerRecords?${params.toString()}`}
       
       

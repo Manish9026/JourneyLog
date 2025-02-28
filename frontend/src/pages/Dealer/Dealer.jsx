@@ -57,7 +57,7 @@ const Statement=memo(({company})=>{
     cmpId:company?.cmpId,
 });
   const [refetch, { data, error, isLoading }] = useLazyGetDealerDetailsQuery(filters)
-  console.log(data,"data");
+  const [srhParam,setSrhParam]=useState("")
   
   useEffect(()=>{
     if(company?.cmpId){
@@ -65,10 +65,33 @@ const Statement=memo(({company})=>{
     refetch({cmpId:company?.cmpId});}
   },[company])
 
-  const onFetch=()=>{
- 
+  useEffect(()=>{
+    const timeout =setTimeout(() => {
+
+      if(isNotEmpty(srhParam)){
+
+        refetch({type:"multipleSrh",query:srhParam})
+
+
+      }else{
+        refetch({cmpId:filters.cmpId})
+      }
+      
+    }, 500);
+   
+    return ()=>clearTimeout(timeout)
+
+  },[srhParam])
+
+  useEffect(()=>{
+
+    console.log("isloading",isLoading);
     
-refetch()
+  },[isLoading])
+  const onFetch=(e)=>{
+    e.preventDefault()
+    refetch({type:"multipleSrh",query:srhParam})
+
   }
   return(
     <span className='flex flex-col gap-2 pb-20'>
@@ -83,8 +106,8 @@ refetch()
                 <path stroke="currentColor" stroke-linecap="round" strokeLinejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
             </svg> */}
         </div>
-        <input type="search" id="default-search" className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search Mockups, Logos..." required />
-        <button onClick={()=>onFetch()} type="submit" className="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
+        <input onChange={(e)=>setSrhParam(e.target.value)} type="search" id="default-search" className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search Mockups, Logos..." required />
+        <button onClick={(e)=>onFetch(e)} type="submit" className="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
     </div>
 </form>
 
@@ -169,7 +192,7 @@ refetch()
           }):
 
 
-         <span className='min-w-100 min-h-20 center min-w-full capitalize center '>
+       isLoading? <tr   className='w-4 p-4 center w-full text-center'><td colSpan={2} className='center  text-center' >loading....</td></tr>:  <span className='min-w-100 min-h-20 center min-w-full capitalize center '>
           <p className='mx-auto absolute left-1/2 translate-1/2 transform'>record not found</p>
          </span>
           }
