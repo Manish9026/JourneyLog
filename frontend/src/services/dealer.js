@@ -9,7 +9,7 @@ export const dealerApi = createApi({
   endpoints: (builder) => ({
     getDealerDetails: builder.query({
       query: ({cmpId,shopName, shopOwner, shopAddress,type,query}={}) => {
-        console.log(cmpId,shopName, shopOwner, shopAddress,query,type);
+        // console.log(cmpId,shopName, shopOwner, shopAddress,query,type);
         
         const params = new URLSearchParams();
       if (shopName) params.append('shopName', shopName);

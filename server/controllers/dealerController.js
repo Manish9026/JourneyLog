@@ -3,6 +3,7 @@ import  Joi from 'joi';
 import { goodRes } from "./index.js";
 import { UserRoutes } from "./userRoutesController.js";
 import { placeModel } from "../models/placesModel.js";
+import { exportAndSendEmail } from "../utils/exportJSONToEXCEL.js";
 const dealerSchemaWithValidation = Joi.object({
     shopName: Joi.string().trim().min(3).max(50).required(),
     shopOwner: Joi.string().trim().min(3).max(50),
@@ -48,7 +49,7 @@ const dealerSchemaWithValidation = Joi.object({
     static getDealerDetail=async(req,res)=>{
         try {
             const userId=req?.user?._id;
-            const { shopName, shopOwner, area,cmpId,query,type } = req.query;
+            const { shopName, shopOwner, area,cmpId,query,type ,isPrinted} = req.query;
             // Build a dynamic filter object
             console.log(query,type);
             
@@ -68,13 +69,29 @@ const dealerSchemaWithValidation = Joi.object({
                     { area: { $regex: query, $options: "i" } } // Case-insensitive search for area
                 ]
             });
-        console.log("search",dealerData);
+        // console.log("search",dealerData);
         
-        }
+        }  
             else
-            dealerData = await dealerModel.find(filter).sort({createdAt:-1});
+            // dealerData = await dealerModel.find(filter).sort({area:1});
+            dealerData = await dealerModel.aggregate([
+                { $match:filter}, // ✅ Filter by area (case-insensitive)
+                { $addFields: { lowerArea: { $toLower: "$area" } } }, // ✅ Convert area to lowercase
+                { $sort: { lowerArea: 1 } },
+                {$project:{
+                    lowerArea:0,
+                    // "company.cmpId":0,
+                    // "company._id":0,
 
-            
+                }} // ✅ Sort by lowercase area
+            ])
+
+            console.log(dealerData);
+            if(isPrinted){
+
+                // await exportAndSendEmail("exportAndSendEmail",dealerData)
+               return  goodRes({res,message:"File send on your email!"})
+            }
             // res.status(200).json({ success: true, count: shops.length, data: shops });
             goodRes({res,message:"",data:{records:dealerData,count: dealerData.length}})
         } catch (error) {

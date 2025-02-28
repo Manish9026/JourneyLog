@@ -19,12 +19,12 @@
 }
 // body column
 .col2{
-    @apply px-6 py-4 min-w-[150px];
+    @apply px-6 py-4 min-w-[150px] capitalize;
 
 }
 // hearer column
 .col3{
-    @apply px-6 py-3 ;
+    @apply px-6 py-3 capitalize;
 }
 .col4{
 

@@ -26,8 +26,10 @@
     "luxon": "^3.5.0",
     "moment-timezone": "^0.5.46",
     "mongoose": "^8.6.2",
+    "nodemailer": "^6.10.0",
     "nodemon": "^3.1.4",
-    "server": "file:"
+    "server": "file:",
+    "xlsx": "^0.18.5"
   },
   "description": "",
   "devDependencies": {

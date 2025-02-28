@@ -1,6 +1,6 @@
 import React, { memo, useCallback, useEffect, useState } from 'react'
 import useReactHooks from '../../custom-hooks/useReactHooks'
-import { FaIndianRupeeSign, FaPlus } from 'react-icons/fa6'
+import { FaIndianRupeeSign, FaPlus, FaPrint, FaXmark } from 'react-icons/fa6'
 import { FaArrowRight, FaSearch } from 'react-icons/fa'
 import { BsDash } from 'react-icons/bs'
 import { IoIosArrowUp } from 'react-icons/io'
@@ -14,8 +14,9 @@ import axios from 'axios'
 import { url } from '../../utils/url'
 import { SrhContainer } from '../travelRoute.jsx/TravelRoute'
 import { useGetDealerDetailsQuery, useLazyGetDealerDetailsQuery } from '../../services/dealer'
-
-
+import Lottie from 'lottie-react'
+import print from '../../assets/animations/print.json'
+import { exportExcel } from '../../utils/printExcelFile'
 const Dealer = () => {
  const [company,setCompany]=useState({cmpName:"",cmpId:""})
 
@@ -39,7 +40,7 @@ const Dealer = () => {
 
       showclassName=""
       hideclassName="px-[0px]"  
-      active={true}      
+      active={false}      
 
       />
       <Statement company={company}/>
@@ -69,8 +70,6 @@ const Statement=memo(({company})=>{
     const timeout =setTimeout(() => {
 
       if(isNotEmpty(srhParam)){
-        console.log(srhParam,"srhParam");
-        
         refetch({type:"multipleSrh",query:srhParam})
 
 
@@ -84,11 +83,6 @@ const Statement=memo(({company})=>{
 
   },[srhParam])
 
-  useEffect(()=>{
-
-    console.log("isloading",isLoading);
-    
-  },[isLoading])
   const onFetch=(e)=>{
     e.preventDefault();
     refetch({type:"multipleSrh",query:srhParam})
@@ -107,8 +101,18 @@ const Statement=memo(({company})=>{
                 <path stroke="currentColor" stroke-linecap="round" strokeLinejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
             </svg> */}
         </div>
-        <input onChange={(e)=>setSrhParam(e.target.value)} value={srhParam} type="search" id="default-search" className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search shopOwner,Area, shopName..." required />
-        <button onClick={onFetch} type="submit" className="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
+        <input onChange={(e)=>setSrhParam(e.target.value)} value={srhParam} type="search" id="default-search" className=" block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search shopOwner,Area, shopName..." required />
+        
+        <span  className="text-white absolute end-2.5 bottom-2.5 gap-1 flex items-center justify-end min-w-[200px] min-h-[20px]">
+       {isNotEmpty(srhParam) && <FaXmark className='
+       cursor-pointer ' onClick={()=>setSrhParam("")}/>}
+        {/* <button onClick={onFetch} type="submit" className="text-white  bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button> */}
+
+        <span onClick={()=>exportExcel(data?.data?.records)} className="center top-1 cursor-pointer fadeIn  px-4 py-2.5 rounded-md min-w-[50px] min-h-[40px]  relative  overflow-hidden border  ">
+
+        <LottieAnimation loop={false} file={print} className={"ml-3 mt-2"}/>
+        </span>
+        </span>
     </div>
 </form>
 
@@ -127,7 +131,7 @@ const Statement=memo(({company})=>{
                     </span>
                 </th>
                 <th scope="col" className="col3">
-                    Shop name & Owner
+                    Shop name & Owner ({data?.data?.count})
                 </th>
                 <th scope="col" className="col3">
                     area
@@ -410,6 +414,12 @@ const DropDownContainer = memo(({ hideChildren,hideClass,showClass,showChildren,
   )
 })
 
+
+const LottieAnimation=({file,className,loop})=>{
+  return(
+    <Lottie  className= {`${className} absolute size-[200px]`} animationData={file} loop={loop} />
+  )
+}
 
 
 

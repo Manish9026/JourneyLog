@@ -13,10 +13,8 @@ function isNotEmpty(value) {
     return true;
 }
 const isMobNo = (value) => {
-    console.log("Checking:", value);
     return /^[0-9]{10}$/.test(String(value).trim());
 };
 
 export {isNotEmpty,isMobNo}
 export default {isNotEmpty,isMobNo}
-console.log(isMobNo("843578575h"))
