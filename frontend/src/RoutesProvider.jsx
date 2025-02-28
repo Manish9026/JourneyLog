@@ -26,6 +26,7 @@ import { getDetails } from './slices/detailSlice.js'
 import { recentPayment } from './slices/paymentSlice.js'
 import { getTravelDetail } from './slices/homeSlice.js'
 import Lottie from 'lottie-react'
+import Dealer from './pages/Dealer/Dealer.jsx'
 
 function RoutesProvider() {
 
@@ -74,6 +75,14 @@ const dispatch=useDispatch();
       element:<Payment/>,
       loader:()=>{
         dispatch(recentPayment())
+        return null
+      }
+    },
+    {
+      path:"dealer",
+      element:<Dealer/>,
+      loader:()=>{
+        // dispatch()
         return null
       }
     },{

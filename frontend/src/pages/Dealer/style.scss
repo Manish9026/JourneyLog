@@ -1,0 +1,15 @@
+.page .inputField{
+    box-shadow: inset 1px 1px 1px 0px rgb(146, 194, 211),inset  -1px -1px 1px 0px rgb(146, 194, 211) ;
+}
+
+.fadeIn{
+    &:active{
+        transition: all ease 1s;
+        scale:7.5;
+        will-change: auto;
+        // transform-origin: center;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+    }
+}

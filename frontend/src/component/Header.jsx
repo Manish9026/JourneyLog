@@ -60,7 +60,7 @@ const Header = () => {
    </div>
    <div className={`${isNavActive? "max-h-40 opacity-100" : "max-h-0 opacity-0"} transition-all duration-500 overflow-hidden flex flex-col list-none secondary-font capitalize`}>
    {
-    [["home","/",<AiFillHome />],["add","/add-routes",<MdPostAdd />],["statements","/statement",<HiDocumentMagnifyingGlass />],["detail","/detail",<BiSolidUserDetail />],["payment",'/payment',<MdPayments />]].map((title,id)=>{
+    [["home","/",<AiFillHome />],["add","/add-routes",<MdPostAdd />],["statements","/statement",<HiDocumentMagnifyingGlass />],["detail","/detail",<BiSolidUserDetail />],["payment",'/payment',<MdPayments />],["Dealer",'/dealer',<MdPayments />]].map((title,id)=>{
         return (
             <NavLink to={title[1]} key={id} className={isActive=>isActive?.isActive?"NavActive":"NavDeActive"} end>
 

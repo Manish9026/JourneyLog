@@ -144,10 +144,14 @@ body {
             // left: 50%;
             // transform: translate(-50%);
             border-radius: 10px;
-            background: #101029c2;
+            background: #101029;
             color: white;
             text-transform: capitalize;
         }
+
+    }
+    .Toastify__close-button{
+        color: #e4fbff;
 
     }
 }

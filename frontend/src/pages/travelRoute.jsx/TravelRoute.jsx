@@ -264,7 +264,7 @@ import { IoIosArrowUp } from "react-icons/io";
 import Switch from '../../component/UI component/Switch';
 import { DateField } from '../Payment/Payment';
 import { BsDash } from "react-icons/bs";
-const SrhContainer = memo(({ srhParam, setValue, close }) => {
+export const SrhContainer = memo(({ srhParam, setValue, close }) => {
   const { dispatch } = useReactHooks();
   const { loading, data } = useSelector(state => state.travelRoute.addRoute.srhResult);
   useEffect(() => {
@@ -283,7 +283,7 @@ const SrhContainer = memo(({ srhParam, setValue, close }) => {
       <span onClick={() => close()} className='absolute top-[5px] cursor-pointer right-[10px] size-[20px] light-bg center rounded-full '><FaXmark /></span>
       {loading?<span className='  center w-full secondary-font '>Loading...</span>:Array.isArray(data) && data.length != 0 ? data.map((place, id) => {
         return (
-          <li onClick={() => setValue(place?.name)} className='center bg-sky-200 min-w-[100px] opacity-80 cursor-pointer p-2 rounded-md capitalize  max-h-[50px] '>{place.name}</li>
+          <li key={place?._id} onClick={() => {setValue(place?.name);close()}} className='center bg-sky-200 min-w-[100px] opacity-80 cursor-pointer p-2 rounded-md capitalize  max-h-[50px] '>{place.name}</li>
         )
       }) : <div className='flex flex-col w-full gap-2 capitalize primary-font center'><p>place not exist in own record</p> <p className='tertiary-font'>please try manual</p>
       </div>}
