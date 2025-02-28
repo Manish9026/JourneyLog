@@ -72,7 +72,7 @@ const dealerSchemaWithValidation = Joi.object({
         
         }
             else
-            dealerData = await dealerModel.find(filter);
+            dealerData = await dealerModel.find(filter).sort({createdAt:-1});
 
             
             // res.status(200).json({ success: true, count: shops.length, data: shops });

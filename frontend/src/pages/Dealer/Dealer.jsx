@@ -69,7 +69,8 @@ const Statement=memo(({company})=>{
     const timeout =setTimeout(() => {
 
       if(isNotEmpty(srhParam)){
-
+        console.log(srhParam,"srhParam");
+        
         refetch({type:"multipleSrh",query:srhParam})
 
 
@@ -89,7 +90,7 @@ const Statement=memo(({company})=>{
     
   },[isLoading])
   const onFetch=(e)=>{
-    e.preventDefault()
+    e.preventDefault();
     refetch({type:"multipleSrh",query:srhParam})
 
   }
@@ -107,7 +108,7 @@ const Statement=memo(({company})=>{
             </svg> */}
         </div>
         <input onChange={(e)=>setSrhParam(e.target.value)} value={srhParam} type="search" id="default-search" className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search shopOwner,Area, shopName..." required />
-        <button onClick={(e)=>onFetch(e)} type="submit" className="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
+        <button onClick={onFetch} type="submit" className="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
     </div>
 </form>
 
@@ -234,7 +235,7 @@ const DealerForm=memo(( {company})=>{
     if(name=="mobNo" ){
 
       if(!/^\d*$/.test(value) || value.length>10){
-       return setErrorLog(prev=>({...prev,mobNoError:{...prev.mobNoError,message:"Mobile number must be 10 digits and contain only numbersr",status:true}}));
+       return setErrorLog(prev=>({...prev,mobNoError:{...prev.mobNoError,message:"Mobile number must be 10 digits and contain only numbers!",status:true}}));
       }else{
         setErrorLog(prev=>({...prev,mobNoError:{...prev.mobNoError,message:"",status:false}}));
       }
@@ -268,7 +269,7 @@ const DealerForm=memo(( {company})=>{
       if(res?.data?.status)
       if(res?.data?.status){
         reset()
-        refetch()
+        refetch({cmpId:formData?.company?.cmpId})
         return toast.success(res?.data?.message)
       }
     }).catch((error)=>{
@@ -304,7 +305,7 @@ const DealerForm=memo(( {company})=>{
 
     <input type="number" defaultValue={formData?.mobNo} value={formData?.mobNo} name="mobNo"  onChange={(e)=>{formHandleChange(e.target);
     }}  id="" placeholder='Ex. +919940569074'  className='inputField'/>
-   {errorLog.mobNoError.status && <span>{ errorLog.mobNoError.message}</span>}
+   {errorLog.mobNoError.status && <span className='text-sky-500'>{ errorLog.mobNoError.message}</span>}
     <span className="relative">
     <input type="text" name='area' value={formData?.area} className='inputField relative z-[4]' onChange={(e)=>formHandleChange(e.target)}  placeholder='Area' />
     {/* <span className="w-full  left-0 top-[40px] absolute z-[1] min-h-[100px] bg-slate-600 center hidden">
