@@ -25,7 +25,7 @@ const dealerSchemaWithValidation = Joi.object({
             const newData={...req.body,userId}
             // res.send({newData})
             const { error } = dealerSchemaWithValidation.validate(req.body);
-            console.log(error.details);
+            // console.log(error.details);
             
             if (error) return res.status(400).json({ error: error.details[0].message });
 
@@ -42,5 +42,6 @@ const dealerSchemaWithValidation = Joi.object({
             console.error('Error adding shop:', error);
             res.status(500).json({ error: 'Internal Server Error' });
         }
+
     }
   }
