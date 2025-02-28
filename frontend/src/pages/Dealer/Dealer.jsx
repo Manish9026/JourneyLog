@@ -106,7 +106,7 @@ const Statement=memo(({company})=>{
                 <path stroke="currentColor" stroke-linecap="round" strokeLinejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
             </svg> */}
         </div>
-        <input onChange={(e)=>setSrhParam(e.target.value)} type="search" id="default-search" className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search Mockups, Logos..." required />
+        <input onChange={(e)=>setSrhParam(e.target.value)} value={srhParam} type="search" id="default-search" className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search shopOwner,Area, shopName..." required />
         <button onClick={(e)=>onFetch(e)} type="submit" className="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
     </div>
 </form>
@@ -233,7 +233,7 @@ const DealerForm=memo(( {company})=>{
 
     if(name=="mobNo" ){
 
-      if(value===undefined || !isMobNo(value) || !value){
+      if(!/^\d*$/.test(value) || value.length>10){
        return setErrorLog(prev=>({...prev,mobNoError:{...prev.mobNoError,message:"Mobile number must be 10 digits and contain only numbersr",status:true}}));
       }else{
         setErrorLog(prev=>({...prev,mobNoError:{...prev.mobNoError,message:"",status:false}}));
@@ -251,6 +251,7 @@ const DealerForm=memo(( {company})=>{
   const onHadleSubmit=async()=>{
     const {shopName,shopAddress,shopOwner,area,withGST,mobNo}=formData;
     
+    console.log(formData);
     
     if(!isNotEmpty(shopName))
       return  toast.error("Shop name is required!");
@@ -259,7 +260,6 @@ const DealerForm=memo(( {company})=>{
     if(!isNotEmpty(area))
       return  toast.error("area name is required!");
 
-    console.log(formData);
     
 
     await axios.post(`${url}/dealer/addDealer`,formData,{withCredentials:true}).then((res)=>{
@@ -283,19 +283,18 @@ const DealerForm=memo(( {company})=>{
     // if(formDa)
   }
   const reset=()=>{
-    return setFormData(
-      {
+    return setFormData(prev=>(
+      { ...prev,
         shopName:"",
         shopOwner:"",
         mobNo:"",
         area:"",
         shopAddress:"",
         withGST:false,
-        company:{
-          cmpId:"",
-          cmpName:""
-        }
+
       }
+    )
+      
     )
   }
   return(
@@ -303,7 +302,7 @@ const DealerForm=memo(( {company})=>{
     <input type="text" value={formData?.shopName} className='inputField' name='shopName' onChange={(e)=>formHandleChange(e.target)} placeholder='Shop Name' />
     <input type="text" value={formData?.shopOwner} className='inputField' name='shopOwner' onChange={(e)=>formHandleChange(e.target)} placeholder='Dealer Name' />
 
-    <input type="number" defaultValue={formData?.mobNo} name="mobNo"  onChange={(e)=>{formHandleChange(e.target);
+    <input type="number" defaultValue={formData?.mobNo} value={formData?.mobNo} name="mobNo"  onChange={(e)=>{formHandleChange(e.target);
     }}  id="" placeholder='Ex. +919940569074'  className='inputField'/>
    {errorLog.mobNoError.status && <span>{ errorLog.mobNoError.message}</span>}
     <span className="relative">
