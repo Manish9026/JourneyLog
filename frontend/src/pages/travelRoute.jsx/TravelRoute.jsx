@@ -121,7 +121,13 @@ const TravelRoute = () => {
     // if(formData.whereFrom)
     setFormData(prev => ({ ...prev, whereFrom: prev.whereTo, whereTo: prev.whereFrom }))
   }
+ useEffect(()=>{
+    setFormData(prev=>({...prev,company:{cmpName:userInfo?.recentCompany,cmpId:userInfo?.recentCompanyId}}))
+  },[userInfo?.recentCompany])
 
+  useEffect(()=>{
+    setFormData(prev=>({...prev,date:{dateValue:{startDate:null,endDate:null},type:""}}))
+  },[isToggle])
 
   return (
     <div className='flex flex-col w-full h-full'>
@@ -185,13 +191,13 @@ const TravelRoute = () => {
               <span className='flex w-full items-center gap-2 px-2 py-1 flex-wrap'>
                 <Switch checked={isToggle.first} onclick={()=>setIsToggle(prev=>({...isToggle,first:!prev.first,second:0}))}/> 
                 <p className='secondary-font capitalize'>update privious record</p>
-                <span className={`${isToggle.first?"max-h-[100px] opacity-100":"max-h-0 opacity-0  invisible"} transition-all duration-700 w-full `}><DateField onChange={(value)=>{setFormData(prev=>({...prev,date:{dateValue:value,type:"update"}}));}}  value={formData?.date?.dateValue} /></span>
+                <span className={`${isToggle.first?"max-h-[100px] opacity-100":"max-h-0 opacity-0  invisible"} transition-all duration-700 w-full `}><DateField inputClassName={"text-slate-200"} onChange={(value)=>{setFormData(prev=>({...prev,date:{dateValue:value,type:"update"}}));}}  value={formData?.date?.dateValue} /></span>
               </span>
               {/* add new previous record */}
               <span className='flex w-full items-center gap-2 px-2  flex-wrap'>
                 <Switch checked={isToggle.second} onclick={()=>setIsToggle(prev=>({...isToggle,first:0,second:!prev.second}))}/> 
                 <p className='secondary-font capitalize'>add new privious record</p>
-                <span className={`${isToggle.second?"max-h-[100px] opacity-100":"max-h-0 opacity-0 invisible"} transition-all duration-700 w-full `}><DateField onChange={(value)=>{setFormData(prev=>({...prev,date:{dateValue:value,type:"new"}}))}}  value={formData?.date?.dateValue} /></span>
+                <span className={`${isToggle.second?"max-h-[100px] opacity-100":"max-h-0 opacity-0 invisible"} transition-all duration-700 w-full `}><DateField inputClassName={"text-slate-200"}  onChange={(value)=>{setFormData(prev=>({...prev,date:{dateValue:value,type:"new"}}))}}  value={formData?.date?.dateValue} /></span>
               </span>
           <div className="flex gap-2  center w-full">
 
@@ -264,6 +270,7 @@ import { IoIosArrowUp } from "react-icons/io";
 import Switch from '../../component/UI component/Switch';
 import { DateField } from '../Payment/Payment';
 import { BsDash } from "react-icons/bs";
+
 export const SrhContainer = memo(({ srhParam, setValue, close }) => {
   const { dispatch } = useReactHooks();
   const { loading, data } = useSelector(state => state.travelRoute.addRoute.srhResult);
