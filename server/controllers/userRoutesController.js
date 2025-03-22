@@ -44,7 +44,7 @@ export class UserRoutes {
         try {
 
             const { whereTo, whereFrom, amount, travelBy, company, date: { dateValue: { startDate }, type } } = req.body;
-            console.log(startDate, type);
+            console.log(startDate, type,company);
 
             let chooseDate = startDate !== null && startDate ? new Date(startDate) : new Date();
 
@@ -62,7 +62,7 @@ export class UserRoutes {
                 if (existTravelRoute) {
                     existTravelRoute?.travel?.push({ whereTo, whereFrom, amount, travelBy, date: chooseDate })
                     if (existTravelRoute.save()) {
-                        return goodRes({ res, data: existTravelRoute, message: "booked" })
+                        return goodRes({ res, data: existTravelRoute, message: "Record added" })
                     }
                     else return badRes({ res, error })
 
@@ -84,7 +84,7 @@ export class UserRoutes {
 
                     }).then((result) => {
                         result.save()
-                        return goodRes({ res, data: result, message: "booked" })
+                        return goodRes({ res, data: result, message: "record added" })
                     }).catch((error) => {
                         console.log(error);
 

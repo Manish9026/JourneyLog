@@ -122,7 +122,7 @@ const TravelRoute = () => {
     setFormData(prev => ({ ...prev, whereFrom: prev.whereTo, whereTo: prev.whereFrom }))
   }
  useEffect(()=>{
-    setFormData(prev=>({...prev,company:{cmpName:userInfo?.recentCompany,cmpId:userInfo?.recentCompanyId}}))
+  recentCmp()
   },[userInfo?.recentCompany])
 
   useEffect(()=>{
