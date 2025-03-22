@@ -93,7 +93,7 @@ const Statement=memo(({company})=>{
 
 <form className="w-full mx-auto flex-1">   
     <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
-    <div className="relative">
+    <label htmlFor='search' className="relative">
         <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
 
           <FaSearch className='text-slate-400'/>
@@ -101,7 +101,7 @@ const Statement=memo(({company})=>{
                 <path stroke="currentColor" stroke-linecap="round" strokeLinejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
             </svg> */}
         </div>
-        <input onChange={(e)=>setSrhParam(e.target.value)} value={srhParam} type="search" id="default-search" className=" block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search shopOwner,Area, shopName..." required />
+        <input  onChange={(e)=>setSrhParam(e.target.value)} value={srhParam} type="search" id="search" className=" block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search shopOwner,Area, shopName..." required />
         
         <span  className="text-white absolute end-2.5 bottom-2.5 gap-1 flex items-center justify-end min-w-[200px] min-h-[20px]">
        {isNotEmpty(srhParam) && <FaXmark className='
@@ -113,7 +113,7 @@ const Statement=memo(({company})=>{
         <LottieAnimation loop={false} file={print} className={"ml-3 mt-2"}/>
         </span>
         </span>
-    </div>
+    </label>
 </form>
 
 
