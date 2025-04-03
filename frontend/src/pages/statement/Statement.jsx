@@ -19,15 +19,15 @@ import { CiNoWaitingSign } from "react-icons/ci";
 import { MdAccountBalanceWallet, MdDeleteSweep, MdEdit, MdOutlineUpdate } from 'react-icons/md';
 import { LuIndianRupee } from 'react-icons/lu';
 import Lottie from "lottie-react";
-import { ImSpinner9 } from "react-icons/im";
+// import { ImSpinner9 } from "react-icons/im";
 import { getSortMonthWithDate } from '../../utils/dataTransformation';
 import money from "../../assets/animations/money.json"
 import not_found from "../../assets/animations/notFound.json"
-import { debounce } from '../../utils/optimization';
+// import { debounce } from '../../utils/optimization';
 import useSticky from '../../custom-hooks/useSticky';
-import { DateField } from '../Payment/Payment';
+// import { DateField } from '../Payment/Payment';
 import SlideButton from '../../component/UI component/SlidingButton';
-import { Skeleton } from '@mui/material';
+// import { Skeleton } from '@mui/material';
 
 const SpinCounter = lazy(() => import("../../component/SpinCounter"));
 const Statement = () => {
@@ -40,7 +40,7 @@ const Statement = () => {
   const filterBoxRef = useRef();
   const deleteBoxRef = useRef();
 
-  const [deleteBoxActive, setDeleteBoxActive] = useState(1)
+  // const [deleteBoxActive, setDeleteBoxActive] = useState(1)
   // const [headerActive,setHeaderActive]=useState(0)
 
     const loaderRef = useRef(null);

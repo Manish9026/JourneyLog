@@ -5,10 +5,13 @@ import { Login, Register } from './component/auth/Auth'
 import {useSelector,useDispatch} from 'react-redux'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Header from './component/Header';
-import Popup from './component/popup/Popup';
-import DelAlert from './component/DelAlert';
-import PopupChildren from './component/popup/PopupChildren';
+// import Header from './component/Header';
+const Header = React.lazy(() => import('./component/Header.jsx')) 
+// import Popup from './component/popup/Popup';
+// import DelAlert from './component/DelAlert';
+// import PopupChildren from './component/popup/PopupChildren';
+const PopupChildren = React.lazy(() => import('./component/popup/PopupChildren.jsx'))
+// import { isVerified } from './slices/authSlice.js'
 const Layout = () => {
   const {status,formStatus}=useSelector(state=>state.auth)
 

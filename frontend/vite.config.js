@@ -1,21 +1,21 @@
-// vite.config.js
 
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
+import compression from "vite-plugin-compression";
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
+    compression({ algorithm: "gzip" }), // Enable GZIP compression
     react(),
     VitePWA({
-      registerType: 'autoUpdate', // automatically updates the service worker
+      registerType: 'autoUpdate',
       manifest: {
         name: 'journeylog',
         short_name: 'journeylog',
         description: 'A Vite-based Progressive Web App',
         theme_color: '#ffffff',
-        background_color:"#080d1f",
+        background_color: "#080d1f",
         icons: [
           {
             src: 'logo.png',
@@ -23,26 +23,28 @@ export default defineConfig({
             type: 'image/png'
           },
           {
-            src:'logo.png',
+            src: 'logo.png',
             sizes: '512x512',
             type: 'image/png'
           }
-        ],
-        workbox: {
-          globPatterns: ['**/*.{js,css,html,,scss,jsx,png,svg,ico}'],
-          maximumFileSizeToCacheInBytes: 4 * 1024 * 1024, // 4MB limit
-        }
+        ]
       },
-     
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,scss,jsx,png,svg,ico}'], // Fixed syntax
+        maximumFileSizeToCacheInBytes: 6 * 1024 * 1024, // Increased cache size limit to 6MB
+      }
     })
   ],
   build: {
-    // chunkSizeWarningLimit: 3000, // Set a higher limit (in KB)
+    chunkSizeWarningLimit: 3000, // Set a higher limit to suppress chunk warnings
     rollupOptions: {
       output: {
         manualChunks(id) {
           if (id.includes("node_modules")) {
-            return "vendor"; // Move dependencies to a separate chunk
+            return "vendor"; // Moves dependencies into a separate chunk
+          }
+          if (id.includes("TravelRoute")) {
+            return "travel-route"; // Moves TravelRoute into its own chunk
           }
         },
       },

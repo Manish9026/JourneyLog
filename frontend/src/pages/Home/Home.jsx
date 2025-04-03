@@ -1,7 +1,4 @@
 import React, { lazy, useCallback, useRef, useState } from 'react'
-import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
-import { Mousewheel, Navigation, Pagination } from 'swiper/modules';
-import { GrNext, GrPrevious } from "react-icons/gr";
 
 import './style.scss'
 // Import Swiper styles
@@ -14,10 +11,11 @@ import { useSelector } from "react-redux"
 import { useEffect } from 'react';
 import { MdAccountBalanceWallet } from "react-icons/md";
 import { GoGraph } from "react-icons/go";
-import TravelChart from './TravelChart';
+// import TravelChart from './TravelChart';
+const TravelChart = lazy(() => import('./TravelChart'));
 import { pending, walet } from '../../assets/icons';
 import useReactHooks from '../../custom-hooks/useReactHooks';
-import { getStatements } from '../../slices/statementSlice';
+// import { getStatements } from '../../slices/statementSlice';
 import { getTravelDetail } from '../../slices/homeSlice';
 const SpinCounter = lazy(() => import("../../component/SpinCounter"));
 

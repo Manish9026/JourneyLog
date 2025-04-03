@@ -16,8 +16,8 @@ import { useSelector } from 'react-redux';
 import { getFormatedDate } from '../../utils/timeFormat';
 import { Tuple } from '@reduxjs/toolkit';
 // import { log } from 'console';
-import { MdDelete } from "react-icons/md";
-import {DropDownContainer as DropDown} from '../Dealer/Dealer.jsx'
+// import { MdDelete } from "react-icons/md";
+// import {DropDownContainer as DropDown} from '../Dealer/Dealer.jsx'
 
 export const travler = [["rapido", <RiEBikeLine />], ["metro", <FaTrain />], ["auto", <MdDirectionsCarFilled />], ["other", <FaRoute />]]
 const TravelRoute = () => {
