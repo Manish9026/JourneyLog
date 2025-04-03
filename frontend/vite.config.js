@@ -37,17 +37,17 @@ export default defineConfig({
   ],
   build: {
     chunkSizeWarningLimit: 3000, // Set a higher limit to suppress chunk warnings
-    rollupOptions: {
-      output: {
-        manualChunks(id) {
-          if (id.includes("node_modules")) {
-            return "vendor"; // Moves dependencies into a separate chunk
-          }
-          if (id.includes("TravelRoute")) {
-            return "travel-route"; // Moves TravelRoute into its own chunk
-          }
-        },
-      },
-    },
+    // rollupOptions: {
+    //   output: {
+    //     manualChunks(id) {
+    //       if (id.includes("node_modules")) {
+    //         return "vendor"; // Moves dependencies into a separate chunk
+    //       }
+    //       if (id.includes("TravelRoute")) {
+    //         return "travel-route"; // Moves TravelRoute into its own chunk
+    //       }
+    //     },
+    //   },
+    // },
   },
 });
