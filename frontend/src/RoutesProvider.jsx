@@ -44,7 +44,7 @@ const dispatch=useDispatch();
       path:'/',
       element:<Home/>,
       loader:()=>{
-        // dispatch(getTravelDetail({skip:0,next:7,company:""}))
+        dispatch(getTravelDetail({skip:0,next:7,company:""}))
         return null
       }
     },{
