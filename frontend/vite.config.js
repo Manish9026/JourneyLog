@@ -6,7 +6,7 @@ import compression from "vite-plugin-compression";
 
 export default defineConfig({
   plugins: [
-    compression({ algorithm: "gzip" }), // Enable GZIP compression
+    compression({ algorithm: "brotliCompress" }), // Enable GZIP compression
     react(),
     VitePWA({
       registerType: 'autoUpdate',
