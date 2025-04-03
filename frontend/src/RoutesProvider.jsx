@@ -27,7 +27,8 @@ import { recentPayment } from './slices/paymentSlice.js'
 import { getTravelDetail } from './slices/homeSlice.js'
 import Lottie from 'lottie-react'
 import Dealer from './pages/Dealer/Dealer.jsx'
-import { InfiniteScroll } from './component/InfiniteScrolling.jsx'
+// import { InfiniteScroll } from './component/InfiniteScrolling.jsx'
+// const InfiniteScroll=lazy(()=>import("./component/InfiniteScrolling.jsx"));
 
 function RoutesProvider() {
 
@@ -95,10 +96,12 @@ const dispatch=useDispatch();
         Loading...
         </span>
       </div>
-    },{
-      path:"/scroll",
-      element:<InfiniteScroll/>
-    }]
+    }
+    // ,{
+    //   path:"/scroll",
+    //   element:<InfiniteScroll/>
+    // }
+    ]
   
   }])
 
