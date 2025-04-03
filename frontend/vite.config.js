@@ -37,6 +37,15 @@ export default defineConfig({
     })
   ],
   build: {
-    chunkSizeWarningLimit: 3000, // Set a higher limit (in KB)
+    // chunkSizeWarningLimit: 3000, // Set a higher limit (in KB)
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            return "vendor"; // Move dependencies to a separate chunk
+          }
+        },
+      },
+    },
   },
 });
