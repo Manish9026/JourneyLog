@@ -174,8 +174,8 @@ const Statement = () => {
       </span>
 
 
-      <span   className='relative flex-col  gap-2 py-2 w-full h-full'>
-        <span className={`fixed  ${headerActive ? 'visible top-[0] opacity-100' : 'visible top-[-100px] opacity-30'} center flex primary-bg min-h-[70px] transition-all ease duration-700  z-[110] flex-1 w-full left-0 right-0 primary-p pb-[50px] `}>
+      <span   className='relative flex-col  gap-2 py-2 w-full h-full pb-[100px]'>
+        <span className={`fixed  ${headerActive ? 'visible top-[0] opacity-100' : 'visible top-[-100px] opacity-30'} center flex primary-bg min-h-[70px] transition-all ease duration-700  z-[110] flex-1 w-full left-0 right-0 primary-p  `}>
           <AmountDisplay />
         </span>
         { statement?.length != 0  && 
@@ -184,7 +184,7 @@ const Statement = () => {
             return (
               <div className="" key={routes._id}>
                 <Title title={getFormatedDate({ date: routes.createdAt, type: "date" })} />
-                <div className="t-container  flex flex-col gap-2 py-2 w-full">
+                <div className="t-container  flex flex-col gap-2 py-2 w-full ">
 
                   {
                     Array.isArray(routes?.travel) && routes?.travel.length != 0 &&
