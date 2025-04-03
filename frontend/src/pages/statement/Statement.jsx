@@ -178,8 +178,8 @@ const Statement = () => {
         <span className={`fixed  ${headerActive ? 'visible top-[0] opacity-100' : 'visible top-[-100px] opacity-30'} center flex primary-bg min-h-[70px] transition-all ease duration-700  z-[110] flex-1 w-full left-0 right-0 primary-p pb-[50px] `}>
           <AmountDisplay />
         </span>
-        { statement.length != 0  && 
-          statement.map((routes, id) => {
+        { statement?.length != 0  && 
+          statement?.map((routes, id) => {
 
             return (
               <div className="" key={routes._id}>
