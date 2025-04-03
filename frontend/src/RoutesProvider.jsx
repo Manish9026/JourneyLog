@@ -27,6 +27,7 @@ import { recentPayment } from './slices/paymentSlice.js'
 import { getTravelDetail } from './slices/homeSlice.js'
 import Lottie from 'lottie-react'
 import Dealer from './pages/Dealer/Dealer.jsx'
+import { InfiniteScroll } from './component/InfiniteScrolling.jsx'
 
 function RoutesProvider() {
 
@@ -43,7 +44,7 @@ const dispatch=useDispatch();
       path:'/',
       element:<Home/>,
       loader:()=>{
-        dispatch(getTravelDetail({skip:0,next:7,company:""}))
+        // dispatch(getTravelDetail({skip:0,next:7,company:""}))
         return null
       }
     },{
@@ -94,6 +95,9 @@ const dispatch=useDispatch();
         Loading...
         </span>
       </div>
+    },{
+      path:"/scroll",
+      element:<InfiniteScroll/>
     }]
   
   }])

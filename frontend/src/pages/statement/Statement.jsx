@@ -8,7 +8,7 @@ import { travler } from '../travelRoute.jsx/TravelRoute';
 import { getFormatedDate } from '../../utils/timeFormat';
 import { TravelReport } from '../../component/travel-report/TravelReport';
 import useReactHooks from '../../custom-hooks/useReactHooks';
-import { getStatements, sort } from '../../slices/statementSlice';
+import { getStatements, setFilterStates, sort } from '../../slices/statementSlice';
 import { BsDash } from 'react-icons/bs';
 import { deleteTravelRecords, getTravelRecord, setAlert, setDelStateData, setEditAlert, setEditData } from '../../slices/travelRouteSlice';
 import Popup from '../../component/popup/Popup';
@@ -27,12 +27,14 @@ import { debounce } from '../../utils/optimization';
 import useSticky from '../../custom-hooks/useSticky';
 import { DateField } from '../Payment/Payment';
 import SlideButton from '../../component/UI component/SlidingButton';
+import { Skeleton } from '@mui/material';
+
 const SpinCounter = lazy(() => import("../../component/SpinCounter"));
 const Statement = () => {
 
   const { userInfo } = useSelector(state => state.auth)
   const [isSort, setIsSort] = useState(-1);
-  const { statement, loading, printLoading } = useSelector(state => state.statement)
+  const { statement, loading, printLoading,scrollStates,filterStates} = useSelector(state => state.statement)
   const { dispatch } = useReactHooks();
   const [searchValue, setSearchValue] = useState("")
   const filterBoxRef = useRef();
@@ -40,6 +42,10 @@ const Statement = () => {
 
   const [deleteBoxActive, setDeleteBoxActive] = useState(1)
   // const [headerActive,setHeaderActive]=useState(0)
+
+    const loaderRef = useRef(null);
+    
+
   const headerActive = useSticky(100, 50);
   useEffect(() => {
     if (!searchValue) {
@@ -95,6 +101,37 @@ const Statement = () => {
       </span>
     )
   }, [statement])
+
+  useEffect(() => {
+    let timeout=undefined;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !scrollStates?.isFull) {
+          // observer.unobserve(loaderRef?.current); 
+          if(searchValue)
+            timeout=setTimeout(() => {
+              dispatch(getStatements({ skip:statement?.length,next:statement?.length + 5, company: searchValue ,refetch:true,filterData:filterStates}));
+            }, 1000);
+         
+
+          
+        }
+      },
+      {threshold: 1, rootMargin: "100px" }
+    );
+
+    if (loaderRef.current) {
+      observer.observe(loaderRef.current);
+    }
+
+    return () => {
+      if (loaderRef.current) {
+        observer.unobserve(loaderRef.current);
+      }
+      clearTimeout(timeout)
+    };
+  }, [searchValue,statement] );
+ 
   return (
     <div className='flex relative flex-col w-full primary-p h-full overflow-hidden '>
 
@@ -137,11 +174,11 @@ const Statement = () => {
       </span>
 
 
-      <span className='relative flex-col  gap-2 py-2 w-full h-full'>
-        <span className={`fixed  ${headerActive ? 'visible top-[0] opacity-100' : 'visible top-[-100px] opacity-30'} center flex primary-bg min-h-[70px] transition-all ease duration-700  z-[110] flex-1 w-full left-0 right-0 primary-p  `}>
+      <span   className='relative flex-col  gap-2 py-2 w-full h-full'>
+        <span className={`fixed  ${headerActive ? 'visible top-[0] opacity-100' : 'visible top-[-100px] opacity-30'} center flex primary-bg min-h-[70px] transition-all ease duration-700  z-[110] flex-1 w-full left-0 right-0 primary-p pb-[50px] `}>
           <AmountDisplay />
         </span>
-        {loading ? <CardSkelton /> : statement.length != 0 ?
+        { statement.length != 0  && 
           statement.map((routes, id) => {
 
             return (
@@ -196,6 +233,9 @@ const Statement = () => {
               </div>
             )
 
+
+
+
             //   return(
             //     <span className='t-body cursor-pointer' key={id}>
             //     <span className='flex items-center  gap-2'><span className='text-yellow-900'>{travler[0][1]}</span> 
@@ -209,28 +249,33 @@ const Statement = () => {
             //     </span>
             //   )
 
-          }) :
+          }) 
 
-          <div className="flex w-full min-h-[400px]  justify-center items-center">
-            <span className='size-[200px] center flex-col capitalize text-sky-200'>
-              <Lottie animationData={not_found} loop={false} />
-              !! not found
-            </span>
-          </div>
+          
         }
+
+
+
+{(scrollStates?.isFull) && <div  className={`${statement?.length==0 && "h-full min-h-[300px]"} center flex `}>
+            <span className={`${statement?.length==0 && "h-full"} center flex-col capitalize text-sky-200`}>
+              <Lottie animationData={not_found} className='size-[50px]' loop={true} />
+              {!(scrollStates?.isFull && statement?.length>0) ? "!! no records found" : "!! no more records "}
+            </span>
+          </div>}
+        <div className="flex" ref={loaderRef}> {loading  &&  <CardSkelton headingClass={"hidden"}/>}</div>
       </span>
 
     </div>
   )
 }
 
-const CardSkelton = () => {
+const CardSkelton = ({headingClass,cardLength=5,}) => {
   return (
-    <div className="flex flex-col gap-2 ">
-      <span className='capitalize secondary-font'>fetching details...</span>
+    <div  className="flex flex-col gap-2 flex-1">
+      <span className={` ${headingClass} capitalize secondary-font`}>fetching details...</span>
       <span className='flex flex-col gap-1'>
         {
-          Array(5).fill(0).map((_, id) => {
+          Array(cardLength).fill(0).map((_, id) => {
             return (
               <span key={id} className=' relative flex flex-col cursor-pointer rounded-md p-2 light-dark gap-1' >
                 <span className='flex items-center  gap-2'>
@@ -289,7 +334,7 @@ const DeleteBox = forwardRef(({ recentCompany }, ref) => {
     // if(travelRecords?.data)
     // setFormData(prev=>({...prev,date:{startDate:travelRecords?.data?.paid?.minDate,endDate:travelRecords?.data?.paid?.maxDate}}))
 
-  }, [])
+  }, [userInfo])
 
   useEffect(() => {
     if(status=="success" || formData.company.cmpId)
@@ -486,7 +531,8 @@ const FilterPopup = forwardRef(({ company }, ref) => {
   }, [filterData.company, company]
   )
   const filterHandler = () => {
-    dispatch(getStatements({ skip: 0, next: 5, company: filterData.company.cmpName, filterData }))
+    dispatch(setFilterStates(filterData))
+    dispatch(getStatements({ skip: 0, next: 5, company: filterData.company.cmpName, filterData, }))
   }
 
 
@@ -537,7 +583,7 @@ const FilterPopup = forwardRef(({ company }, ref) => {
 }
 )
 
-export const SingleDateField = memo(({ title, placeHolder = "Enter Date", className, popupClass, value, onChange, dateDirection = "down" }) => {
+export const SingleDateField = memo(({ title, placeHolder = "Enter Date  (YYYY-MM-DD)", className, popupClass, value, onChange, dateDirection = "down" }) => {
   return (
     <span className={`min-w-[250px]  md:min-w-[300px] max-w-[500px] flex-1  ${className}`}>
       <Title title={title} className={"px-2"} />
@@ -545,7 +591,16 @@ export const SingleDateField = memo(({ title, placeHolder = "Enter Date", classN
         useRange={false}
         asSingle={true}
         value={{ startDate: (value), endDate: (value) }}
-        onChange={(value) => onChange(value.startDate)}
+        onChange={(value) =>{ 
+          
+          const now = new Date();
+          // console.log(now,"now");
+          
+    value?.startDate.setHours(now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds());
+
+          // console.log(value?.startDate,"value");
+
+        return onChange(value?.startDate)}}
         placeholder={placeHolder}
         inputClassName="w-full text-slate-200 px-4 py-2 border border-gray-300 bg-[#1e293b] rounded-md"
         containerClassName="relative text-gray-900  min-w-full transition-height  duration-500"

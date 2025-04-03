@@ -38,16 +38,21 @@ export class UserRoutes {
         }
     }
 
+    
     static addRoute = async (req, res) => {
         const userId = req?.user?._id || null
 
         try {
 
-            const { whereTo, whereFrom, amount, travelBy, company, date: { dateValue: { startDate }, type } } = req.body;
-            console.log(startDate, type,company);
+            const { whereTo, whereFrom, amount, travelBy, company, date: { dateValue , type } } = req.body;
+            console.log(dateValue, type,company);
 
-            let chooseDate = startDate !== null && startDate ? new Date(startDate) : new Date();
 
+            let chooseDate = dateValue !== null && dateValue ? new Date(dateValue) : new Date();
+
+
+
+            // chooseDate.setTime(chooseDate.getTime() + chooseDate.getTimezoneOffset() * 60 * 1000); // Adjust for timezone offset
             // console.log(chooseDate,startingDate(chooseDate), endingDate(chooseDate));
 
 
@@ -367,14 +372,14 @@ export class UserRoutes {
     }
 
     static getRandomRoutes = async (req, res) => {
-        const { limit, skip, company, getType } = req.query;
+        const { next, skip, company, getType } = req.query;
         const userId = req?.user?._id
         const { recentCompany } = req.user;
         let cmpName = isNotEmpty(company) ? company : recentCompany;
         const filterOption = await this.getFilterOption(req.body.filter)
-        // console.log(cmpName);
+        console.log(req.query);
 
-        console.log(filterOption.limit);
+        console.log(filterOption);
 
 
         try {
@@ -385,9 +390,11 @@ export class UserRoutes {
                         createdAt: -1 // Sort by createdAt in descending order
                     }
                 },
-                {
-                    $limit: filterOption.limit || 5 // Limit the results to 5 documents
-                },
+                // {
+                //     $limit: filterOption.limit || 5, // Limit the,
+                //     // $ results to 5 documents
+                //     // $skip: parseInt(skip) || 0
+                // },
                 {
                     $project: {
                         _id: 1,
@@ -403,6 +410,12 @@ export class UserRoutes {
                         "travel.0": { $exists: true } // Ensure only documents with matching travel records are returned
                     }
                 },
+                {
+                    $skip: parseInt(skip) || 0, // Skip documents based on pagination
+                  },
+                  {
+                    $limit: parseInt(next) || 10, // Limit the number of documents per page
+                  },
             ])
             if (travelRoute.length != 0) {
                 if (getType == "home") {
@@ -411,10 +424,10 @@ export class UserRoutes {
 
                     goodRes({ res, data: { travelDetail: travelRoute, utilAmount: result } })
                 } else {
-                    goodRes({ res, data: travelRoute })
+                    goodRes({ res, data: {travelRoute:travelRoute || [],skip:parseInt(next),next:(parseInt(5))} })
                 }
             }
-            else badRes({ res, message: "not found" })
+            else badRes({ res, message: "not found",data:[] })
 
 
         } catch (error) {

@@ -388,7 +388,7 @@ const CompanyOption=memo(({setCompany,company})=>{
   }
 )
 
-const DropDownContainer = memo(({ hideChildren,hideClass,showClass,showChildren,active}) => {
+export const DropDownContainer = memo(({ hideChildren,hideClass,showClass,showChildren,active}) => {
   const [isActive, setIsActive] = useState(active)
   const {dispatch}=useReactHooks();
   return (

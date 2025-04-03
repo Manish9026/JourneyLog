@@ -18,8 +18,14 @@ export const store=configureStore({
        [dealerApi.reducerPath]:dealerApi.reducer
     },
 
-    middleware:(getDefaultMiddleware)=>
-        getDefaultMiddleware().concat(dealerApi.middleware),
+
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+          serializableCheck: false, // ✅ Keep this
+        }).concat(dealerApi.middleware),
+  
+
+
 })
 
 
